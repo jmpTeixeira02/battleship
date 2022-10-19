@@ -1,14 +1,20 @@
-abstract data class Ship(val type: KClass<? super Ship>, val size: Int, val start: Coordinates, val end: Coordinates) {
-    protected var hasDrowned: Boolean
-        set(value) {
-            if (value)
-                Crash()
-        }
-    protected var nHits: Int = 0
+data class Ship(public val type: ShipTypes, public val start: Coordinates, public val end: Coordinates) {
+    public val size = type.size
+    public var hasDrowned: Boolean
+    public var nHits: Int = 0
         set(value) {
             field = value
             hasDrowned = value == Size
         }
 
-    abstract fun Crash()
+    override fun  equals(other: Any?): Boolean {
+        return other == this ||
+                (other::class == Coordinates::class &&
+                        Line == (other as Coordinates).Line &&
+                        Column == (other as Coordinates).Column)
+    }
+
+    override fun toString(): String {
+        return type.type + " (" + type.size + " espaços) @ (" + start.toString() + ", " + end.toString() + ')'
+    }
 }
