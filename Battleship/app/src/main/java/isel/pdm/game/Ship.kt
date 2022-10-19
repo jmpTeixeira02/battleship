@@ -1,17 +1,26 @@
-data class Ship(public val type: ShipTypes, public val start: Coordinates, public val end: Coordinates) {
-    public val size = type.size
-    public var hasDrowned: Boolean
-    public var nHits: Int = 0
+enum class ShipTypes(val type: String, val size: Int) {
+    Carrier("Porta-aviões", 5),
+    Battleship("Couraçado", 4),
+    Destroyer("Destruidor", 3),
+    Submarine("Submarino", 3),
+    PatrolBoat("Patrulha", 2)
+}
+
+data class Ship(val type: ShipTypes, val start: Coordinates, val end: Coordinates) {
+    val size = type.size
+    var hasDrowned: Boolean = false
+    var nHits: Int = 0
         set(value) {
             field = value
-            hasDrowned = value == Size
+            hasDrowned = value == size
         }
 
-    override fun  equals(other: Any?): Boolean {
+    override fun equals(other: Any?): Boolean {
         return other == this ||
-                (other::class == Coordinates::class &&
-                        Line == (other as Coordinates).Line &&
-                        Column == (other as Coordinates).Column)
+                (other!!::class == Ship::class &&
+                        start == (other as Ship).start &&
+                        end == (other as Ship).end &&
+                        type == (other as Ship).type)
     }
 
     override fun toString(): String {
