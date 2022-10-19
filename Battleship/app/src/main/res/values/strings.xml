@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Battleship</string>
+    <string name="activity_info_no_suitable_app">There is no suitable app for this operation!</string>
 </resources>
