@@ -59,18 +59,7 @@ class AboutUsActivity : ComponentActivity(){
     }
 }
 
-private val authors = listOf<String>("A1", "A2", "A3")
-private val authorsEmail = arrayOf<String>("a1@email.com, a2@email.com, a3@email.com")
+private val authors = listOf<String>("João Teixeira A48710", "João Cravo A46109", "João Martins A50055")
+private val authorsEmail = arrayOf<String>("a48710@alunos.isel.pt, a46109@alunos.isel.pt, a50055@alunos.isel.pt")
 private const val emailSubject = "Battleship App"
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            HomeScreen(
-                aboutUsRequest = { AboutUsActivity.navigate(origin = this) },
-                replayRequest = {}
-            )
-        }
-    }
-}
