@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Battleship</string>
+    <string name="enabled_invite_button_text">Invite player</string>
+    <string name="disabled_invite_button_text">Player invited</string>
 </resources>
