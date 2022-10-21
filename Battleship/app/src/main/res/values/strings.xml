@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Battleship</string>
+    <string name="enabled_invite_button_text">Invite player</string>
+    <string name="disabled_invite_button_text">Player invited</string>
+    <string name="activity_info_no_suitable_app">There is no suitable app for this operation!</string>
+    <string name="replay_screenName">Replays</string>
+    <string name="aboutUs_screenName">About US</string>
+    <string name="refreshButtonReady">Refresh</string>
+    <string name="refreshButtonRefreshing">Refreshing...</string>
+
 </resources>
