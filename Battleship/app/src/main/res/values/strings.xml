@@ -5,4 +5,7 @@
     <string name="activity_info_no_suitable_app">There is no suitable app for this operation!</string>
     <string name="replay_screenName">Replays</string>
     <string name="aboutUs_screenName">About US</string>
+    <string name="refreshButtonReady">Refresh</string>
+    <string name="refreshButtonRefreshing">Refreshing...</string>
+
 </resources>
