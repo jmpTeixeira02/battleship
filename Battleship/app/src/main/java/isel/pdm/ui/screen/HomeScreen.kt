@@ -39,14 +39,13 @@ fun HomeScreen(
                     title = stringResource(id = R.string.app_name)
                 )
             }
-        ) { innerPadding ->
+        ) { /*innerPadding ->
             LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.padding(innerPadding)
             ) {
                 TODO()
-            }
-
+            }*/
         }
     }
 }

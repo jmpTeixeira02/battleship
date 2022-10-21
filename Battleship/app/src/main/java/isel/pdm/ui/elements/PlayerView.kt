@@ -1,16 +1,15 @@
-package isel.pdm.ui
+package isel.pdm.ui.elements
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import isel.pdm.data.online.players.PlayerMatchmaking
+import isel.pdm.data.players.PlayerMatchmaking
 import isel.pdm.ui.elements.buttons.InviteButton
 import isel.pdm.ui.elements.buttons.InviteState
 import isel.pdm.ui.elements.buttons.PendingInviteButtons
