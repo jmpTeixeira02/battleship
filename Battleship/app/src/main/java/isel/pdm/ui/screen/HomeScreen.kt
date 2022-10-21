@@ -60,8 +60,9 @@ private fun HomeScreenPreview(){
     )
 }
 
+/*
 @Preview
 @Composable
 private fun PlayerInvitePreview () {
 
-}
+}*/

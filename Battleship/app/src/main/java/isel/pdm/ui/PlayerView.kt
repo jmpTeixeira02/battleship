@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import isel.pdm.players.PlayerMatchmaking
-import isel.pdm.players.buttons.InviteButton
-import isel.pdm.players.buttons.InviteState
-import isel.pdm.players.buttons.PendingInviteButtons
+import isel.pdm.data.online.players.PlayerMatchmaking
+import isel.pdm.ui.elements.buttons.InviteButton
+import isel.pdm.ui.elements.buttons.InviteState
+import isel.pdm.ui.elements.buttons.PendingInviteButtons
 import isel.pdm.ui.theme.BattleshipTheme
 
 @Composable

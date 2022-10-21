@@ -1,3 +1,3 @@
-package isel.pdm.players
+package isel.pdm.data.players
 
 data class PlayerMatchmaking(val name: String)

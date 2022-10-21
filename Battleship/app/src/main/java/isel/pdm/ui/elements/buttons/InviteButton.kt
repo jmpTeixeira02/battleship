@@ -1,4 +1,4 @@
-package isel.pdm.players.buttons
+package isel.pdm.ui.elements.buttons
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
@@ -38,7 +38,7 @@ fun InviteButtonPreview() {
     InviteButton(
         state = InviteState.InviteEnabled,
         onClick = { },
-        modifier = Modifier.Companion.padding(all = 16.dp)
+        modifier = Modifier.padding(all = 16.dp)
     )
 }
 
@@ -48,6 +48,6 @@ fun InvitedButton() {
     InviteButton(
         state = InviteState.InvitedDisabled,
         onClick = { },
-        modifier = Modifier.Companion.padding(all = 16.dp)
+        modifier = Modifier.padding(all = 16.dp)
     )
 }

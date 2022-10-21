@@ -1,4 +1,4 @@
-package isel.pdm.players.buttons
+package isel.pdm.ui.elements.buttons
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
