@@ -1,13 +1,12 @@
 package isel.pdm.service
 
-import isel.pdm.data.replays.Replay
-import kotlinx.coroutines.delay
+import isel.pdm.data.Replay
 
-interface Replays {
+interface ReplayService {
     fun showReplays(): List<Replay>
 }
 
-class FakeReplayService : Replays {
+class FakeReplayService : ReplayService {
 
     private val fakeReplays = mutableListOf<Replay>()
 

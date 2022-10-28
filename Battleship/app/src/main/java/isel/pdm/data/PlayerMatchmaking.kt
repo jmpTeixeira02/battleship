@@ -1,4 +1,4 @@
-package isel.pdm.data.players
+package isel.pdm.data
 
 
 enum class InviteState { InviteEnabled, InvitedDisabled, InvitePending }

@@ -1,11 +1,11 @@
-package isel.pdm.ui.screen
+package isel.pdm.activities
 
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
-import isel.pdm.data.replays.Replay
-import isel.pdm.service.Replays
+import isel.pdm.data.Replay
+import isel.pdm.service.ReplayService
 
-class SelectReplayViewModel(private val replay: Replays) : ViewModel() {
+class SelectReplayViewModel(private val replay: ReplayService) : ViewModel() {
 
     private var _replays by mutableStateOf<List<Replay>>(emptyList())
     val replays: List<Replay>
