@@ -1,6 +1,5 @@
 package isel.pdm.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,24 +8,17 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.R
-import isel.pdm.activities.AboutUsActivity
 import isel.pdm.data.players.PlayerMatchmaking
-import isel.pdm.service.FakeMatchmaking
-import isel.pdm.service.Matchmaking
 import isel.pdm.ui.elements.PlayerView
 import isel.pdm.ui.elements.TopBar
 import isel.pdm.ui.elements.buttons.InviteState
 import isel.pdm.ui.elements.buttons.RefreshButton
 import isel.pdm.ui.elements.buttons.RefreshState
 import isel.pdm.ui.theme.BattleshipTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import kotlin.coroutines.suspendCoroutine
 
 /*data class PlayersListScreen(
     val players: List<PlayerView> = emptyList()
@@ -39,9 +31,11 @@ fun HomeScreen(
     replayRequest: (() -> Unit)? = null,
     refreshPlayers: () -> Unit,
     refreshState: RefreshState = RefreshState.Ready,
+   /* inviteState: InviteState = InviteState.InviteEnabled,
+    onInviteSent: () -> Unit,*/
     players: List<PlayerMatchmaking>
-){
-    BattleshipTheme{
+) {
+    BattleshipTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             backgroundColor = MaterialTheme.colors.background,
@@ -54,21 +48,28 @@ fun HomeScreen(
             }
         )
         { innerPadding ->
-            Column(modifier = Modifier.fillMaxHeight() ) {
-                LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            Column(modifier = Modifier.fillMaxHeight()) {
+                LazyColumn(
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp),
-                    modifier = Modifier.weight(1F)
+                    modifier = Modifier
+                        .weight(1F)
                         .padding(innerPadding)
 
-                ){
-                    items(players){
-                        PlayerView(player = it, state = InviteState.InviteEnabled, onInviteSend = { TODO() })
+                ) {
+                    items(players) {
+                        PlayerView(
+                            player = it,
+                            state = InviteState.InviteEnabled,
+                            onInviteSend = { } // TODO
+                        )
                     }
                 }
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom,
-                    modifier = Modifier.padding(24.dp)
+                    modifier = Modifier
+                        .padding(24.dp)
                         .fillMaxWidth()
                 ) {
                     RefreshButton(state = refreshState, onClick = refreshPlayers)
@@ -80,7 +81,7 @@ fun HomeScreen(
 
 @Preview
 @Composable
-private fun HomeScreenPreview(){
+private fun HomeScreenPreview() {
     HomeScreen(
         aboutUsRequest = {},
         refreshPlayers = {},
@@ -91,7 +92,7 @@ private fun HomeScreenPreview(){
             PlayerMatchmaking("A"),
             PlayerMatchmaking("B"),
             PlayerMatchmaking("C"),
-        )
+        ),
     )
 }
 

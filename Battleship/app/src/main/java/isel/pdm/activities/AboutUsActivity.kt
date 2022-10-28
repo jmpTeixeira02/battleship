@@ -14,7 +14,7 @@ import isel.pdm.R
 import isel.pdm.ui.screen.AboutUsScreen
 import isel.pdm.ui.screen.HomeScreen
 
-class AboutUsActivity : ComponentActivity(){
+class AboutUsActivity : ComponentActivity() {
 
     companion object {
         fun navigate(origin: Activity) {
@@ -29,14 +29,14 @@ class AboutUsActivity : ComponentActivity(){
         super.onCreate(savedInstanceState)
         setContent {
             AboutUsScreen(
-                backRequest = {finish()},
-                sendEmailRequest = {sendEmail()},
+                backRequest = { finish() },
+                sendEmailRequest = { sendEmail() },
                 authors = authors
             )
         }
     }
 
-    private fun sendEmail(): Unit{
+    private fun sendEmail() {
         try {
             val intent = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:")
@@ -45,8 +45,7 @@ class AboutUsActivity : ComponentActivity(){
             }
 
             startActivity(intent)
-        }
-        catch (e: ActivityNotFoundException) {
+        } catch (e: ActivityNotFoundException) {
             Log.e(TAG, "Failed to send email", e)
             Toast
                 .makeText(
@@ -59,7 +58,9 @@ class AboutUsActivity : ComponentActivity(){
     }
 }
 
-private val authors = listOf<String>("João Teixeira A48710", "João Cravo A46109", "João Martins A50055")
-private val authorsEmail = arrayOf<String>("a48710@alunos.isel.pt, a46109@alunos.isel.pt, a50055@alunos.isel.pt")
+private val authors =
+    listOf<String>("João Teixeira A48710", "João Cravo A46109", "João Martins A50055")
+private val authorsEmail =
+    arrayOf<String>("a48710@alunos.isel.pt, a46109@alunos.isel.pt, a50055@alunos.isel.pt")
 private const val emailSubject = "Battleship App"
 

@@ -25,7 +25,7 @@ fun AboutUsScreen(
     sendEmailRequest: (() -> Unit) = {},
     authors: Iterable<String>
 ){
-    BattleshipTheme() {
+    BattleshipTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             backgroundColor = MaterialTheme.colors.background,

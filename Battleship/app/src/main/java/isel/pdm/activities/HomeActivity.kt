@@ -4,10 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import isel.pdm.service.FakeMatchmaking
-import isel.pdm.ui.elements.buttons.RefreshButton
 import isel.pdm.ui.elements.buttons.RefreshState
 import isel.pdm.ui.screen.HomeScreen
 import isel.pdm.ui.screen.HomeScreenViewModel
@@ -22,19 +19,24 @@ class HomeActivity : ComponentActivity() {
     }
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val refreshState =
                 if (viewModel.isRefreshing) RefreshState.Refreshing
                 else RefreshState.Ready
+           /* val inviteState =
+                if (viewModel.isInviteSent) InviteState.InvitedDisabled
+                else InviteState.InviteEnabled*/
             HomeScreen(
                 aboutUsRequest = { AboutUsActivity.navigate(origin = this) },
-                replayRequest = { },
+                replayRequest = { SelectReplayActivity.navigate(origin = this )},
                 refreshState = refreshState,
-                refreshPlayers = {viewModel.findPlayer()},
-                players = viewModel.players
+                refreshPlayers = { viewModel.findPlayer() },
+                players = viewModel.players,
+
+                /*inviteState = inviteState,
+                onInviteSent = { viewModel.sendInvite() }*/
             )
         }
     }

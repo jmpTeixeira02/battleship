@@ -9,9 +9,10 @@ private val TAG = "Matchmaking"
 
 interface Matchmaking {
     suspend fun findPlayer(): MutableList<PlayerMatchmaking>
+    suspend fun sendInviteTo(playerName: String): PlayerMatchmaking
 }
 
-class FakeMatchmaking() : Matchmaking{
+class FakeMatchmaking : Matchmaking{
     private val fakePlayers = mutableListOf<PlayerMatchmaking>()
     override suspend fun findPlayer(): MutableList<PlayerMatchmaking> {
         delay(2000)
@@ -23,6 +24,10 @@ class FakeMatchmaking() : Matchmaking{
         }
         Log.v(TAG, fakePlayers.toString())
         return fakePlayers
+    }
+
+    override suspend fun sendInviteTo(playerName: String): PlayerMatchmaking {
+        return fakePlayers[fakePlayers.indexOf(PlayerMatchmaking(playerName))]
     }
 
 }

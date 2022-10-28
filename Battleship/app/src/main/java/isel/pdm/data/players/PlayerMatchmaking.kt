@@ -1,3 +1,5 @@
 package isel.pdm.data.players
 
-data class PlayerMatchmaking(val name: String)
+import isel.pdm.ui.elements.buttons.InviteState
+
+data class PlayerMatchmaking(val name: String, val inviteState: InviteState = InviteState.InviteEnabled)

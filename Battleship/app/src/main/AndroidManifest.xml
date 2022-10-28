@@ -30,6 +30,10 @@
         <activity
             android:name=".activities.AboutUsActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".activities.SelectReplayActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

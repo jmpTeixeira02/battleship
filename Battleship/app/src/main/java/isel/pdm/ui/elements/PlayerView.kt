@@ -19,7 +19,7 @@ import isel.pdm.ui.theme.BattleshipTheme
 fun PlayerView(
     player: PlayerMatchmaking,
     state: InviteState,
-    onInviteSend: () -> Unit,
+    onInviteSend: () -> Unit = { },
     onAcceptInvite: () -> Unit = { },
     onDeleteInvite: () -> Unit = { },
 ) {
@@ -40,7 +40,7 @@ fun PlayerView(
             if (state == InviteState.InviteEnabled || state == InviteState.InvitedDisabled) {
                 InviteButton(
                     state = state,
-                    onClick = { InviteState.InvitedDisabled /* quando implementado substituir por -> onInviteSend */ },
+                    onClick = onInviteSend,
                     modifier = Modifier.padding(all = 16.dp)
                 )
             } else {
