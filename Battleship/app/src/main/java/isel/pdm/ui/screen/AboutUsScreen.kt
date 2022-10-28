@@ -17,11 +17,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.ui.elements.TopBar
 import isel.pdm.R
+import isel.pdm.ui.elements.NavigationHandlers
 import isel.pdm.ui.theme.BattleshipTheme
 
 @Composable
 fun AboutUsScreen(
-    backRequest: (() -> Unit)? = null,
+    navigationRequest: NavigationHandlers = NavigationHandlers(),
     sendEmailRequest: (() -> Unit) = {},
     authors: Iterable<String>
 ){
@@ -29,7 +30,9 @@ fun AboutUsScreen(
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             backgroundColor = MaterialTheme.colors.background,
-            topBar = { TopBar(backRequest = backRequest, title = stringResource( id = R.string.aboutUs_screenName)) }
+            topBar = { TopBar(
+                navigation = navigationRequest,
+                title = stringResource( id = R.string.aboutUs_screenName)) }
         ) { innerPadding ->
             Column(
                 verticalArrangement = Arrangement.SpaceAround,
@@ -58,7 +61,7 @@ fun AboutUsScreen(
 @Composable
 private fun AboutUsScreenPreview(){
     AboutUsScreen(
-        backRequest = {},
+        navigationRequest = NavigationHandlers(backRequest = {}),
         authors = listOf(
             "Author A - Axxxxx",
             "Author B - Axxxxx",

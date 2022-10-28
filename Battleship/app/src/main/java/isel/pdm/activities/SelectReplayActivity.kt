@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import isel.pdm.service.FakeReplayService
+import isel.pdm.ui.elements.NavigationHandlers
 import isel.pdm.ui.screen.SelectReplayScreen
 import isel.pdm.ui.screen.SelectReplayViewModel
 import isel.pdm.utils.viewModelInit
@@ -33,7 +34,7 @@ class SelectReplayActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SelectReplayScreen(
-                backRequest = { finish() },
+                navigationRequest = NavigationHandlers(backRequest = {finish()}),
                // getReplays = { viewModel.getAvailableReplays() },
                 availableReplays = viewModel.getAvailableReplays()
             )

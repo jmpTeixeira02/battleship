@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import isel.pdm.R
+import isel.pdm.ui.elements.NavigationHandlers
 import isel.pdm.ui.screen.AboutUsScreen
 import isel.pdm.ui.screen.HomeScreen
 
@@ -29,7 +30,7 @@ class AboutUsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AboutUsScreen(
-                backRequest = { finish() },
+                navigationRequest = NavigationHandlers(backRequest = {finish()}),
                 sendEmailRequest = { sendEmail() },
                 authors = authors
             )

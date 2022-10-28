@@ -16,12 +16,16 @@ import isel.pdm.ui.elements.buttons.InviteButton
 import isel.pdm.ui.elements.buttons.PendingInviteButtons
 import isel.pdm.ui.theme.BattleshipTheme
 
+data class MatchmakingHandlers(
+    val onAcceptInvite: () -> Unit = { },
+    val onDeleteInvite: (PlayerMatchmaking) -> Unit = { },
+    val onInviteSend: (PlayerMatchmaking, InviteState) -> Unit = { _, _ -> },
+)
+
 @Composable
 fun PlayerView(
     player: PlayerMatchmaking,
-    onInviteSend: (PlayerMatchmaking, InviteState) -> Unit = { _, _ -> },
-    onAcceptInvite: () -> Unit = { },
-    onDeleteInvite: () -> Unit = { },
+    matchMakingRequest: MatchmakingHandlers = MatchmakingHandlers()
 ) {
     Card(
         modifier = Modifier
@@ -40,7 +44,7 @@ fun PlayerView(
             if (player.inviteState == InviteState.InviteEnabled){
                 InviteButton(
                     state = player.inviteState,
-                    onClick = {onInviteSend(player, InviteState.InvitedDisabled)},
+                    onClick = {matchMakingRequest.onInviteSend(player, InviteState.InvitedDisabled)},
                     modifier = Modifier.padding(all = 16.dp)
                 )
             }
@@ -53,8 +57,8 @@ fun PlayerView(
             }
             else {
                 PendingInviteButtons(
-                    onAcceptInvite = onAcceptInvite,
-                    onDeleteInvite = onDeleteInvite,
+                    onAcceptInvite = matchMakingRequest.onAcceptInvite,
+                    onDeleteInvite = {matchMakingRequest.onDeleteInvite(player)},
                 )
             }
         }

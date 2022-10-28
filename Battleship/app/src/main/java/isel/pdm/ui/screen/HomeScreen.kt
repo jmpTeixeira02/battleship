@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.dp
 import isel.pdm.R
 import isel.pdm.data.players.InviteState
 import isel.pdm.data.players.PlayerMatchmaking
+import isel.pdm.ui.elements.MatchmakingHandlers
+import isel.pdm.ui.elements.NavigationHandlers
 import isel.pdm.ui.elements.PlayerView
 import isel.pdm.ui.elements.TopBar
 import isel.pdm.ui.elements.buttons.RefreshButton
@@ -27,11 +29,10 @@ import isel.pdm.ui.theme.BattleshipTheme
 
 @Composable
 fun HomeScreen(
-    aboutUsRequest: () -> Unit,
-    replayRequest: (() -> Unit)? = null,
+    navigationRequest: NavigationHandlers = NavigationHandlers(),
+    matchMakingRequest: MatchmakingHandlers = MatchmakingHandlers(),
     refreshPlayers: () -> Unit,
     refreshState: RefreshState = RefreshState.Ready,
-    onInviteSent: (PlayerMatchmaking, InviteState) -> Unit,
     players: List<PlayerMatchmaking>
 ) {
     BattleshipTheme {
@@ -40,8 +41,7 @@ fun HomeScreen(
             backgroundColor = MaterialTheme.colors.background,
             topBar = {
                 TopBar(
-                    aboutUsRequest = aboutUsRequest,
-                    replayRequest = replayRequest,
+                    navigation = navigationRequest,
                     title = stringResource(id = R.string.app_name)
                 )
             }
@@ -59,7 +59,7 @@ fun HomeScreen(
                     items(players) {
                         PlayerView(
                             player = it,
-                            onInviteSend = onInviteSent
+                            matchMakingRequest = matchMakingRequest
                         )
                     }
                 }
@@ -81,17 +81,17 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenPreview() {
     HomeScreen(
-        aboutUsRequest = {},
         refreshPlayers = {},
+        navigationRequest = NavigationHandlers(replayRequest = {}, aboutUsRequest = {}),
         players = mutableListOf(
             PlayerMatchmaking("A"),
-            PlayerMatchmaking("B"),
-            PlayerMatchmaking("C"),
+            PlayerMatchmaking("B", inviteState = InviteState.InvitePending),
+            PlayerMatchmaking("C", inviteState = InviteState.InvitedDisabled),
             PlayerMatchmaking("A"),
-            PlayerMatchmaking("B"),
-            PlayerMatchmaking("C"),
+            PlayerMatchmaking("B", inviteState = InviteState.InvitePending),
+            PlayerMatchmaking("C", inviteState = InviteState.InvitedDisabled),
         ),
-        onInviteSent = {_, _ ->  }
+        matchMakingRequest = MatchmakingHandlers(onInviteSend = {_, _ ->  })
     )
 }
 

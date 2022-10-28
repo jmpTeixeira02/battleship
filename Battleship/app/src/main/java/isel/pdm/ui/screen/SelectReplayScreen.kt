@@ -13,13 +13,14 @@ import androidx.compose.ui.unit.dp
 import isel.pdm.R
 import isel.pdm.data.players.PlayerMatchmaking
 import isel.pdm.data.replays.Replay
+import isel.pdm.ui.elements.NavigationHandlers
 import isel.pdm.ui.elements.ReplayView
 import isel.pdm.ui.elements.TopBar
 import isel.pdm.ui.theme.BattleshipTheme
 
 @Composable
 fun SelectReplayScreen(
-    backRequest: (() -> Unit)? = null,
+    navigationRequest: NavigationHandlers = NavigationHandlers(),
    // getReplays: () -> Unit,
     availableReplays: List<Replay>
 ) {
@@ -29,7 +30,7 @@ fun SelectReplayScreen(
             backgroundColor = MaterialTheme.colors.background,
             topBar = {
                 TopBar(
-                    backRequest = backRequest,
+                    navigation = navigationRequest,
                     title = stringResource(id = R.string.replay_screenName)
                 )
             }
@@ -61,7 +62,7 @@ fun SelectReplayScreen(
 @Composable
 private fun SelectReplayScreenPreview() {
     SelectReplayScreen(
-        backRequest = {},
+        navigationRequest = NavigationHandlers(backRequest = {}),
         //getReplays = { },
         availableReplays = mutableListOf(
             Replay("#01", "01/01/0000"),

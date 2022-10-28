@@ -27,11 +27,7 @@ class HomeScreenViewModel(private val matchmaking: Matchmaking) : ViewModel() {
     fun findPlayer() {
         viewModelScope.launch {
             _isRefreshing = true
-            val foundPlayers = matchmaking.findPlayer();
-            Log.v("ViewModel", "Before Res:" + _players.toString())
-            Log.v("ViewModel", foundPlayers.toString())
-            _players = _players + foundPlayers
-            Log.v("ViewModel", "Res: " + _players.toString())
+            _players = _players + matchmaking.findPlayer()
             _isRefreshing = false
         }
     }
@@ -51,22 +47,10 @@ class HomeScreenViewModel(private val matchmaking: Matchmaking) : ViewModel() {
         _players = _players.mapIndexed { index, playerMatchmaking ->
             if (index == idx) playerMatchmaking.copy(inviteState = state)
             else playerMatchmaking
-        } as MutableList<PlayerMatchmaking>
-
+        }
     }
 
-
-    /* private var _isInviteSent by mutableStateOf(false)
-      val isInviteSent: Boolean
-          get() = _isInviteSent
-
-      private var _player by mutableStateOf<PlayerMatchmaking?>(null)
-      val player: PlayerMatchmaking?
-          get() = _player*/
-
-    /*fun sendInvite() {
-        viewModelScope.launch {
-            _player = matchmaking.sendInviteTo(player!!.name)
-        }
-    }*/
+    fun removePlayer(player: PlayerMatchmaking){
+        _players = _players - player
+    }
 }
