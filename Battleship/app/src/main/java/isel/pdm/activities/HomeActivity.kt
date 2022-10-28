@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import isel.pdm.data.players.InviteState
+import isel.pdm.data.players.PlayerMatchmaking
 import isel.pdm.service.FakeMatchmaking
 import isel.pdm.ui.elements.buttons.RefreshState
 import isel.pdm.ui.screen.HomeScreen
@@ -17,7 +19,6 @@ class HomeActivity : ComponentActivity() {
             HomeScreenViewModel(FakeMatchmaking())
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,10 +35,12 @@ class HomeActivity : ComponentActivity() {
                 refreshState = refreshState,
                 refreshPlayers = { viewModel.findPlayer() },
                 players = viewModel.players,
-
-                /*inviteState = inviteState,
-                onInviteSent = { viewModel.sendInvite() }*/
+                onInviteSent = {
+                    player: PlayerMatchmaking, state: InviteState ->
+                        viewModel.updatePlayerState(player, state)
+                }
             )
         }
     }
 }
+

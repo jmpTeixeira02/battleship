@@ -12,10 +12,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.R
+import isel.pdm.data.players.InviteState
 import isel.pdm.data.players.PlayerMatchmaking
 import isel.pdm.ui.elements.PlayerView
 import isel.pdm.ui.elements.TopBar
-import isel.pdm.ui.elements.buttons.InviteState
 import isel.pdm.ui.elements.buttons.RefreshButton
 import isel.pdm.ui.elements.buttons.RefreshState
 import isel.pdm.ui.theme.BattleshipTheme
@@ -31,8 +31,7 @@ fun HomeScreen(
     replayRequest: (() -> Unit)? = null,
     refreshPlayers: () -> Unit,
     refreshState: RefreshState = RefreshState.Ready,
-   /* inviteState: InviteState = InviteState.InviteEnabled,
-    onInviteSent: () -> Unit,*/
+    onInviteSent: (PlayerMatchmaking, InviteState) -> Unit,
     players: List<PlayerMatchmaking>
 ) {
     BattleshipTheme {
@@ -60,8 +59,7 @@ fun HomeScreen(
                     items(players) {
                         PlayerView(
                             player = it,
-                            state = InviteState.InviteEnabled,
-                            onInviteSend = { } // TODO
+                            onInviteSend = onInviteSent
                         )
                     }
                 }
@@ -93,6 +91,7 @@ private fun HomeScreenPreview() {
             PlayerMatchmaking("B"),
             PlayerMatchmaking("C"),
         ),
+        onInviteSent = {_, _ ->  }
     )
 }
 

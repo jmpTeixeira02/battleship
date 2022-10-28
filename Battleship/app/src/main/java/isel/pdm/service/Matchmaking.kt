@@ -8,27 +8,22 @@ import kotlin.coroutines.suspendCoroutine
 private val TAG = "Matchmaking"
 
 interface Matchmaking {
-    suspend fun findPlayer(): MutableList<PlayerMatchmaking>
-    suspend fun sendInviteTo(playerName: String): PlayerMatchmaking
+    suspend fun findPlayer(): List<PlayerMatchmaking>
+    //suspend fun sendInviteTo(playerName: String): PlayerMatchmaking
 }
 
 class FakeMatchmaking : Matchmaking{
-    private val fakePlayers = mutableListOf<PlayerMatchmaking>()
-    override suspend fun findPlayer(): MutableList<PlayerMatchmaking> {
+    var count: Int = 1
+    override suspend fun findPlayer(): List<PlayerMatchmaking> {
         delay(2000)
-        if (fakePlayers.size == 0){
-            fakePlayers.add(PlayerMatchmaking("1"))
-        }
-        else{
-            fakePlayers.add(PlayerMatchmaking((fakePlayers.last().name.toInt() + 1).toString() ))
-        }
-        Log.v(TAG, fakePlayers.toString())
+        val fakePlayers = listOf(PlayerMatchmaking(count.toString()))
+        count++;
         return fakePlayers
     }
 
-    override suspend fun sendInviteTo(playerName: String): PlayerMatchmaking {
+    /*override suspend fun sendInviteTo(playerName: String): PlayerMatchmaking {
         return fakePlayers[fakePlayers.indexOf(PlayerMatchmaking(playerName))]
-    }
+    }*/
 
 }
 

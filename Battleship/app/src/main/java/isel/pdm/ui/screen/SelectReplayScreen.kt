@@ -41,7 +41,6 @@ fun SelectReplayScreen(
                     modifier = Modifier
                         .weight(1F)
                         .padding(innerPadding)
-
                 ) {
                     items(availableReplays) {
                         ReplayView(
