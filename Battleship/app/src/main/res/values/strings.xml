@@ -6,6 +6,6 @@
     <string name="replay_screenName">Replays</string>
     <string name="aboutUs_screenName">About US</string>
     <string name="refreshButtonReady">Refresh</string>
-    <string name="refreshButtonRefreshing">Refreshing...</string>
+    <string name="refreshButtonRefreshing">Refreshing…</string>
 
 </resources>

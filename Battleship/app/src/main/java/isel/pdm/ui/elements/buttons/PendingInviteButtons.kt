@@ -3,10 +3,7 @@ package isel.pdm.ui.elements.buttons
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -20,11 +17,11 @@ fun PendingInviteButtons(
     onDeleteInvite: () -> Unit = { },
 ) {
     Row(horizontalArrangement = Arrangement.SpaceEvenly) {
-        AcceptInvite(
+        AcceptInviteIcon(
             id = R.drawable.ic_flat_tick_icon,
             onClick = { onAcceptInvite() },
         )
-        DeclineInvite(
+        DeclineInviteIcon(
             id = R.drawable.ic_flat_cross_icon,
             onClick = { onDeleteInvite() },
         )
@@ -32,7 +29,7 @@ fun PendingInviteButtons(
 }
 
 @Composable
-fun AcceptInvite(@DrawableRes id: Int, onClick: () -> Unit) {
+fun AcceptInviteIcon(@DrawableRes id: Int, onClick: () -> Unit) {
     Image(
         painter = painterResource(id = id),
         contentDescription = null,
@@ -44,7 +41,7 @@ fun AcceptInvite(@DrawableRes id: Int, onClick: () -> Unit) {
 }
 
 @Composable
-fun DeclineInvite(@DrawableRes id: Int, onClick: () -> Unit) {
+fun DeclineInviteIcon(@DrawableRes id: Int, onClick: () -> Unit) {
     Image(
         painter = painterResource(id = id),
         contentDescription = null,

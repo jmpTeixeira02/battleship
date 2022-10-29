@@ -14,30 +14,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import isel.pdm.R
 import isel.pdm.ui.theme.BattleshipTheme
 
+data class NavigationHandlers(
+    val backRequest: (() -> Unit)? = null,
+    val replayRequest: (() -> Unit)? = null,
+    val aboutUsRequest: (() -> Unit)? = null,
+)
+
 @Composable
 fun TopBar(
-    backRequest: (() -> Unit)? = null,
-    aboutUsRequest: (() -> Unit)? = null,
-    replayRequest: (() -> Unit)? = null,
+    navigation: NavigationHandlers = NavigationHandlers(),
     title: String = ""
 ){
     TopAppBar(
         title = { Text(text = title) },
         navigationIcon = {
-            if (backRequest != null){
-                IconButton(onClick = backRequest) {
+            if (navigation.backRequest != null){
+                IconButton(onClick = navigation.backRequest) {
                     Icon(Icons.Default.ArrowBack, contentDescription = "Return to last screen")
                 }
             }
         },
         actions = {
-            if (replayRequest != null){
-                IconButton(onClick = replayRequest) {
+            if (navigation.replayRequest != null){
+                IconButton(onClick = navigation.replayRequest) {
                     Icon(Icons.Default.Star, contentDescription = "Go to Replays Screen")
                 }
             }
-            if (aboutUsRequest != null){
-                IconButton(onClick = aboutUsRequest) {
+            if (navigation.aboutUsRequest != null){
+                IconButton(onClick = navigation.aboutUsRequest) {
                     Icon(Icons.Default.Info, contentDescription = "Go to About US Screen")
                 }
             }
@@ -49,7 +53,7 @@ fun TopBar(
 @Composable
 private fun TopBarPreviewHomeScreen(){
     BattleshipTheme {
-        TopBar(replayRequest = {}, aboutUsRequest = {}, title = "Home Screen")
+        TopBar(NavigationHandlers(replayRequest = {}, aboutUsRequest = {}), title = "Home Screen")
     }
 }
 
@@ -57,6 +61,6 @@ private fun TopBarPreviewHomeScreen(){
 @Composable
 private fun TopBarPreviewAboutUsScreen(){
     BattleshipTheme {
-        TopBar(backRequest = {}, title = "About US")
+        TopBar(NavigationHandlers(backRequest = {}), title = "About US")
     }
 }
