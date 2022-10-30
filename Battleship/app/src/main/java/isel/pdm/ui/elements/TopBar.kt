@@ -1,9 +1,6 @@
 package isel.pdm.ui.elements
 
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
@@ -12,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import isel.pdm.R
+import isel.pdm.data.PlayerMatchmaking
 import isel.pdm.ui.theme.BattleshipTheme
 
 data class NavigationHandlers(
