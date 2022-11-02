@@ -1,4 +1,4 @@
-package isel.pdm.game
+package isel.pdm.data.game
 
 data class Coordinates(val Line: Int, val Column: Int, val Value: Boolean) {
     override fun equals(other: Any?): Boolean {

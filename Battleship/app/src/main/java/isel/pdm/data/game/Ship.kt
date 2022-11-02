@@ -1,4 +1,4 @@
-package isel.pdm.game
+package isel.pdm.data.game
 
 enum class ShipTypes(val type: String, val size: Int) {
     Carrier("Porta-aviões", 5),
