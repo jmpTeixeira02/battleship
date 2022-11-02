@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import isel.pdm.data.Replay
+import isel.pdm.data.game.Replay
 import isel.pdm.ui.elements.buttons.ReplayButton
 import isel.pdm.ui.theme.BattleshipTheme
 

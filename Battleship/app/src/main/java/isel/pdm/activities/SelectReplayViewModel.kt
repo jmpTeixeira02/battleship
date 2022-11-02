@@ -2,7 +2,7 @@ package isel.pdm.activities
 
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
-import isel.pdm.data.Replay
+import isel.pdm.data.game.Replay
 import isel.pdm.service.ReplayService
 
 class SelectReplayViewModel(private val replay: ReplayService) : ViewModel() {

@@ -1,6 +1,6 @@
 package isel.pdm.service
 
-import isel.pdm.data.Replay
+import isel.pdm.data.game.Replay
 
 interface ReplayService {
     fun showReplays(): List<Replay>
