@@ -1,4 +1,4 @@
 package isel.pdm.data
 
-data class Replay(val id: String, val date: String, turns: MutableList<Turn>)
+data class Replay(val replayId: String, val date: String, val opponentName: String, turns: MutableList<Turn>)
 
