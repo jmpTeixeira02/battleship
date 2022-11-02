@@ -19,7 +19,7 @@ data class Replay(val replayId: String, val date: String, val opponentName: Stri
 
         public fun Read() : Replay {
             try {
-                
+                return Replay("", "", "", mutableListOf())
             }
             catch (e: Exception) {
                 throw Exception("Could not replay favorite game - ${e.message}")
