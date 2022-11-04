@@ -6,7 +6,13 @@ enum class TurnUser(val type: Char) {
 }
 
 data class Turn(val user: TurnUser, val coords: Coordinates) {
+    companion object {
+        fun fromString(turn: String) : Turn {
+            return Turn(TurnUser.valueOf(turn[0].toString()), Coordinates.fromString(turn.substring(1)))
+        }
+    }
+
     override fun toString(): String {
-        return user.type + coords
+        return user.type.toString() + coords
     }
 }
