@@ -10,10 +10,15 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import isel.pdm.R
-import isel.pdm.ui.elements.NavigationHandlers
+import isel.pdm.data.PlayerMatchmaking
+import isel.pdm.service.FakeMatchmakingService
+import isel.pdm.ui.elements.buttons.BiState
+import isel.pdm.ui.elements.topbar.NavigationHandlers
 import isel.pdm.ui.screen.AboutUsScreen
 import isel.pdm.ui.screen.GamePrepScreen
+import isel.pdm.utils.viewModelInit
 
 class GamePrepActivity : ComponentActivity() {
 
@@ -26,11 +31,26 @@ class GamePrepActivity : ComponentActivity() {
         }
     }
 
+    private val viewModel: GamePrepViewModel by viewModels {
+        viewModelInit {
+            GamePrepViewModel()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val deleteBoatState =
+                if (viewModel.isDeleting) BiState.hasBeenPressed
+                else BiState.hasNotBeenPressed
             GamePrepScreen(
-                emptyList()
+                players = listOf(
+                    PlayerMatchmaking("Player 1"),
+                    PlayerMatchmaking("Player 2")
+                ),
+                rotateBoat = {},
+                deleteBoatState = deleteBoatState,
+                deleteBoat = {viewModel.deleteBoat()}
             )
         }
     }

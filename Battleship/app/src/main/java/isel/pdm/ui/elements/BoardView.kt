@@ -15,25 +15,32 @@ import isel.pdm.data.PlayerMatchmaking
 
 @Composable
 fun BoardView(
+    modifier: Modifier = Modifier
 ){
-    Box(modifier = Modifier.fillMaxSize()){
-        Column(modifier = Modifier.fillMaxHeight()){
+    BoxWithConstraints(modifier = modifier){
+        val boxWithConstraintsScope = this
+        Column()
+        {
             for (i in 1..10){
-                drawRowOfColumns()
+                drawRowOfColumns(boxWithConstraintsScope)
             }
         }
     }
 }
 
 @Composable
-private fun drawRowOfColumns(){
-    Row(modifier = Modifier
-        .background(color = Color.LightGray)
+private fun drawRowOfColumns(boxWithConstraintsScope: BoxWithConstraintsScope){
+    Row(
+        modifier = Modifier
+            .background(color = Color.LightGray),
+        horizontalArrangement = Arrangement.Start
     ){
         for (k in 1.. 10){
             Box(modifier = Modifier
+                .width(boxWithConstraintsScope.maxWidth / 10)
+                .height(boxWithConstraintsScope.maxHeight / 10)
                 .border(width = 1.dp, color = Color.Black)
-                .width(width = 18.dp)){
+            ){
                 Text(" ")
             }
         }
@@ -46,27 +53,5 @@ private fun drawRowOfColumns(){
 @Preview
 @Composable
 fun BoardViewPreview(){
-    BoardView()
+    BoardView(modifier = Modifier)
 }
-
-
-/*Canvas(modifier = Modifier.fillMaxSize().clickable {  }){
-           val canvasSize = size
-           val canvasWidth = size.width
-           val canvasHeight = size.height
-
-           val smallestOrientation =
-               if (canvasHeight < canvasWidth) canvasHeight / 12
-               else canvasWidth / 12
-
-
-           for (i in 1..10){
-               for (k in 1..10){
-                   drawRect(
-                       color = if ( (i+k) % 2 == 0) Color.Red else Color.Blue,
-                       topLeft = Offset(x = smallestOrientation * i, y = smallestOrientation * k),
-                       size = Size(width = smallestOrientation, height = smallestOrientation)
-                   )
-               }
-           }
-       }*/

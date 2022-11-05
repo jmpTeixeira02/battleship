@@ -1,4 +1,4 @@
-package isel.pdm.ui.elements
+package isel.pdm.ui.elements.topbar
 
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -6,10 +6,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import isel.pdm.R
-import isel.pdm.data.PlayerMatchmaking
 import isel.pdm.ui.theme.BattleshipTheme
 
 data class NavigationHandlers(
@@ -19,7 +16,7 @@ data class NavigationHandlers(
 )
 
 @Composable
-fun TopBar(
+fun NavigationTopBar(
     navigation: NavigationHandlers = NavigationHandlers(),
     title: String = ""
 ){
@@ -51,7 +48,7 @@ fun TopBar(
 @Composable
 private fun TopBarPreviewHomeScreen(){
     BattleshipTheme {
-        TopBar(NavigationHandlers(replayRequest = {}, aboutUsRequest = {}), title = "Home Screen")
+        NavigationTopBar(NavigationHandlers(replayRequest = {}, aboutUsRequest = {}), title = "Home Screen")
     }
 }
 
@@ -59,6 +56,6 @@ private fun TopBarPreviewHomeScreen(){
 @Composable
 private fun TopBarPreviewAboutUsScreen(){
     BattleshipTheme {
-        TopBar(NavigationHandlers(backRequest = {}), title = "About US")
+        NavigationTopBar(NavigationHandlers(backRequest = {}), title = "About US")
     }
 }

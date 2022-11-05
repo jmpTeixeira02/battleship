@@ -15,11 +15,11 @@ import isel.pdm.R
 import isel.pdm.data.InviteState
 import isel.pdm.data.PlayerMatchmaking
 import isel.pdm.ui.elements.MatchmakingHandlers
-import isel.pdm.ui.elements.NavigationHandlers
+import isel.pdm.ui.elements.topbar.NavigationHandlers
 import isel.pdm.ui.elements.PlayerView
-import isel.pdm.ui.elements.TopBar
+import isel.pdm.ui.elements.buttons.BiState
+import isel.pdm.ui.elements.topbar.NavigationTopBar
 import isel.pdm.ui.elements.buttons.RefreshButton
-import isel.pdm.ui.elements.buttons.RefreshState
 import isel.pdm.ui.theme.BattleshipTheme
 
 /*data class PlayersListScreen(
@@ -32,7 +32,7 @@ fun HomeScreen(
     navigationRequest: NavigationHandlers = NavigationHandlers(),
     matchMakingRequest: MatchmakingHandlers = MatchmakingHandlers(),
     refreshPlayers: () -> Unit,
-    refreshState: RefreshState = RefreshState.Ready,
+    refreshState: BiState = BiState.hasNotBeenPressed,
     players: List<PlayerMatchmaking>
 ) {
     BattleshipTheme {
@@ -40,7 +40,7 @@ fun HomeScreen(
             modifier = Modifier.fillMaxSize(),
             backgroundColor = MaterialTheme.colors.background,
             topBar = {
-                TopBar(
+                NavigationTopBar(
                     navigation = navigationRequest,
                     title = stringResource(id = R.string.app_name)
                 )
