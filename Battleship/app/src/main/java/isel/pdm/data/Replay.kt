@@ -1,3 +1,12 @@
 package isel.pdm.data
 
-data class Replay(val id: String, val date: String)
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+data class Replay(
+    val replayId: String,
+    val date: String,
+    val opponentName: String,
+    val shotsFired: Int
+) : Parcelable

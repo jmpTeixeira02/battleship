@@ -82,7 +82,7 @@ fun HomeScreen(
 private fun HomeScreenPreview() {
     HomeScreen(
         refreshPlayers = {},
-        navigationRequest = NavigationHandlers(replayRequest = {}, aboutUsRequest = {}),
+        navigationRequest = NavigationHandlers(replayListRequest = {}, aboutUsRequest = {}),
         players = mutableListOf(
             PlayerMatchmaking("A"),
             PlayerMatchmaking("B", inviteState = InviteState.InvitePending),
@@ -94,10 +94,3 @@ private fun HomeScreenPreview() {
         matchMakingRequest = MatchmakingHandlers(onInviteSend = {_, _ ->  })
     )
 }
-
-/*
-@Preview
-@Composable
-private fun PlayerInvitePreview () {
-
-}*/

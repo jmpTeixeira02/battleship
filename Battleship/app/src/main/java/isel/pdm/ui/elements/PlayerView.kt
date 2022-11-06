@@ -33,7 +33,10 @@ fun PlayerView(
             .padding(16.dp),
         elevation = 10.dp
     ) {
-        Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
                 text = player.name,
                 style = MaterialTheme.typography.h6,
@@ -41,24 +44,27 @@ fun PlayerView(
                     .padding(all = 24.dp),
                 textAlign = TextAlign.Center
             )
-            if (player.inviteState == InviteState.InviteEnabled){
+            if (player.inviteState == InviteState.InviteEnabled) {
                 InviteButton(
                     state = player.inviteState,
-                    onClick = {matchMakingRequest.onInviteSend(player, InviteState.InvitedDisabled)},
+                    onClick = {
+                        matchMakingRequest.onInviteSend(
+                            player,
+                            InviteState.InvitedDisabled
+                        )
+                    },
                     modifier = Modifier.padding(all = 16.dp)
                 )
-            }
-            else if (player.inviteState == InviteState.InvitedDisabled){
+            } else if (player.inviteState == InviteState.InvitedDisabled) {
                 InviteButton(
                     state = player.inviteState,
                     onClick = {},
                     modifier = Modifier.padding(all = 16.dp)
                 )
-            }
-            else {
+            } else {
                 PendingInviteButtons(
                     onAcceptInvite = matchMakingRequest.onAcceptInvite,
-                    onDeleteInvite = {matchMakingRequest.onDeleteInvite(player)},
+                    onDeleteInvite = { matchMakingRequest.onDeleteInvite(player) },
                 )
             }
         }

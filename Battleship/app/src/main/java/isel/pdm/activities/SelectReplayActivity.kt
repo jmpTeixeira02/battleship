@@ -6,8 +6,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import isel.pdm.data.Replay
 import isel.pdm.service.FakeReplayService
 import isel.pdm.ui.elements.NavigationHandlers
+import isel.pdm.ui.elements.ReplayHandler
 import isel.pdm.ui.screen.SelectReplayScreen
 import isel.pdm.utils.viewModelInit
 
@@ -28,17 +30,22 @@ class SelectReplayActivity : ComponentActivity() {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.getNewReplays()
         setContent {
             SelectReplayScreen(
-                navigationRequest = NavigationHandlers(backRequest = {finish()}),
-               // getReplays = { viewModel.getAvailableReplays() },
-                availableReplays = viewModel.getAvailableReplays()
+                navigationRequest = NavigationHandlers(
+                    backRequest = { finish() },
+                ),
+                availableReplays = viewModel.getAvailableReplays(),
+                replayRequest = ReplayHandler(
+                    onOpenSelectedReplay = { replay: Replay ->
+                        viewModel.openReplay(replay)
+                        ReplayGameActivity.navigate(origin = this, replay)
+                    }
+                )
             )
         }
     }
-
-
 }

@@ -27,29 +27,26 @@ class HomeActivity : ComponentActivity() {
             val refreshState =
                 if (viewModel.isRefreshing) RefreshState.Refreshing
                 else RefreshState.Ready
-           /* val inviteState =
-                if (viewModel.isInviteSent) InviteState.InvitedDisabled
-                else InviteState.InviteEnabled*/
+            /* val inviteState =
+                 if (viewModel.isInviteSent) InviteState.InvitedDisabled
+                 else InviteState.InviteEnabled*/
             HomeScreen(
                 navigationRequest = NavigationHandlers(
                     aboutUsRequest = { AboutUsActivity.navigate(origin = this) },
-                    replayRequest = { SelectReplayActivity.navigate(origin = this )}
+                    replayListRequest = { SelectReplayActivity.navigate(origin = this) }
                 ),
                 matchMakingRequest = MatchmakingHandlers(
                     onAcceptInvite = {},
-                    onInviteSend = {
-                            player: PlayerMatchmaking, state: InviteState ->
+                    onInviteSend = { player: PlayerMatchmaking, state: InviteState ->
                         viewModel.updatePlayerState(player, state)
                     },
-                    onDeleteInvite = {player: PlayerMatchmaking ->
+                    onDeleteInvite = { player: PlayerMatchmaking ->
                         viewModel.removePlayer(player)
                     }
                 ),
                 refreshState = refreshState,
                 refreshPlayers = { viewModel.findPlayer() },
                 players = viewModel.players,
-
-
             )
         }
     }

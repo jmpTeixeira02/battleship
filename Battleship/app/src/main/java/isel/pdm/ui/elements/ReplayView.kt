@@ -12,14 +12,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import isel.pdm.R
 import isel.pdm.data.Replay
 import isel.pdm.ui.elements.buttons.ReplayButton
 import isel.pdm.ui.theme.BattleshipTheme
 
+data class ReplayHandler(
+    val onOpenSelectedReplay: (Replay) -> Unit = { }
+)
+
+
 @Composable
 fun ReplayView(
     replay: Replay,
-    onReplaySelect: () -> Unit = { }
+    replayRequest: ReplayHandler = ReplayHandler(),
 ) {
     Card(
         modifier = Modifier
@@ -29,7 +35,7 @@ fun ReplayView(
     ) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly) {
             Text(
-                text = replay.id,
+                text = replay.replayId,
                 style = MaterialTheme.typography.h6,
                 modifier = Modifier
                     .padding(all = 16.dp),
@@ -42,9 +48,12 @@ fun ReplayView(
                     .padding(all = 16.dp),
                 textAlign = TextAlign.Center
             )
-            ReplayButton(
-                onReplaySelect = onReplaySelect
-            )
+            Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                ReplayButton(
+                    id = R.drawable.ic_replay_button_icon,
+                    onClick = { replayRequest.onOpenSelectedReplay(replay) }
+                )
+            }
         }
     }
 }
@@ -54,7 +63,7 @@ fun ReplayView(
 @Composable
 private fun SelectReplayScreenPreview() {
     BattleshipTheme {
-        ReplayView(replay = Replay("#03", "22/10/2022"))
+        ReplayView(replay = Replay("#03", "22/10/2022", "OpponentX", 23))
     }
 
 }
