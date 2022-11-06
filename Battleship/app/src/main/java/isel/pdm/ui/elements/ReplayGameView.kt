@@ -33,7 +33,7 @@ fun ReplayGameView(replay: Replay) {
     }
     Row(horizontalArrangement = Arrangement.SpaceEvenly) {
         Text(
-            text = "Total shots: ",
+            text = "Shots fired: ",
             style = MaterialTheme.typography.h6,
             modifier = Modifier
                 .padding(top = 8.dp),

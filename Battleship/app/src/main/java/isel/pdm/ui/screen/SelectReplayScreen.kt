@@ -19,7 +19,7 @@ import isel.pdm.ui.theme.BattleshipTheme
 fun SelectReplayScreen(
     navigationRequest: NavigationHandlers = NavigationHandlers(),
     availableReplays: List<Replay>,
-    replayRequest: ReplayHandler = ReplayHandler()
+    replayRequest: ReplayHandler = ReplayHandler(),
 ) {
     BattleshipTheme {
         Scaffold(
@@ -41,7 +41,7 @@ fun SelectReplayScreen(
                         .padding(innerPadding)
                 ) {
                     items(availableReplays) {
-                        ReplayView(
+                        ExpandableReplayView(
                             replay = it,
                             replayRequest = replayRequest,
                         )

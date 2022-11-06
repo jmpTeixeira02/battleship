@@ -19,7 +19,7 @@ fun ReplayButton(
         painter = painterResource(id = id),
         contentDescription = null,
         modifier = Modifier
-            .size(64.dp)
+            .size(48.dp)
             .padding(all = 8.dp)
             .clickable { onClick() }
     )
