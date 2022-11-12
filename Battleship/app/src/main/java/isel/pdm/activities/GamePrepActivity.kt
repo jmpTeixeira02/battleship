@@ -50,7 +50,11 @@ class GamePrepActivity : ComponentActivity() {
                 ),
                 rotateBoat = {},
                 deleteBoatState = deleteBoatState,
-                deleteBoat = {viewModel.deleteBoat()}
+                deleteBoat = {viewModel.deleteBoat()},
+                onCellClick = {
+                    x: Int, y: Int -> Log.v("GamePrepActivity", "Cell: ${x}, ${y}")
+                },
+                onBoatClick = {boat: String -> Log.v("GamePrepActivity", "Boat ${boat} was press")}
             )
         }
     }

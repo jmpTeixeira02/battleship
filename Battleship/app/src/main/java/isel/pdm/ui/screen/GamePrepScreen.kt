@@ -27,7 +27,9 @@ fun GamePrepScreen(
     players: List<PlayerMatchmaking>,
     rotateBoat: () -> Unit = {},
     deleteBoat: () -> Unit,
-    deleteBoatState: BiState = BiState.hasNotBeenPressed
+    deleteBoatState: BiState = BiState.hasNotBeenPressed,
+    onCellClick: (x: Int, y: Int) -> Unit = {_, _ ->},
+    onBoatClick: (boat: String) -> Unit = {}
 ){
     BattleshipTheme {
         Scaffold(
@@ -43,10 +45,13 @@ fun GamePrepScreen(
                     modifier = Modifier
                         .width(BOARD_SIZE)
                         .height(BOARD_SIZE),
-                    onClick = { Log.v("GAME_PREP_SCREEN", "CELL WAS CLICKED")}
+                    onClick = onCellClick
                 )
 
-                FleetView(modifier = Modifier)
+                FleetView(
+                    modifier = Modifier,
+                    onClick = onBoatClick
+                )
 
                 Button(onClick = rotateBoat, modifier = Modifier.padding(all = 16.dp)) {
                     Text(text = "Random")

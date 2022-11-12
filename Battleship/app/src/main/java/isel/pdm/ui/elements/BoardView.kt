@@ -6,59 +6,46 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import isel.pdm.utils.drawCell
 
 
 @Composable
 fun BoardView(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
-){
-    BoxWithConstraints(modifier = modifier){
-        val boxWithConstraintsScope = this
+    size: Int = 10,
+    boarderColor: Color = Color.Black,
+    cellFillColor: Color = Color.LightGray,
+    cellText: String = " ",
+    onClick: (x: Int, y: Int) -> Unit = {_,_ ->}
+) {
+    BoxWithConstraints(modifier = modifier) {
+        val cellHeight = this.maxHeight / size
+        val CellWidth = this.maxWidth / size
         Column()
         {
-            for (i in 1..10){
-                drawRowOfCells(
-                    size = 10,
-                    boxWithConstraintsScope = boxWithConstraintsScope,
-                    boarderColor = Color.Black,
-                    cellFillColor = Color.LightGray,
-                    onClick = onClick
-                )
+            for (x in 1..10) {
+                Row(
+                    modifier = Modifier
+                        .background(color = cellFillColor),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    for (y in 1..size) {
+                        drawCell(
+                            modifier = Modifier
+                                .width(cellHeight)
+                                .height(CellWidth),
+                            boarderColor = boarderColor,
+                            cellFillColor = cellFillColor,
+                            cellText = cellText,
+                            onClick = { onClick(x, y)}
+                        )
+                    }
+                }
             }
         }
     }
 }
-
-@Composable
-fun drawRowOfCells(
-    size: Int,
-    boxWithConstraintsScope: BoxWithConstraintsScope,
-    boarderColor: Color,
-    cellFillColor: Color,
-    cellText: String = " ",
-    onClick: () -> Unit = {}
-){
-    Row(
-        modifier = Modifier
-            .background(color = cellFillColor),
-        horizontalArrangement = Arrangement.Start
-    ){
-        for (k in 1.. size){
-            drawCell(
-                modifier = Modifier
-                    .width(boxWithConstraintsScope.maxWidth / size)
-                    .height(boxWithConstraintsScope.maxHeight / size),
-                boarderColor = boarderColor,
-                cellFillColor = cellFillColor,
-                cellText = cellText,
-                onClick = onClick
-            )
-        }
-    }
-}
-
 
 @Preview
 @Composable
