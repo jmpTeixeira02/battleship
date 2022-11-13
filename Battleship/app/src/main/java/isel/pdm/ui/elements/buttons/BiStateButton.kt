@@ -13,9 +13,9 @@ import isel.pdm.data.InviteState
 import isel.pdm.ui.theme.BattleshipTheme
 
 
-public class BiStateButtonStrings(val hasNotBeenPressedStr: String, val hasBeenPressedStrResStr: String)
+class BiStateButtonStrings(val hasNotBeenPressedStr: String, val hasBeenPressedStrResStr: String)
 
-public enum class BiState {hasNotBeenPressed, hasBeenPressed}
+enum class BiState {hasNotBeenPressed, hasBeenPressed}
 
 @Composable
 private fun BiStateButton(

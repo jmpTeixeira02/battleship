@@ -11,12 +11,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import isel.pdm.ui.elements.buttons.BiState
 import isel.pdm.utils.drawCell
+
+enum class Fleet {Destroyer, Submarine, Cruiser, BattleShip, Carrier}
 
 @Composable
 fun FleetView(
     modifier: Modifier = Modifier,
-    onClick: (boat: String) -> Unit = {}
+    onClick: (idx: Int) -> Unit = { _->},
+    selectedBoatStateList: List<BiState> = listOf()
 ){
     BoxWithConstraints(modifier = modifier.padding(4.dp)) {
         val maxBoatCellsSize = this.maxWidth / 6
@@ -27,31 +31,36 @@ fun FleetView(
                 verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ){
-                buildBoat(size = 2, color = Color.Magenta, name = "Destroyer",
+                buildBoat(size = 2, name = "Destroyer",
                     maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                    onClick = { onClick("Destroyer") }
+                    onClick = onClick, state = selectedBoatStateList[Fleet.Destroyer.ordinal],
+                    listIdx = Fleet.Destroyer.ordinal
                 )
                 Spacer(modifier = spaceModifier)
                 Row(horizontalArrangement = Arrangement.SpaceEvenly){
-                    buildBoat(size = 3, color = Color.Red, name = "Submarine",
+                    buildBoat(size = 3, name = "Submarine",
                         maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                        onClick = { onClick("Submarine") }
+                        onClick = onClick, state = selectedBoatStateList[Fleet.Submarine.ordinal],
+                        listIdx = Fleet.Submarine.ordinal
                     )
                     Spacer(modifier = spaceModifier)
-                    buildBoat(size = 3, color = Color.Cyan, name = "Cruiser",
+                    buildBoat(size = 3, name = "Cruiser",
                         maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                        onClick = { onClick("Cruiser") }
+                        onClick = onClick, state = selectedBoatStateList[Fleet.Cruiser.ordinal],
+                        listIdx = Fleet.Cruiser.ordinal
                     )
                 }
                 Spacer(modifier = spaceModifier)
-                buildBoat(size= 4, color = Color.Yellow, name = "BattleShip",
+                buildBoat(size= 4, name = "BattleShip",
                     maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                    onClick = { onClick("BattleShip") }
+                    onClick = onClick, state = selectedBoatStateList[Fleet.BattleShip.ordinal],
+                    listIdx = Fleet.BattleShip.ordinal
                 )
                 Spacer(modifier = spaceModifier)
-                buildBoat(size = 5, color = Color.Green, name = "Carrier",
+                buildBoat(size = 5, name = "Carrier",
                     maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                    onClick = { onClick("Carrier") }
+                    onClick = onClick, state = selectedBoatStateList[Fleet.Carrier.ordinal],
+                    listIdx = Fleet.Carrier.ordinal
                 )
             }
 
@@ -63,17 +72,21 @@ private fun buildBoat(
     size: Int,
     maxBoatCellSize: Dp,
     color: Color = Color.Green,
+    state: BiState = BiState.hasNotBeenPressed,
     name: String = " ",
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: (idx: Int) -> Unit = { _->},
+    listIdx: Int = 0
 ){
     Box(Modifier.border(color = Color.Black, width = 1.dp)){
         drawCell(
             boarderColor = Color.Transparent,
-            cellFillColor = color,
+            cellFillColor = if (state == BiState.hasNotBeenPressed) color else Color.Red,
             cellText = name,
             modifier = modifier.width(maxBoatCellSize*size),
-            onClick = onClick
+            onClick = {
+                onClick(listIdx)
+            }
         )
     }
 

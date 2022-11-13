@@ -1,16 +1,13 @@
 package isel.pdm.activities
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
-import android.content.ContentValues
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.ui.graphics.Color
 import isel.pdm.R
 import isel.pdm.data.PlayerMatchmaking
 import isel.pdm.service.FakeMatchmakingService
@@ -37,12 +34,22 @@ class GamePrepActivity : ComponentActivity() {
         }
     }
 
+    private fun boatSelectedClick(idx: Int){
+        viewModel.updateSelectedList(idx)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val deleteBoatState =
                 if (viewModel.isDeleting) BiState.hasBeenPressed
                 else BiState.hasNotBeenPressed
+            val selectedBoatStateList =
+                viewModel.isSelectedList.map{
+                    bool ->
+                        if (bool) BiState.hasBeenPressed
+                        else BiState.hasNotBeenPressed
+            }
             GamePrepScreen(
                 players = listOf(
                     PlayerMatchmaking("Player 1"),
@@ -51,10 +58,13 @@ class GamePrepActivity : ComponentActivity() {
                 rotateBoat = {},
                 deleteBoatState = deleteBoatState,
                 deleteBoat = {viewModel.deleteBoat()},
-                onCellClick = {
-                    x: Int, y: Int -> Log.v("GamePrepActivity", "Cell: ${x}, ${y}")
+                onCellClick = { x: Int, y: Int ->
+                    Log.v("GamePrepActivity", "Cell: ${x}, ${y}")
                 },
-                onBoatClick = {boat: String -> Log.v("GamePrepActivity", "Boat ${boat} was press")}
+                selectedBoatStateList = selectedBoatStateList,
+                onBoatClick = {
+                    idx: Int -> boatSelectedClick(idx)
+                }
             )
         }
     }
