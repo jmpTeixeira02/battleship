@@ -34,6 +34,10 @@
         <activity
             android:name=".activities.SelectReplayActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".activities.ReplayGameActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

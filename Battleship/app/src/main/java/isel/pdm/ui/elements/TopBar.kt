@@ -9,14 +9,12 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import isel.pdm.R
 import isel.pdm.ui.theme.BattleshipTheme
 
 data class NavigationHandlers(
     val backRequest: (() -> Unit)? = null,
-    val replayRequest: (() -> Unit)? = null,
+    val replayListRequest: (() -> Unit)? = null,
     val aboutUsRequest: (() -> Unit)? = null,
 )
 
@@ -35,8 +33,8 @@ fun TopBar(
             }
         },
         actions = {
-            if (navigation.replayRequest != null){
-                IconButton(onClick = navigation.replayRequest) {
+            if (navigation.replayListRequest != null){
+                IconButton(onClick = navigation.replayListRequest) {
                     Icon(Icons.Default.Star, contentDescription = "Go to Replays Screen")
                 }
             }
@@ -53,7 +51,7 @@ fun TopBar(
 @Composable
 private fun TopBarPreviewHomeScreen(){
     BattleshipTheme {
-        TopBar(NavigationHandlers(replayRequest = {}, aboutUsRequest = {}), title = "Home Screen")
+        TopBar(NavigationHandlers(replayListRequest = {}, aboutUsRequest = {}), title = "Home Screen")
     }
 }
 
