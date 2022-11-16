@@ -1,6 +1,6 @@
 package isel.pdm.data.game
 
-data class Replay(val replayId: String = , val date: String = LocalDate.now().toString(), val opponentName: String, val turns: List<Turn> = listOf()) {
+data class Replay(val replayId: String, val date: String = LocalDate.now().toString(), val opponentName: String, val turns: List<Turn> = listOf()) : Parcelable {
     companion object {
         private var dump: String = ""
 
