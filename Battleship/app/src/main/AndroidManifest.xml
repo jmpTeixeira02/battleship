@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Battleship"
         tools:targetApi="31">
         <activity
-            android:name=".activities.HomeActivity"
+            android:name=".activities.CreatePlayerActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Battleship">
@@ -27,6 +27,11 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <activity
+            android:name=".activities.HomeActivity"
+            android:exported="false" />
+
         <activity
             android:name=".activities.AboutUsActivity"
             android:exported="false" />

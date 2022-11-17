@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import isel.pdm.R
 import isel.pdm.data.InviteState
 import isel.pdm.data.PlayerMatchmaking
+import isel.pdm.data.Replay
 import isel.pdm.ui.elements.MatchmakingHandlers
 import isel.pdm.ui.elements.NavigationHandlers
 import isel.pdm.ui.elements.PlayerView
@@ -33,7 +34,8 @@ fun HomeScreen(
     matchMakingRequest: MatchmakingHandlers = MatchmakingHandlers(),
     refreshPlayers: () -> Unit,
     refreshState: RefreshState = RefreshState.Ready,
-    players: List<PlayerMatchmaking>
+    players: List<PlayerMatchmaking>,
+    currentPlayer: PlayerMatchmaking? /* adicionar à Top bar ou criar um player card ?*/
 ) {
     BattleshipTheme {
         Scaffold(
@@ -91,6 +93,7 @@ private fun HomeScreenPreview() {
             PlayerMatchmaking("B", inviteState = InviteState.InvitePending),
             PlayerMatchmaking("C", inviteState = InviteState.InvitedDisabled),
         ),
-        matchMakingRequest = MatchmakingHandlers(onInviteSend = {_, _ ->  })
+        matchMakingRequest = MatchmakingHandlers(onInviteSend = {_, _ ->  }),
+        currentPlayer = PlayerMatchmaking("xd")
     )
 }
