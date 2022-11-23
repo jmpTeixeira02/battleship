@@ -1,7 +1,41 @@
 package isel.pdm.data.game
 
-data class Replay(val replayId: String, val date: String = LocalDate.now().toString(), val opponentName: String, val turns: List<Turn> = listOf()) : Parcelable {
-    companion object {
+import android.os.Parcel
+import android.os.Parcelable
+import java.io.File
+import java.time.LocalDate
+
+data class Replay(val replayId: String, val date: String = LocalDate.now().toString(), val opponentName: String, val turns: List<Turn> = listOf()) :
+    Parcelable {
+
+    constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
+        LocalDate.parse(parcel.readString()!!).toString(),
+        parcel.readString()!!,
+        TODO("turns")
+    )
+
+    override fun describeContents(): Int {
+        TODO("Not yet implemented")
+    }
+
+    override fun writeToParcel(p0: Parcel?, p1: Int) {
+        p0!!.writeInt(p1)
+    }
+
+    companion object CREATOR : Parcelable.Creator<Replay> {
+        override fun createFromParcel(parcel: Parcel): Replay {
+            return Replay(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Replay?> {
+            val temp = arrayOfNulls<Replay?>(size)
+            for (i in 0 until size) {
+                temp[i] = Replay("Standard ID", LocalDate.now().toString(), "Opponent Name", emptyList())
+            }
+            return temp
+        }
+
         private var dump: String = ""
 
         fun dump(/*path: String, */rep: Replay) {
@@ -35,7 +69,7 @@ data class Replay(val replayId: String, val date: String = LocalDate.now().toStr
             try {
                 val header = readHeaderInfo()
                 val turns = mutableListOf<Turn>()
-                dump.substring(dump.IndexOf("\n--------------------\n") + 22, dump.length + 1).split(Regex.fromLiteral("\n")).forEach {
+                dump.substring(dump.indexOf("\n--------------------\n") + 22, dump.length + 1).split(Regex.fromLiteral("\n")).forEach {
                     turns.add(Turn.fromString(it))
                 }
 
@@ -54,7 +88,7 @@ data class Replay(val replayId: String, val date: String = LocalDate.now().toStr
 
         fun readHeaderInfo(/*path: String*/): List<String> {
             try {
-                return dump.substring(0, dum.indexOf("\n")).split("|||")
+                return dump.substring(0, dump.indexOf("\n")).split("|||")
 
                 /*
                 val header = File(path).readLines()[0]
@@ -68,12 +102,14 @@ data class Replay(val replayId: String, val date: String = LocalDate.now().toStr
         }
 
         fun getTurns(path: String): List<Turn> {
-            var file = File(path)
-            var temp: List<Turn> = file.readLines()
-            var res = mutableListOf<Turn>()
-            temp.subList(2, temp.size + 1).forEach {
-                res.add(Turn.fromString(it.toString()))
+            val file = File(path)
+            val temp = file.readLines()
+            val res = emptyList<Turn>().toMutableList()
+            temp.subList(2, temp.size).forEach {
+                res.add(Turn.fromString(it))
             }
+
+            return res
         }
     }
 }
