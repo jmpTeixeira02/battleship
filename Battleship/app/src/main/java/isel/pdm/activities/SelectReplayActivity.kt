@@ -8,7 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import isel.pdm.data.Replay
 import isel.pdm.service.FakeReplayService
-import isel.pdm.ui.elements.NavigationHandlers
+import isel.pdm.ui.elements.topbar.NavigationHandlers
 import isel.pdm.ui.elements.ReplayHandler
 import isel.pdm.ui.screen.SelectReplayScreen
 import isel.pdm.utils.viewModelInit

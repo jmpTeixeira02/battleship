@@ -12,7 +12,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.R
 import isel.pdm.data.Replay
-import isel.pdm.ui.elements.*
+import isel.pdm.ui.elements.ExpandableReplayView
+import isel.pdm.ui.elements.ReplayHandler
+import isel.pdm.ui.elements.topbar.NavigationHandlers
+import isel.pdm.ui.elements.ReplayView
+import isel.pdm.ui.elements.topbar.NavigationTopBar
 import isel.pdm.ui.theme.BattleshipTheme
 
 @Composable
@@ -26,7 +30,7 @@ fun SelectReplayScreen(
             modifier = Modifier.fillMaxSize(),
             backgroundColor = MaterialTheme.colors.background,
             topBar = {
-                TopBar(
+                NavigationTopBar(
                     navigation = navigationRequest,
                     title = stringResource(id = R.string.replay_screenName)
                 )

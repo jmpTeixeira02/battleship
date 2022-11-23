@@ -38,6 +38,10 @@
         <activity
             android:name=".activities.ReplayGameActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".activities.GamePrepActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

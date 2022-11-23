@@ -1,5 +1,7 @@
 package isel.pdm.ui.elements
 
+import android.graphics.drawable.shapes.Shape
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +18,7 @@ import isel.pdm.R
 import isel.pdm.data.Replay
 import isel.pdm.ui.elements.buttons.ReplayButton
 import isel.pdm.ui.theme.BattleshipTheme
+import isel.pdm.ui.theme.Shapes
 
 data class ReplayHandler(
     val onOpenSelectedReplay: (Replay) -> Unit = { }
@@ -31,7 +34,8 @@ fun ReplayView(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        elevation = 10.dp
+        elevation = 10.dp,
+
     ) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly) {
             Text(
