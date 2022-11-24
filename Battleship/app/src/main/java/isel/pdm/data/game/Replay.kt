@@ -5,22 +5,26 @@ import android.os.Parcelable
 import java.io.File
 import java.time.LocalDate
 
-data class Replay(val replayId: String, val date: String = LocalDate.now().toString(), val opponentName: String, val turns: List<Turn> = listOf()) :
+data class Replay(val replayId: String = "", val date: String = LocalDate.now().toString(), val opponentName: String, val turns: List<Turn> = listOf()) :
     Parcelable {
-
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
-        LocalDate.parse(parcel.readString()!!).toString(),
         parcel.readString()!!,
-        TODO("turns")
-    )
-
-    override fun describeContents(): Int {
-        TODO("Not yet implemented")
+        parcel.readString()!!,
+        emptyList()
+    ) {
+        parcel.readTypedList(turns, Turn.CREATOR)
     }
 
-    override fun writeToParcel(p0: Parcel?, p1: Int) {
-        p0!!.writeInt(p1)
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(replayId)
+        parcel.writeString(date)
+        parcel.writeString(opponentName)
+        parcel.writeTypedList(turns)
     }
 
     companion object CREATOR : Parcelable.Creator<Replay> {
@@ -29,11 +33,11 @@ data class Replay(val replayId: String, val date: String = LocalDate.now().toStr
         }
 
         override fun newArray(size: Int): Array<Replay?> {
-            val temp = arrayOfNulls<Replay?>(size)
+            val res = arrayOfNulls<Replay?>(size)
             for (i in 0 until size) {
-                temp[i] = Replay("Standard ID", LocalDate.now().toString(), "Opponent Name", emptyList())
+                res[i] = Replay("$i", LocalDate.now().toString(), "Opponent $i", emptyList())
             }
-            return temp
+            return res
         }
 
         private var dump: String = ""
@@ -103,9 +107,9 @@ data class Replay(val replayId: String, val date: String = LocalDate.now().toStr
 
         fun getTurns(path: String): List<Turn> {
             val file = File(path)
-            val temp = file.readLines()
-            val res = emptyList<Turn>().toMutableList()
-            temp.subList(2, temp.size).forEach {
+            val temp: List<String> = file.readLines()
+            val res = mutableListOf<Turn>()
+            temp.subList(2, temp.size + 1).forEach {
                 res.add(Turn.fromString(it))
             }
 

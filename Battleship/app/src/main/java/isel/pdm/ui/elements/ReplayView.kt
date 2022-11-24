@@ -63,7 +63,7 @@ fun ReplayView(
 @Composable
 private fun SelectReplayScreenPreview() {
     BattleshipTheme {
-        ReplayView(replay = Replay("#03", "22/10/2022", "OpponentX", 23))
+        ReplayView(replay = Replay("#03", "22/10/2022", "OpponentX", emptyList()))
     }
 
 }

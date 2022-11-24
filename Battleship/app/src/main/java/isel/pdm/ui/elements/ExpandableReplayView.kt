@@ -25,7 +25,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.R
-import isel.pdm.data.Replay
+import isel.pdm.data.game.Replay
+import isel.pdm.data.game.Turn
 import isel.pdm.ui.elements.buttons.ReplayButton
 
 @Composable
@@ -78,7 +79,7 @@ private fun StatelessExpandableReplayView(
                 Text(
                     text = "Game ID: " + replay.replayId +
                             "\n\nOpponent name: " + replay.opponentName +
-                            "\n\nShots fired: " + replay.shotsFired.toString(),
+                            "\n\nShots fired: " + replay.turns.size.toString(),
                     style = MaterialTheme.typography.subtitle2,
                     textAlign = TextAlign.Start,
                     maxLines = maxLines,
@@ -139,5 +140,5 @@ private val randomReplay = Replay(
     replayId = "#XPTO123",
     date = "14/10/2022",
     opponentName = "ADV_3",
-    shotsFired = 29
+    turns = listOf(Turn.fromString("E(1,6)"), Turn.fromString("P(4,8)"), Turn.fromString("E(2,9)"), Turn.fromString("P(1,7)"))
 )

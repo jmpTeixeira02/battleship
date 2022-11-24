@@ -20,12 +20,22 @@ data class Ship(val type: ShipTypes, val start: Coordinates, val end: Coordinate
     override fun equals(other: Any?): Boolean {
         return other == this ||
                 (other!!::class == Ship::class &&
-                        start == (other as Ship).start &&
-                        end == (other as Ship).end &&
-                        type == (other as Ship).type)
+                start == (other as Ship).start &&
+                end == other.end &&
+                type == other.type)
     }
 
     override fun toString(): String {
-        return type.type + " (" + type.size + " espaços) @ (" + start.toString() + ", " + end.toString() + ')'
+        return type.type + " (" + type.size + " espaços) @ (" + start.toString() + "," + end.toString() + ')'
+    }
+
+    override fun hashCode(): Int {
+        var result = type.hashCode()
+        result = 31 * result + start.hashCode()
+        result = 31 * result + end.hashCode()
+        result = 31 * result + size
+        result = 31 * result + hasDrowned.hashCode()
+        result = 31 * result + nHits
+        return result
     }
 }

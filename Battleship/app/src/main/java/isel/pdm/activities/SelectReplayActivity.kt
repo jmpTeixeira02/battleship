@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import isel.pdm.data.Replay
+import isel.pdm.data.game.Replay
 import isel.pdm.service.FakeReplayService
 import isel.pdm.ui.elements.NavigationHandlers
 import isel.pdm.ui.elements.ReplayHandler

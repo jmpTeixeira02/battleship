@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import isel.pdm.data.Replay
+import isel.pdm.data.game.Replay
 
 @Composable
 fun ReplayGameView(replay: Replay) {
@@ -40,7 +40,7 @@ fun ReplayGameView(replay: Replay) {
             textAlign = TextAlign.Start
         )
         Text(
-            text = replay.shotsFired.toString(),
+            text = replay.turns.size.toString(),
             style = MaterialTheme.typography.h6,
             modifier = Modifier
                 .padding(top = 8.dp),
