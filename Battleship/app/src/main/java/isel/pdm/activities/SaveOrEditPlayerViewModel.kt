@@ -4,9 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import isel.pdm.data.PlayerMatchmaking
+import isel.pdm.data.player.PlayerMatchmaking
 
-class CreatePlayerViewModel : ViewModel() {
+class SaveOrEditPlayerViewModel : ViewModel() {
     private var _players by mutableStateOf<List<PlayerMatchmaking>>(emptyList())
     private val players: List<PlayerMatchmaking>
         get() = _players

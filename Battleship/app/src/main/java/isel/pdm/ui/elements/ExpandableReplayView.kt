@@ -19,6 +19,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -54,6 +55,7 @@ private fun StatelessExpandableReplayView(
         shape = MaterialTheme.shapes.medium,
         elevation = 10.dp,
         modifier = Modifier
+            .testTag("ExpandableReplayView")
             .fillMaxWidth()
             .padding(16.dp)
             .semantics { set(expandedPropertyKey, isExpanded) }
@@ -101,6 +103,7 @@ private fun StatelessExpandableReplayView(
                     modifier = Modifier
                         .size(32.dp)
                         .clickable(onClick = onExpandedToggleRequest)
+                        .testTag("ExpandableReplayView.ExpandAction")
                 )
             }
             Text(
@@ -111,7 +114,6 @@ private fun StatelessExpandableReplayView(
                     .fillMaxWidth()
                     .padding(top = 8.dp, end = 8.dp),
             )
-
         }
     }
 }
