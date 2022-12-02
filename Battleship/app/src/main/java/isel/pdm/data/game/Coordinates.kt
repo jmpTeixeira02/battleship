@@ -2,7 +2,10 @@ package isel.pdm.data.game
 
 import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.parcelize.Parceler
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Coordinates(val Line: Int, val Column: Int, val Value: Boolean = false) : Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -29,32 +32,40 @@ data class Coordinates(val Line: Int, val Column: Int, val Value: Boolean = fals
         return result
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(Line)
-        parcel.writeInt(Column)
-        parcel.writeByte(if (Value) 1 else 0)
-    }
-
     override fun describeContents(): Int {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<Coordinates> {
-        override fun createFromParcel(parcel: Parcel): Coordinates {
-            return Coordinates(parcel)
-        }
-
-        override fun newArray(size: Int): Array<Coordinates?> {
-            val res = arrayOfNulls<Coordinates?>(size)
-            for (i in 0 until size) {
-                res[i] = Coordinates(0, 0, false)
+    companion object {
+        object Parcelator : Parceler<Coordinates> {
+            fun createFromParcel(parcel: Parcel): Coordinates {
+                return Coordinates(parcel)
             }
-            return res
+
+            override fun newArray(size: Int): Array<Coordinates> {
+                val res = Array<Coordinates>(size) {
+                    Coordinates(0, 0, false)
+                }
+                return res
+            }
+
+            override fun create(parcel: Parcel): Coordinates {
+                return Coordinates(parcel)
+            }
+
+            override fun Coordinates.write(parcel: Parcel, flags: Int) {
+                parcel.writeInt(Line)
+                parcel.writeInt(Column)
+                parcel.writeByte(if (Value) 1 else 0)
+            }
         }
 
-        fun fromString(coords: String) : Coordinates {
+        fun fromString(coords: String): Coordinates {
             val index = coords.indexOf(",")
-            return Coordinates(Integer.parseInt(coords.subSequence(1, index).toString()), Integer.parseInt(coords.subSequence(index + 2, coords.length + 1).toString()))
+            return Coordinates(
+                Integer.parseInt(coords.subSequence(1, index).toString()),
+                Integer.parseInt(coords.subSequence(index + 2, coords.length + 1).toString())
+            )
         }
     }
 }
