@@ -7,38 +7,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import isel.pdm.ui.elements.buttons.BiState
 import isel.pdm.utils.drawCell
 
+const val BOARD_SIDE: Int = 10
 
 @Composable
 fun BoardView(
     modifier: Modifier = Modifier,
-    size: Int = 10,
     boarderColor: Color = Color.Black,
     cellFillColor: Color = Color.LightGray,
     cellText: String = " ",
-    onClick: (x: Int, y: Int) -> Unit = {_,_ ->}
+    onClick: (x: Int, y: Int, boatColor: Color) -> Unit = {_,_,_ ->},
+    selectedBoat: Int = -1,
+    boardCellList: List<List<Color>> = List(BOARD_SIDE){ _ -> List(BOARD_SIDE){_ -> Color.LightGray} }
 ) {
     BoxWithConstraints(modifier = modifier) {
-        val cellHeight = this.maxHeight / size
-        val CellWidth = this.maxWidth / size
+        val cellHeight = this.maxHeight / BOARD_SIDE
+        val CellWidth = this.maxWidth / BOARD_SIDE
         Column()
         {
-            for (x in 1..10) {
+            repeat (BOARD_SIDE) { y ->
                 Row(
-                    modifier = Modifier
-                        .background(color = cellFillColor),
                     horizontalArrangement = Arrangement.Start
                 ) {
-                    for (y in 1..size) {
+                    repeat (BOARD_SIDE) { x ->
+                        val cellModifier = Modifier
                         drawCell(
-                            modifier = Modifier
+                            modifier = cellModifier
                                 .width(cellHeight)
                                 .height(CellWidth),
                             boarderColor = boarderColor,
-                            cellFillColor = cellFillColor,
+                            cellFillColor = boardCellList[y][x],
                             cellText = cellText,
-                            onClick = { onClick(x, y)}
+                            onClick = {
+                                if (selectedBoat != -1){
+                                    onClick(x, y, Fleet.values()[selectedBoat].color)
+                                }
+                                else onClick(x, y, cellFillColor)
+                            }
                         )
                     }
                 }

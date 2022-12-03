@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import isel.pdm.R
 import isel.pdm.data.PlayerMatchmaking
 import isel.pdm.service.FakeMatchmakingService
+import isel.pdm.ui.elements.Fleet
 import isel.pdm.ui.elements.buttons.BiState
 import isel.pdm.ui.elements.topbar.NavigationHandlers
 import isel.pdm.ui.screen.AboutUsScreen
@@ -38,6 +39,7 @@ class GamePrepActivity : ComponentActivity() {
         viewModel.updateSelectedList(idx)
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -58,10 +60,12 @@ class GamePrepActivity : ComponentActivity() {
                 rotateBoat = {},
                 deleteBoatState = deleteBoatState,
                 deleteBoat = {viewModel.deleteBoat()},
-                onCellClick = { x: Int, y: Int ->
-                    Log.v("GamePrepActivity", "Cell: ${x}, ${y}")
+                onCellClick = { x: Int, y: Int, boatColor: Color ->
+                    Log.v("GamePrepActivity", "Cell: $x, $y with color $boatColor")
+                    viewModel.updateCell(x, y, boatColor)
                 },
                 selectedBoatStateList = selectedBoatStateList,
+                boardCellList = viewModel.boardCell,
                 onBoatClick = {
                     idx: Int -> boatSelectedClick(idx)
                 }
