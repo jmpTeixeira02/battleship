@@ -36,7 +36,7 @@ class GamePrepActivity : ComponentActivity() {
     }
 
     private fun boatSelectedClick(idx: Int){
-        viewModel.updateSelectedList(idx)
+        viewModel.updateSelectedBoat(idx)
     }
 
 
@@ -47,7 +47,7 @@ class GamePrepActivity : ComponentActivity() {
                 if (viewModel.isDeleting) BiState.hasBeenPressed
                 else BiState.hasNotBeenPressed
             val selectedBoatStateList =
-                viewModel.isSelectedList.map{
+                viewModel.selectedBoat.map{
                     bool ->
                         if (bool) BiState.hasBeenPressed
                         else BiState.hasNotBeenPressed

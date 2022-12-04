@@ -1,14 +1,16 @@
-package isel.pdm.game
+package isel.pdm.data.game
 
-data class Coordinates(val Line: Int, val Column: Int, val Value: Boolean) {
+data class Coordinates(val line: Int, val column: Int, val value: Boolean) {
+    init {
+        require(line in 0..9 && column in 0..9)
+    }
+
     override fun equals(other: Any?): Boolean {
-        return other == this ||
-               (other!!::class == Coordinates::class &&
-                Line == (other as Coordinates).Line &&
-                Column == (other as Coordinates).Column)
+        return other == this || (
+            other!!::class == Coordinates::class &&
+            line == (other as Coordinates).line &&
+            column == other.column
+            )
     }
 
-    override fun toString(): String {
-        return "($Line, $Column)"
-    }
 }

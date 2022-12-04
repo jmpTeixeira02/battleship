@@ -24,23 +24,22 @@ class GamePrepViewModel() : ViewModel() {
             _boardCells[y][x] = value
     }
 
-    private var _isSelectedList = mutableStateListOf(false, false, false, false ,false)
-    val isSelectedList = _isSelectedList
+    private var _selectedBoat = mutableStateListOf(false, false, false, false ,false)
+    val selectedBoat = _selectedBoat
+    
+    fun updateSelectedBoat(idx: Int){
+        if (!_selectedBoat[idx]){
+            _selectedBoat.replaceAll { _ -> false }
+            _selectedBoat[idx] = !_selectedBoat[idx]
+        }
+        else{
+            _selectedBoat.replaceAll { _ -> false }
+        }
+    }
 
     private var _isDeleting by mutableStateOf(false)
     val isDeleting: Boolean
         get() = _isDeleting
-
-    fun updateSelectedList(idx: Int){
-        if (!_isSelectedList[idx]){
-            _isSelectedList.replaceAll { _ -> false }
-            _isSelectedList[idx] = !_isSelectedList[idx]
-        }
-        else{
-            _isSelectedList.replaceAll { _ -> false }
-        }
-    }
-
 
     private var board = Board()
 
