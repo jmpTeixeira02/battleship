@@ -8,13 +8,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.ui.graphics.Color
-import isel.pdm.R
 import isel.pdm.data.PlayerMatchmaking
-import isel.pdm.service.FakeMatchmakingService
-import isel.pdm.ui.elements.Fleet
+import isel.pdm.ui.elements.BoardCell
+import isel.pdm.ui.elements.BoatSelector
+import isel.pdm.ui.elements.FleetSelector
 import isel.pdm.ui.elements.buttons.BiState
-import isel.pdm.ui.elements.topbar.NavigationHandlers
-import isel.pdm.ui.screen.AboutUsScreen
 import isel.pdm.ui.screen.GamePrepScreen
 import isel.pdm.utils.viewModelInit
 
@@ -46,12 +44,6 @@ class GamePrepActivity : ComponentActivity() {
             val deleteBoatState =
                 if (viewModel.isDeleting) BiState.hasBeenPressed
                 else BiState.hasNotBeenPressed
-            val selectedBoatStateList =
-                viewModel.selectedBoat.map{
-                    bool ->
-                        if (bool) BiState.hasBeenPressed
-                        else BiState.hasNotBeenPressed
-            }
             GamePrepScreen(
                 players = listOf(
                     PlayerMatchmaking("Player 1"),
@@ -60,11 +52,10 @@ class GamePrepActivity : ComponentActivity() {
                 rotateBoat = {},
                 deleteBoatState = deleteBoatState,
                 deleteBoat = {viewModel.deleteBoat()},
-                onCellClick = { x: Int, y: Int, boatColor: Color ->
-                    Log.v("GamePrepActivity", "Cell: $x, $y with color $boatColor")
-                    viewModel.updateCell(x, y, boatColor)
+                onCellClick = { x: Int, y: Int, selectedBoat: BoardCell ->
+                    viewModel.updateCell(x, y, selectedBoat)
                 },
-                selectedBoatStateList = selectedBoatStateList,
+                selectedBoatStateList = viewModel.selectedBoat,
                 boardCellList = viewModel.boardCell,
                 onBoatClick = {
                     idx: Int -> boatSelectedClick(idx)

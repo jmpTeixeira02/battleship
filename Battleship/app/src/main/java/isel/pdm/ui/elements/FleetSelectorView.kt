@@ -1,8 +1,6 @@
 package isel.pdm.ui.elements
 
-import android.util.Log
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -11,22 +9,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import isel.pdm.ui.elements.buttons.BiState
 import isel.pdm.utils.drawCell
 
-enum class Fleet(val size: Int, val color: Color){
-    Destroyer(2, Color.Blue),
-    Submarine(3, Color.Cyan),
-    Cruiser(3, Color.Magenta),
-    BattleShip( 4, Color.Yellow),
-    Carrier(5, Color.Green)
+enum class FleetSelector(val size: Int){
+    Destroyer(2),
+    Submarine(3),
+    Cruiser(3),
+    BattleShip( 4),
+    Carrier(5)
 }
 
+enum class BoatSelector {hasBeenPlaced, isSelected, isNotSelected}
+
 @Composable
-fun FleetView(
+fun FleetSelectorView(
     modifier: Modifier = Modifier,
     onClick: (idx: Int) -> Unit = { _->},
-    selectedBoatStateList: List<BiState> = List(Fleet.values().size){_ -> BiState.hasNotBeenPressed}
+    selectedBoatStateList: List<BoatSelector> = List(FleetSelector.values().size){ _ -> BoatSelector.isNotSelected}
 ){
     BoxWithConstraints(modifier = modifier.padding(4.dp)) {
         val maxBoatCellsSize = this.maxWidth / 6
@@ -37,36 +36,41 @@ fun FleetView(
                 verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ){
-                buildBoat(size = Fleet.Destroyer.size, name = Fleet.Destroyer.name,
+                buildBoatSelect(
+                    size = FleetSelector.Destroyer.size, name = FleetSelector.Destroyer.name,
                     maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                    onClick = onClick, state = selectedBoatStateList[Fleet.Destroyer.ordinal],
-                    listIdx = Fleet.Destroyer.ordinal
+                    onClick = onClick, state = selectedBoatStateList[FleetSelector.Destroyer.ordinal],
+                    listIdx = FleetSelector.Destroyer.ordinal
                 )
                 Spacer(modifier = spaceModifier)
                 Row(horizontalArrangement = Arrangement.SpaceEvenly){
-                    buildBoat(size = Fleet.Submarine.size, name = Fleet.Submarine.name,
+                    buildBoatSelect(
+                        size = FleetSelector.Submarine.size, name = FleetSelector.Submarine.name,
                         maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                        onClick = onClick, state = selectedBoatStateList[Fleet.Submarine.ordinal],
-                        listIdx = Fleet.Submarine.ordinal
+                        onClick = onClick, state = selectedBoatStateList[FleetSelector.Submarine.ordinal],
+                        listIdx = FleetSelector.Submarine.ordinal
                     )
                     Spacer(modifier = spaceModifier)
-                    buildBoat(size = Fleet.Cruiser.size, name = Fleet.Cruiser.name,
+                    buildBoatSelect(
+                        size = FleetSelector.Cruiser.size, name = FleetSelector.Cruiser.name,
                         maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                        onClick = onClick, state = selectedBoatStateList[Fleet.Cruiser.ordinal],
-                        listIdx = Fleet.Cruiser.ordinal
+                        onClick = onClick, state = selectedBoatStateList[FleetSelector.Cruiser.ordinal],
+                        listIdx = FleetSelector.Cruiser.ordinal
                     )
                 }
                 Spacer(modifier = spaceModifier)
-                buildBoat(size= Fleet.BattleShip.size, name = Fleet.BattleShip.name,
+                buildBoatSelect(
+                    size = FleetSelector.BattleShip.size, name = FleetSelector.BattleShip.name,
                     maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                    onClick = onClick, state = selectedBoatStateList[Fleet.BattleShip.ordinal],
-                    listIdx = Fleet.BattleShip.ordinal
+                    onClick = onClick, state = selectedBoatStateList[FleetSelector.BattleShip.ordinal],
+                    listIdx = FleetSelector.BattleShip.ordinal
                 )
                 Spacer(modifier = spaceModifier)
-                buildBoat(size = Fleet.Carrier.size, name = Fleet.Carrier.name,
+                buildBoatSelect(
+                    size = FleetSelector.Carrier.size, name = FleetSelector.Carrier.name,
                     maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                    onClick = onClick, state = selectedBoatStateList[Fleet.Carrier.ordinal],
-                    listIdx = Fleet.Carrier.ordinal
+                    onClick = onClick, state = selectedBoatStateList[FleetSelector.Carrier.ordinal],
+                    listIdx = FleetSelector.Carrier.ordinal
                 )
             }
 
@@ -74,11 +78,10 @@ fun FleetView(
 }
 
 @Composable
-private fun buildBoat(
+private fun buildBoatSelect(
     size: Int,
     maxBoatCellSize: Dp,
-    color: Color = Color.Green,
-    state: BiState = BiState.hasNotBeenPressed,
+    state: BoatSelector = BoatSelector.isNotSelected,
     name: String = " ",
     modifier: Modifier = Modifier,
     onClick: (idx: Int) -> Unit = { _->},
@@ -87,7 +90,10 @@ private fun buildBoat(
     Box(Modifier.border(color = Color.Black, width = 1.dp)){
         drawCell(
             boarderColor = Color.Transparent,
-            cellFillColor = if (state == BiState.hasNotBeenPressed) color else Color.Red,
+            cellFillColor =
+                if (state == BoatSelector.isNotSelected) Color.Green
+                else if (state == BoatSelector.hasBeenPlaced) Color.Red
+                else Color.Magenta,
             cellText = name,
             modifier = modifier.width(maxBoatCellSize*size),
             onClick = {
@@ -101,9 +107,8 @@ private fun buildBoat(
 @Preview
 @Composable
 private fun buildBoatPreview(){
-    buildBoat(
+    buildBoatSelect(
         size = 3,
-        color = Color.Green,
         name = "Cruiser",
         modifier = Modifier,
         maxBoatCellSize = 200.dp
@@ -113,5 +118,5 @@ private fun buildBoatPreview(){
 @Preview
 @Composable
 private fun selectFleetPreview(){
-   FleetView()
+   FleetSelectorView()
 }

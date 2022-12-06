@@ -3,7 +3,6 @@ package isel.pdm.ui.screen
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -11,10 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import isel.pdm.data.PlayerMatchmaking
-import isel.pdm.ui.elements.BOARD_SIDE
-import isel.pdm.ui.elements.BoardView
-import isel.pdm.ui.elements.Fleet
-import isel.pdm.ui.elements.FleetView
+import isel.pdm.ui.elements.*
 import isel.pdm.ui.elements.buttons.BiState
 import isel.pdm.ui.elements.buttons.RemoveBoatButton
 import isel.pdm.ui.elements.topbar.GameTopBar
@@ -28,10 +24,10 @@ fun GamePrepScreen(
     rotateBoat: () -> Unit = {},
     deleteBoat: () -> Unit = {},
     deleteBoatState: BiState = BiState.hasNotBeenPressed,
-    onCellClick: (x: Int, y: Int, boatColor: Color) -> Unit = { _, _, _ ->},
+    onCellClick: (x: Int, y: Int, boardCell: BoardCell) -> Unit = { _, _, _ ->},
     onBoatClick: (idx: Int) -> Unit = {_->},
-    selectedBoatStateList: List<BiState> = List(Fleet.values().size){ _ -> BiState.hasNotBeenPressed},
-    boardCellList: List<List<Color>> = List(BOARD_SIDE){ _ -> List(BOARD_SIDE){_ -> Color.LightGray} }
+    selectedBoatStateList: List<BoatSelector> = List(FleetSelector.values().size){ _ -> BoatSelector.isNotSelected},
+    boardCellList: List<List<BoardCell>> = List(BOARD_SIDE){ _ -> List(BOARD_SIDE){_ -> BoardCell.Water} }
 ){
     BattleshipTheme {
         Scaffold(
@@ -48,10 +44,10 @@ fun GamePrepScreen(
                         .width(BOARD_SIZE)
                         .height(BOARD_SIZE),
                     onClick = onCellClick,
-                    selectedBoat = selectedBoatStateList.indexOfFirst{ e -> e == BiState.hasBeenPressed },
+                    selectedBoat = selectedBoatStateList.indexOfFirst{ e -> e == BoatSelector.isSelected },
                     boardCellList = boardCellList
                 )
-                FleetView(
+                FleetSelectorView(
                     modifier = Modifier,
                     onClick = onBoatClick,
                     selectedBoatStateList = selectedBoatStateList
