@@ -1,16 +1,20 @@
 package isel.pdm.data.game
 
-data class Coordinates(val line: Int, val column: Int, val value: Boolean) {
+/**
+ * Represents coordinates
+ */
+data class Coordinate(val y: Int, val x: Int) {
     init {
-        require(line in 0..9 && column in 0..9)
+        require(isValidRow(y) && isValidColumn(x))
     }
-
-    override fun equals(other: Any?): Boolean {
-        return other == this || (
-            other!!::class == Coordinates::class &&
-            line == (other as Coordinates).line &&
-            column == other.column
-            )
-    }
-
 }
+
+/**
+ * Checks whether [value] is a valid row index
+ */
+fun isValidRow(value: Int) = value in 0 until BOARD_SIDE
+
+/**
+ * Checks whether [value] is a valid column index
+ */
+fun isValidColumn(value: Int) = value in 0 until BOARD_SIDE
