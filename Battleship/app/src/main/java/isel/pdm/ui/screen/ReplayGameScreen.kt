@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.data.game.Replay
-import isel.pdm.data.game.Turn
+import isel.pdm.data.game.TurnManager
 import isel.pdm.ui.elements.NavigationHandlers
 import isel.pdm.ui.elements.ReplayGameView
 import isel.pdm.ui.elements.TopBar
@@ -77,5 +77,5 @@ val replay: Replay = Replay(
     replayId = "#123",
     date = "01/01/01",
     opponentName = "olabc",
-    turns = listOf(Turn.fromString("E(5,5)"), Turn.fromString("P(3,2)"), Turn.fromString("E(5,3)"), Turn.fromString("P(4,7)"), Turn.fromString("E(3,7)"), Turn.fromString("P(9,6)"))
+    turns = listOf(TurnManager.fromString("E(5,5)"), TurnManager.fromString("P(3,2)"), TurnManager.fromString("E(5,3)"), TurnManager.fromString("P(4,7)"), TurnManager.fromString("E(3,7)"), TurnManager.fromString("P(9,6)"))
 )

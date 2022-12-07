@@ -1,63 +1,29 @@
 package isel.pdm.data.game
 
-import android.os.Parcel
 import android.os.Parcelable
-import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Coordinates(val Line: Int, val Column: Int, val Value: Boolean = false) : Parcelable {
+data class Coordinates(val Line: Int, val Column: Int, val Value: Boolean = false) : Parcelable
 
-    constructor(parcel: Parcel) : this(
-        parcel.readInt(),
-        parcel.readInt(),
-        parcel.readByte() != 0.toByte()
-    )
-
-    override fun equals(other: Any?): Boolean {
-        return other == this ||
-               (other!!::class == Coordinates::class &&
-                Line == (other as Coordinates).Line &&
-                Column == other.Column)
-    }
-
-    override fun toString(): String {
-        return "($Line,$Column)"
-    }
-
-    override fun hashCode(): Int {
-        var result = Line
-        result = 31 * result + Column
-        result = 31 * result + Value.hashCode()
-        return result
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
+class CoordinatesManager {
     companion object {
-        object Parcelator : Parceler<Coordinates> {
-            fun createFromParcel(parcel: Parcel): Coordinates {
-                return Coordinates(parcel)
-            }
+        fun equals(coords: Coordinates, other: Any?): Boolean {
+            return other == coords ||
+                    (other!!::class == Coordinates::class &&
+                            coords.Line == (other as Coordinates).Line &&
+                            coords.Column == other.Column)
+        }
 
-            override fun newArray(size: Int): Array<Coordinates> {
-                val res = Array<Coordinates>(size) {
-                    Coordinates(0, 0, false)
-                }
-                return res
-            }
+        fun toString(coords: Coordinates): String {
+            return "($coords.Line,$coords.Column)"
+        }
 
-            override fun create(parcel: Parcel): Coordinates {
-                return Coordinates(parcel)
-            }
-
-            override fun Coordinates.write(parcel: Parcel, flags: Int) {
-                parcel.writeInt(Line)
-                parcel.writeInt(Column)
-                parcel.writeByte(if (Value) 1 else 0)
-            }
+        fun hashCode(coords: Coordinates): Int {
+            var result = coords.Line
+            result = 31 * result + coords.Column
+            result = 31 * result + coords.Value.hashCode()
+            return result
         }
 
         fun fromString(coords: String): Coordinates {

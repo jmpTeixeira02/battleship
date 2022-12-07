@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.R
 import isel.pdm.data.game.Replay
-import isel.pdm.data.game.Turn
+import isel.pdm.data.game.TurnManager
 import isel.pdm.ui.elements.buttons.ReplayButton
 
 @Composable
@@ -140,5 +140,5 @@ private val randomReplay = Replay(
     replayId = "#XPTO123",
     date = "14/10/2022",
     opponentName = "ADV_3",
-    turns = listOf(Turn.fromString("E(1,6)"), Turn.fromString("P(4,8)"), Turn.fromString("E(2,9)"), Turn.fromString("P(1,7)"))
+    turns = listOf(TurnManager.fromString("E(1,6)"), TurnManager.fromString("P(4,8)"), TurnManager.fromString("E(2,9)"), TurnManager.fromString("P(1,7)"))
 )
