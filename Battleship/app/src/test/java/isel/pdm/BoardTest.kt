@@ -22,7 +22,7 @@ class BoardTests {
         val start: Coordinate = Coordinate(0,0)
         val end: Coordinate = Coordinate(0,5)
 
-        board.placeBoat(start, end, Ship(TypeOfShip.Carrier))
+        board.placeShip(start, end, Ship(TypeOfShip.Carrier))
         assert(board.cells[0].filter { e -> e.ship?.type == TypeOfShip.Carrier }.size == TypeOfShip.Carrier.size)
     }
 
@@ -32,7 +32,7 @@ class BoardTests {
         try{
             val start: Coordinate = Coordinate(fixed,0)
             val end: Coordinate = Coordinate(fixed,-1)
-        }catch (e:java.lang.IllegalArgumentException){
+        }catch (e: Exception){
             assertTrue(true)
         }
     }
@@ -44,11 +44,11 @@ class BoardTests {
         val start: Coordinate = Coordinate(0,0)
         val end: Coordinate = Coordinate(0,5)
 
-        board.placeBoat(start, end, Ship(TypeOfShip.Carrier))
+        board.placeShip(start, end, Ship(TypeOfShip.Carrier))
         assert(board.cells[0].filter { e -> e.ship?.type == TypeOfShip.Carrier }.size == TypeOfShip.Carrier.size)
 
         try {
-            board.placeBoat(start, end, Ship(TypeOfShip.Carrier))
+            board.placeShip(start, end, Ship(TypeOfShip.Carrier))
             assertFalse(false)
         }catch (e:Exception){
             assertTrue(true)
@@ -63,7 +63,7 @@ class BoardTests {
         val end: Coordinate = Coordinate(1,5)
 
         try {
-            board.placeBoat(start, end, Ship(TypeOfShip.Carrier))
+            board.placeShip(start, end, Ship(TypeOfShip.Carrier))
             assertFalse(false)
         }catch (e:Exception){
             assertTrue(true)

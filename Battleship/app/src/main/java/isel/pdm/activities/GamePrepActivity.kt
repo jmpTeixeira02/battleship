@@ -3,15 +3,13 @@ package isel.pdm.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.ui.graphics.Color
 import isel.pdm.data.PlayerMatchmaking
-import isel.pdm.ui.elements.BoardCell
-import isel.pdm.ui.elements.BoatSelector
-import isel.pdm.ui.elements.FleetSelector
+import isel.pdm.data.game.Ship
+import isel.pdm.data.game.TypeOfShip
+import isel.pdm.ui.elements.ShipState
 import isel.pdm.ui.elements.buttons.BiState
 import isel.pdm.ui.screen.GamePrepScreen
 import isel.pdm.utils.viewModelInit
@@ -33,10 +31,6 @@ class GamePrepActivity : ComponentActivity() {
         }
     }
 
-    private fun boatSelectedClick(idx: Int){
-        viewModel.updateSelectedBoat(idx)
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,14 +45,15 @@ class GamePrepActivity : ComponentActivity() {
                 ),
                 rotateBoat = {},
                 deleteBoatState = deleteBoatState,
-                deleteBoat = {viewModel.deleteBoat()},
-                onCellClick = { x: Int, y: Int, selectedBoat: BoardCell ->
-                    viewModel.updateCell(x, y, selectedBoat)
+                deleteBoat = {viewModel.deleteBoatToggle()},
+                onCellClick = { line: Int, column: Int, selectedShip: Ship? ->
+                    viewModel.boardClickHandler(line, column, selectedShip)
                 },
-                selectedBoatStateList = viewModel.selectedBoat,
-                boardCellList = viewModel.boardCell,
-                onBoatClick = {
-                    idx: Int -> boatSelectedClick(idx)
+                selectedBoat = viewModel.shipSelector.filterValues{ e -> e == ShipState.isSelected }.keys.firstOrNull(),
+                shipState = viewModel.shipSelector,
+                boardCellList = viewModel.boardCells,
+                onBoatSelectClick = {
+                    boatSelected: TypeOfShip -> viewModel.boatSelectorHandler(boatSelected)
                 }
             )
         }

@@ -3,9 +3,9 @@ package isel.pdm.data.game
 /**
  * Represents coordinates
  */
-data class Coordinate(val y: Int, val x: Int) {
+data class Coordinate(val line: Int, val column: Int) {
     init {
-        require(isValidRow(y) && isValidColumn(x))
+        require(isValidRow(line) && isValidColumn(column))
     }
 }
 

@@ -5,11 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import isel.pdm.data.game.BOARD_SIDE
+import isel.pdm.data.game.Cell
+import isel.pdm.data.game.Ship
+import isel.pdm.data.game.TypeOfShip
 import isel.pdm.utils.drawCell
 
-const val BOARD_SIDE: Int = 10
-
-enum class BoardCell(val color: Color){
+enum class CellColor(val color: Color){
     Water(Color.LightGray),
     Destroyer(Color.Blue),
     Submarine(Color.Cyan),
@@ -22,36 +24,33 @@ enum class BoardCell(val color: Color){
 fun BoardView(
     modifier: Modifier = Modifier,
     boarderColor: Color = Color.Black,
-    cellFillColor: Color = BoardCell.Water.color,
     cellText: String = " ",
-    onClick: (x: Int, y: Int, selectedBoat: BoardCell) -> Unit = {_,_,_ ->},
-    selectedBoat: Int = -1,
-    boardCellList: List<List<BoardCell>> = List(BOARD_SIDE){ _ -> List(BOARD_SIDE){_ -> BoardCell.Water} }
+    onClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ ->},
+    selectedBoat: TypeOfShip? = null,
+    boardCellList: List<List<Cell>> = List(BOARD_SIDE){ _ -> List(BOARD_SIDE){ _ -> Cell(null)} }
 ) {
     BoxWithConstraints(modifier = modifier) {
         val cellHeight = this.maxHeight / BOARD_SIDE
         val CellWidth = this.maxWidth / BOARD_SIDE
         Column()
         {
-            repeat (BOARD_SIDE) { y ->
+            repeat (BOARD_SIDE) { line ->
                 Row(
                     horizontalArrangement = Arrangement.Start
                 ) {
-                    repeat (BOARD_SIDE) { x ->
+                    repeat (BOARD_SIDE) { column ->
+
                         val cellModifier = Modifier
                         drawCell(
                             modifier = cellModifier
                                 .width(cellHeight)
                                 .height(CellWidth),
                             boarderColor = boarderColor,
-                            cellFillColor = boardCellList[y][x].color,
+                            cellFillColor = CellColor.valueOf(boardCellList[line][column].value).color,
                             cellText = cellText,
                             onClick = {
-                                if (selectedBoat != -1){
-                                    // Add one because there is water
-                                    onClick(x, y, BoardCell.values()[selectedBoat+1])
-                                }
-                                else onClick(x, y, BoardCell.Water)
+                                if (selectedBoat != null) onClick(line, column, Ship(selectedBoat))
+                                else onClick(line,column,null)
                             }
                         )
                     }

@@ -8,12 +8,7 @@ enum class TypeOfShip(val size: Int) {
     Carrier(5)
 }
 
-data class Ship(val type: TypeOfShip) {
+data class Ship(val type: TypeOfShip){
     val size = type.size
-    var hasDrowned: Boolean = false
-    var nHits: Int = 0
-        set(value) {
-            field = value
-            hasDrowned = value == size
-        }
+    val name = type.name
 }

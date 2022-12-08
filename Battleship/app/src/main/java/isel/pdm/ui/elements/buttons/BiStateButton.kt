@@ -107,7 +107,7 @@ fun RefreshButtonPreviewReady() {
 @Preview
 @Composable
 fun RefreshButtonPreviewRefreshing() {
-    BattleshipTheme() {
+    BattleshipTheme {
         RefreshButton(
             state = BiState.hasBeenPressed,
             onClick = { },

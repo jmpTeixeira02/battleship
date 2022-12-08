@@ -1,53 +1,73 @@
 package isel.pdm.activities
 
+import android.util.Log
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.ViewModel
-import isel.pdm.ui.elements.BOARD_SIDE
-import isel.pdm.ui.elements.BoardCell
-import isel.pdm.ui.elements.BoatSelector
-import isel.pdm.ui.elements.FleetSelector
+import isel.pdm.data.game.*
+import isel.pdm.ui.elements.ShipState
 
-class GamePrepViewModel() : ViewModel() {
+data class ShipPlacer(var line:Int, var column: Int, var cellTenant: Cell = Cell(null))
 
-    private var _boardCells: SnapshotStateList<SnapshotStateList<BoardCell>> = List(BOARD_SIDE){_ -> List(BOARD_SIDE){_-> BoardCell.Water}.toMutableStateList()}.toMutableStateList()
-    val boardCell = _boardCells
 
-    fun updateCell(x: Int, y:Int, boatType: BoardCell){
-        if (_isDeleting){
-            if (_boardCells[y][x] == boatType) _boardCells[y][x] = BoardCell.Water
+class GamePrepViewModel : ViewModel() {
+
+    private val _board = Board()
+
+    private val _boardCells = _board.cells
+    val boardCells = _boardCells
+
+
+    private var _shipStarter: ShipPlacer? = null
+
+    fun boardClickHandler(line: Int, column:Int, selectedShip: Ship?){
+        if (_isDeleting){ // Cell was clicked while deleting ships
+            val clickedShip = _boardCells[line][column].ship
+            if (clickedShip!=null){
+                deleteShip(clickedShip)
+            }
+            return
         }
-        else{
-            if (_boardCells[y][x] == BoardCell.Water)
-                _boardCells[y][x] = boatType
+
+        if (_boardCells[line][column].ship != null || selectedShip == null) // There was no ship selected or there was a ship on that cell already
+            return
+
+        if (_shipStarter == null){
+            _boardCells[line][column] = Cell(selectedShip)
+            _shipStarter = ShipPlacer(line, column, Cell(selectedShip))
+        }
+        else if (_shipStarter!!.cellTenant.ship == selectedShip){
+            placeShip(ShipPlacer(line, column, Cell(selectedShip)))
         }
     }
 
-    private var _selectedBoat: SnapshotStateList<BoatSelector> = List(5){_ -> BoatSelector.isNotSelected}.toMutableStateList()
-    val selectedBoat = _selectedBoat
 
-//    fun updateSelectedBoat(idx: Int){
-//        if (!_selectedBoat[idx]){
-//            _selectedBoat.replaceAll { _ -> false }
-//            _selectedBoat[idx] = !_selectedBoat[idx]
-//        }
-//        else{
-//            _selectedBoat.replaceAll { _ -> false }
-//        }
-//    }
 
-    fun updateSelectedBoat(idx: Int) {
-        if (_selectedBoat[idx] == BoatSelector.isNotSelected){
-            val placedBoats = _selectedBoat.mapIndexed{innerIdx, state -> Pair(innerIdx, state) }.filter{pair -> pair.second == BoatSelector.hasBeenPlaced}
-            _selectedBoat.replaceAll{_ -> BoatSelector.isNotSelected}
-            placedBoats.forEach {
-                _selectedBoat[it.first] = it.second
-            }
-            _selectedBoat[idx] = BoatSelector.isSelected
+    private val _shipSelector: SnapshotStateMap<TypeOfShip, ShipState> =
+        TypeOfShip.values().map { ship -> ship to ShipState.isNotSelected}.toMutableStateMap()
+
+    val shipSelector: Map<TypeOfShip, ShipState>
+        get() = _shipSelector
+
+    fun boatSelectorHandler(boatSelected: TypeOfShip) {
+        if (_shipStarter != null && _shipSelector[boatSelected] != ShipState.hasBeenPlaced){ // Remove old shipStarter if a new ship is selected
+            deleteShip(_shipStarter!!.cellTenant.ship!!)
+            _shipStarter = null
         }
-        else if (_selectedBoat[idx] == BoatSelector.isSelected){
-            _selectedBoat[idx] = BoatSelector.isNotSelected
+        if (isDeleting && _shipSelector[boatSelected] != ShipState.hasBeenPlaced){ // Make it impossible to select a ship when deleting
+            return
+        }
+
+
+        if (_shipSelector[boatSelected] == ShipState.isNotSelected){
+            unselectShipSelector()
+            _shipSelector[boatSelected] = ShipState.isSelected
+        }
+        else if (_shipSelector[boatSelected] == ShipState.isSelected){
+            unselectShipSelector()
+        }
+        else if (_shipSelector[boatSelected] == ShipState.hasBeenPlaced && isDeleting){
+            deleteShip(Ship(boatSelected))
         }
     }
 
@@ -55,7 +75,46 @@ class GamePrepViewModel() : ViewModel() {
     val isDeleting: Boolean
         get() = _isDeleting
 
-    fun deleteBoat() {
+    fun deleteBoatToggle() {
+        unselectShipSelector()
+        if (_shipStarter != null){
+            deleteShip(_shipStarter!!.cellTenant.ship!!)
+            _shipStarter = null
+        }
         _isDeleting = !_isDeleting
+    }
+
+    /**
+     * Deletes [ship] from board and reset it's selector button
+     */
+    private fun deleteShip(ship: Ship){
+        _shipSelector[ship.type] = ShipState.isNotSelected
+        _board.deleteShip(ship)
+    }
+
+    /**
+     * Places [ship] on the board, starting on [_shipStarter] local member and ending on [shipEndCoordinate]
+     * If the placement is valid, the ship is placed on board and the selector is locked
+     * If the placement is invalid, restart placement from [_shipStarter]
+     */
+    private fun placeShip(shipEnd: ShipPlacer){
+        val ship =  shipEnd.cellTenant.ship!!
+        try{
+            _boardCells[_shipStarter!!.line][_shipStarter!!.column] = Cell(null)
+            _board.placeShip(Coordinate(_shipStarter!!.line, _shipStarter!!.column), Coordinate(shipEnd.line, shipEnd.column), ship)
+            _shipSelector[ship.type] = ShipState.hasBeenPlaced
+            _shipStarter = null
+        }catch (e: Exception){ // Invalid ship placement, restart from shipStarter
+            _boardCells[_shipStarter!!.line][_shipStarter!!.column] = Cell(ship)
+        }
+    }
+
+    /**
+     * Makes all ships in [_shipSelector] notSelected if they haven't been placed yet
+     */
+    private fun unselectShipSelector(){
+        _shipSelector.forEach { (k: TypeOfShip, _) ->
+            if(_shipSelector[k] != ShipState.hasBeenPlaced)
+                _shipSelector[k] = ShipState.isNotSelected }
     }
 }

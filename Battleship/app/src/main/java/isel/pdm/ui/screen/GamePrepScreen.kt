@@ -5,11 +5,14 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import isel.pdm.data.PlayerMatchmaking
+import isel.pdm.data.game.BOARD_SIDE
+import isel.pdm.data.game.Cell
+import isel.pdm.data.game.Ship
+import isel.pdm.data.game.TypeOfShip
 import isel.pdm.ui.elements.*
 import isel.pdm.ui.elements.buttons.BiState
 import isel.pdm.ui.elements.buttons.RemoveBoatButton
@@ -24,10 +27,11 @@ fun GamePrepScreen(
     rotateBoat: () -> Unit = {},
     deleteBoat: () -> Unit = {},
     deleteBoatState: BiState = BiState.hasNotBeenPressed,
-    onCellClick: (x: Int, y: Int, boardCell: BoardCell) -> Unit = { _, _, _ ->},
-    onBoatClick: (idx: Int) -> Unit = {_->},
-    selectedBoatStateList: List<BoatSelector> = List(FleetSelector.values().size){ _ -> BoatSelector.isNotSelected},
-    boardCellList: List<List<BoardCell>> = List(BOARD_SIDE){ _ -> List(BOARD_SIDE){_ -> BoardCell.Water} }
+    onCellClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ -> },
+    onBoatSelectClick: (boatSelected: TypeOfShip) -> Unit = { _ -> },
+    boardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell(null) } },
+    shipState: Map<TypeOfShip, ShipState> = TypeOfShip.values().associateWith { _ -> ShipState.isNotSelected },
+    selectedBoat: TypeOfShip? = null
 ){
     BattleshipTheme {
         Scaffold(
@@ -44,13 +48,13 @@ fun GamePrepScreen(
                         .width(BOARD_SIZE)
                         .height(BOARD_SIZE),
                     onClick = onCellClick,
-                    selectedBoat = selectedBoatStateList.indexOfFirst{ e -> e == BoatSelector.isSelected },
+                    selectedBoat = selectedBoat,
                     boardCellList = boardCellList
                 )
                 FleetSelectorView(
                     modifier = Modifier,
-                    onClick = onBoatClick,
-                    selectedBoatStateList = selectedBoatStateList
+                    onClick = onBoatSelectClick,
+                    shipState = shipState
                 )
 
                 Button(onClick = rotateBoat, modifier = Modifier.padding(all = 16.dp)) {
