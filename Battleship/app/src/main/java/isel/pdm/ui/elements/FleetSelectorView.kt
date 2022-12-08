@@ -19,7 +19,7 @@ enum class ShipState {hasBeenPlaced, isSelected, isNotSelected}
 fun FleetSelectorView(
     modifier: Modifier = Modifier,
     onClick: (boatSelected: TypeOfShip) -> Unit = { _->},
-    shipState: Map<TypeOfShip, ShipState> = TypeOfShip.values().associateWith { _ -> ShipState.isNotSelected }
+    shipSelector: Map<TypeOfShip, ShipState> = TypeOfShip.values().associateWith { _ -> ShipState.isNotSelected }
 ){
     BoxWithConstraints(modifier = modifier.padding(4.dp)) {
         val maxBoatCellsSize = this.maxWidth / 6
@@ -30,41 +30,41 @@ fun FleetSelectorView(
                 verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ){
-                buildBoatSelect(
+                BuildBoatSelect(
                     size = TypeOfShip.Destroyer.size, name = TypeOfShip.Destroyer.name,
                     maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                    onClick = onClick, state = shipState[TypeOfShip.Destroyer]!!,
-                    boatSelected = shipState.keys.first { e -> e == TypeOfShip.Destroyer }
+                    onClick = onClick, state = shipSelector[TypeOfShip.Destroyer]!!,
+                    boatSelected = shipSelector.keys.first { e -> e == TypeOfShip.Destroyer }
                 )
                 Spacer(modifier = spaceModifier)
                 Row(horizontalArrangement = Arrangement.SpaceEvenly){
-                    buildBoatSelect(
+                    BuildBoatSelect(
                         size = TypeOfShip.Submarine.size, name = TypeOfShip.Submarine.name,
                         maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                        onClick = onClick, state = shipState[TypeOfShip.Submarine]!!,
-                        boatSelected = shipState.keys.first { e -> e == TypeOfShip.Submarine }
+                        onClick = onClick, state = shipSelector[TypeOfShip.Submarine]!!,
+                        boatSelected = shipSelector.keys.first { e -> e == TypeOfShip.Submarine }
                     )
                     Spacer(modifier = spaceModifier)
-                    buildBoatSelect(
+                    BuildBoatSelect(
                         size = TypeOfShip.Cruiser.size, name = TypeOfShip.Cruiser.name,
                         maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                        onClick = onClick, state = shipState[TypeOfShip.Cruiser]!!,
-                        boatSelected = shipState.keys.first { e -> e == TypeOfShip.Cruiser }
+                        onClick = onClick, state = shipSelector[TypeOfShip.Cruiser]!!,
+                        boatSelected = shipSelector.keys.first { e -> e == TypeOfShip.Cruiser }
                     )
                 }
                 Spacer(modifier = spaceModifier)
-                buildBoatSelect(
+                BuildBoatSelect(
                     size = TypeOfShip.BattleShip.size, name = TypeOfShip.BattleShip.name,
                     maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                    onClick = onClick, state = shipState[TypeOfShip.BattleShip]!!,
-                    boatSelected = shipState.keys.first { e -> e == TypeOfShip.BattleShip }
+                    onClick = onClick, state = shipSelector[TypeOfShip.BattleShip]!!,
+                    boatSelected = shipSelector.keys.first { e -> e == TypeOfShip.BattleShip }
                 )
                 Spacer(modifier = spaceModifier)
-                buildBoatSelect(
+                BuildBoatSelect(
                     size = TypeOfShip.Carrier.size, name = TypeOfShip.Carrier.name,
                     maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
-                    onClick = onClick, state = shipState[TypeOfShip.Carrier]!!,
-                    boatSelected = shipState.keys.first { e -> e == TypeOfShip.Carrier }
+                    onClick = onClick, state = shipSelector[TypeOfShip.Carrier]!!,
+                    boatSelected = shipSelector.keys.first { e -> e == TypeOfShip.Carrier }
                 )
             }
 
@@ -72,7 +72,7 @@ fun FleetSelectorView(
 }
 
 @Composable
-private fun buildBoatSelect(
+private fun BuildBoatSelect(
     size: Int,
     maxBoatCellSize: Dp,
     state: ShipState = ShipState.isNotSelected,
@@ -101,8 +101,8 @@ private fun buildBoatSelect(
 
 @Preview
 @Composable
-private fun buildBoatPreview(){
-    buildBoatSelect(
+private fun BuildBoatPreview(){
+    BuildBoatSelect(
         size = 3,
         name = "Cruiser",
         modifier = Modifier,
