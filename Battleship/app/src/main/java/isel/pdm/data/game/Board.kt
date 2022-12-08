@@ -6,11 +6,17 @@ import isel.pdm.utils.CellIsAlreadyOccupiedException
 import isel.pdm.utils.InvalidOrientationException
 
 const val BOARD_SIDE: Int = 10
-
+const val MAX_BOAT_PLACING_TRIES: Int = 100
 
 data class Board(var cells: MutableList<MutableList<Cell>> = MutableList(BOARD_SIDE){ _ -> MutableList(BOARD_SIDE){ _-> Cell(null)}.toMutableStateList()}.toMutableStateList()){
 
-    fun deleteShip(ship: Ship): Unit{
+
+    fun randomFleet(){
+        clearBoard()
+        TypeOfShip.values().forEach { ship -> randomPlaceShip(Ship(ship)) }
+    }
+
+    fun deleteShip(ship: Ship){
         repeat(BOARD_SIDE){ line ->
             repeat(BOARD_SIDE){column ->
                 if(cells[line][column].ship == ship) cells[line][column] = Cell(null)
@@ -19,7 +25,6 @@ data class Board(var cells: MutableList<MutableList<Cell>> = MutableList(BOARD_S
     }
 
     fun placeShip(start: Coordinate, end: Coordinate, ship: Ship){
-        Log.v("VIEW_MO_PLACEBOAT", "$ship")
         try{
             val shipCoordinates = canPlaceShip(start, end, ship)
             shipCoordinates.forEach {
@@ -30,6 +35,24 @@ data class Board(var cells: MutableList<MutableList<Cell>> = MutableList(BOARD_S
         }
     }
 
+    fun clearBoard(){
+        repeat(BOARD_SIDE){ line ->
+            repeat(BOARD_SIDE){column ->
+                cells[line][column] = Cell(null)
+            }
+        }
+    }
+    private fun randomPlaceShip(ship:Ship){
+        repeat(MAX_BOAT_PLACING_TRIES){
+            try{
+                placeShip(Coordinate.random(), Coordinate.random(), ship)
+                return
+            }
+            catch (e:Exception){
+
+            }
+        }
+    }
 
     private fun canPlaceShip(start: Coordinate, end:Coordinate, ship: Ship): List<Coordinate>{
         val temp = mutableListOf<Coordinate>()

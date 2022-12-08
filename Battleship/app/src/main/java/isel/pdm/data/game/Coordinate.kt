@@ -7,7 +7,21 @@ data class Coordinate(val line: Int, val column: Int) {
     init {
         require(isValidRow(line) && isValidColumn(column))
     }
+    companion object{
+        private val min = 0
+        private val max = BOARD_SIDE
+        fun random():Coordinate{
+            val interval = (min until max)
+            return Coordinate(interval.random(), interval.random())
+        }
+    }
 }
+
+
+/**
+ * Creates a coordinate with random line and column
+ */
+
 
 /**
  * Checks whether [value] is a valid row index

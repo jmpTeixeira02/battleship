@@ -1,6 +1,5 @@
 package isel.pdm.activities
 
-import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.ViewModel
@@ -41,33 +40,31 @@ class GamePrepViewModel : ViewModel() {
         }
     }
 
-
-
     private val _shipSelector: SnapshotStateMap<TypeOfShip, ShipState> =
         TypeOfShip.values().map { ship -> ship to ShipState.isNotSelected}.toMutableStateMap()
 
     val shipSelector: Map<TypeOfShip, ShipState>
         get() = _shipSelector
 
-    fun boatSelectorHandler(boatSelected: TypeOfShip) {
-        if (_shipStarter != null && _shipSelector[boatSelected] != ShipState.hasBeenPlaced){ // Remove old shipStarter if a new ship is selected
+    fun shipSelectorHandler(shipSelected: TypeOfShip) {
+        if (_shipStarter != null && _shipSelector[shipSelected] != ShipState.hasBeenPlaced){ // Remove old shipStarter if a new ship is selected
             deleteShip(_shipStarter!!.cellTenant.ship!!)
             _shipStarter = null
         }
-        if (isDeleting && _shipSelector[boatSelected] != ShipState.hasBeenPlaced){ // Make it impossible to select a ship when deleting
+        if (isDeleting && _shipSelector[shipSelected] != ShipState.hasBeenPlaced){ // Make it impossible to select a ship when deleting
             return
         }
 
 
-        if (_shipSelector[boatSelected] == ShipState.isNotSelected){
+        if (_shipSelector[shipSelected] == ShipState.isNotSelected){
             unselectShipSelector()
-            _shipSelector[boatSelected] = ShipState.isSelected
+            _shipSelector[shipSelected] = ShipState.isSelected
         }
-        else if (_shipSelector[boatSelected] == ShipState.isSelected){
+        else if (_shipSelector[shipSelected] == ShipState.isSelected){
             unselectShipSelector()
         }
-        else if (_shipSelector[boatSelected] == ShipState.hasBeenPlaced && isDeleting){
-            deleteShip(Ship(boatSelected))
+        else if (_shipSelector[shipSelected] == ShipState.hasBeenPlaced && isDeleting){
+            deleteShip(Ship(shipSelected))
         }
     }
 
@@ -84,6 +81,10 @@ class GamePrepViewModel : ViewModel() {
         _isDeleting = !_isDeleting
     }
 
+    fun randomFleet(){
+        _board.randomFleet()
+        placeAllShipSelector()
+    }
     /**
      * Deletes [ship] from board and reset it's selector button
      */
@@ -116,5 +117,14 @@ class GamePrepViewModel : ViewModel() {
         _shipSelector.forEach { (k: TypeOfShip, _) ->
             if(_shipSelector[k] != ShipState.hasBeenPlaced)
                 _shipSelector[k] = ShipState.isNotSelected }
+    }
+
+    /**
+     * Makes all ships in [_shipSelector] placed
+     */
+    private fun placeAllShipSelector() {
+        _shipSelector.forEach { (k: TypeOfShip, _) ->
+            _shipSelector[k] = ShipState.hasBeenPlaced
+        }
     }
 }

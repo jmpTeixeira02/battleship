@@ -50,7 +50,7 @@ class GamePrepActivity : ComponentActivity() {
                     deleteButtonState = deleteButtonState,
                     onDeleteButtonClick = {viewModel.deleteBoatToggle()},
                 ),
-                onRandomShipPlacer = {},
+                onRandomShipPlacer = { viewModel.randomFleet() },
                 boardCellHandler = BoardCellHandler(
                     onCellClick = { line: Int, column: Int, selectedShip: Ship? ->
                         viewModel.boardClickHandler(line, column, selectedShip)},
@@ -61,7 +61,7 @@ class GamePrepActivity : ComponentActivity() {
                         .filterValues{ e -> e == ShipState.isSelected }.keys.firstOrNull(),
                     shipSelector = viewModel.shipSelector,
                     onShipSelectorClick = {
-                        boatSelected: TypeOfShip -> viewModel.boatSelectorHandler(boatSelected)
+                        boatSelected: TypeOfShip -> viewModel.shipSelectorHandler(boatSelected)
                     }
                 ),
             )
