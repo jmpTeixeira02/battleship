@@ -9,12 +9,12 @@ enum class TurnUser(val type: Char) {
 }
 
 @Parcelize
-data class Turn(val user: TurnUser, val coords: Coordinates) : Parcelable
+data class Turn(val user: TurnUser, val coords: Coordinate) : Parcelable
 
 class TurnManager {
     companion object {
         fun fromString(turn: String) : Turn {
-            return Turn(TurnUser.valueOf(turn[0].toString()), CoordinatesManager.fromString(turn.substring(1)))
+            return Turn(TurnUser.valueOf(turn[0].toString()), Coordinate.fromString(turn.substring(1)))
         }
 
         fun toString(turn: Turn): String {

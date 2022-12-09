@@ -1,9 +1,13 @@
 package isel.pdm.data.game
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 /**
  * Represents coordinates
  */
-data class Coordinate(val line: Int, val column: Int) {
+@Parcelize
+data class Coordinate(val line: Int, val column: Int) : Parcelable {
     init {
         require(isValidRow(line) && isValidColumn(column))
     }
@@ -13,6 +17,13 @@ data class Coordinate(val line: Int, val column: Int) {
         fun random():Coordinate{
             val interval = (min until max)
             return Coordinate(interval.random(), interval.random())
+        }
+        fun fromString(coords: String): Coordinate {
+            val index = coords.indexOf(",")
+            return Coordinate(
+                Integer.parseInt(coords.subSequence(1, index).toString()),
+                Integer.parseInt(coords.subSequence(index + 2, coords.length + 1).toString())
+            )
         }
     }
 }
