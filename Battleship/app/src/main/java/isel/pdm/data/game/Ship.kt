@@ -1,7 +1,5 @@
 package isel.pdm.data.game
 
-import isel.pdm.game.Coordinates
-
 enum class ShipTypes(val type: String, val size: Int) {
     Carrier("Porta-aviões", 5),
     Battleship("Couraçado", 4),
@@ -23,8 +21,8 @@ data class Ship(val type: ShipTypes, val start: Coordinates, val end: Coordinate
         return other == this ||
                 (other!!::class == Ship::class &&
                         start == (other as Ship).start &&
-                        end == (other as Ship).end &&
-                        type == (other as Ship).type)
+                        end == other.end &&
+                        type == other.type)
     }
 
     override fun toString(): String {
