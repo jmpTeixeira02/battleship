@@ -6,8 +6,8 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import isel.pdm.data.game.Replay
-import isel.pdm.ui.elements.NavigationHandlers
+import isel.pdm.data.Replay
+import isel.pdm.ui.elements.topbar.NavigationHandlers
 import isel.pdm.ui.screen.ReplayGameScreen
 
 class ReplayGameActivity : ComponentActivity() {

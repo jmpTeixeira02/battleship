@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.data.InviteState
 import isel.pdm.data.PlayerMatchmaking
+import isel.pdm.ui.elements.buttons.BiState
 import isel.pdm.ui.elements.buttons.InviteButton
 import isel.pdm.ui.elements.buttons.PendingInviteButtons
 import isel.pdm.ui.theme.BattleshipTheme
@@ -46,18 +47,13 @@ fun PlayerView(
             )
             if (player.inviteState == InviteState.InviteEnabled) {
                 InviteButton(
-                    state = player.inviteState,
-                    onClick = {
-                        matchMakingRequest.onInviteSend(
-                            player,
-                            InviteState.InvitedDisabled
-                        )
-                    },
+                    state = BiState.hasNotBeenPressed,
+                    onClick = {matchMakingRequest.onInviteSend(player, InviteState.InvitedDisabled)},
                     modifier = Modifier.padding(all = 16.dp)
                 )
             } else if (player.inviteState == InviteState.InvitedDisabled) {
                 InviteButton(
-                    state = player.inviteState,
+                    state = BiState.hasBeenPressed,
                     onClick = {},
                     modifier = Modifier.padding(all = 16.dp)
                 )

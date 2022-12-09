@@ -11,9 +11,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.R
-import isel.pdm.data.game.Replay
-import isel.pdm.data.game.TurnManager
-import isel.pdm.ui.elements.*
+import isel.pdm.data.Replay
+import isel.pdm.ui.elements.ExpandableReplayView
+import isel.pdm.ui.elements.ReplayHandler
+import isel.pdm.ui.elements.topbar.NavigationHandlers
+import isel.pdm.ui.elements.ReplayView
+import isel.pdm.ui.elements.topbar.NavigationTopBar
 import isel.pdm.ui.theme.BattleshipTheme
 
 @Composable
@@ -27,7 +30,7 @@ fun SelectReplayScreen(
             modifier = Modifier.fillMaxSize(),
             backgroundColor = MaterialTheme.colors.background,
             topBar = {
-                TopBar(
+                NavigationTopBar(
                     navigation = navigationRequest,
                     title = stringResource(id = R.string.replay_screenName)
                 )
@@ -60,12 +63,12 @@ private fun SelectReplayScreenPreview() {
     SelectReplayScreen(
         navigationRequest = NavigationHandlers(backRequest = {}),
         availableReplays = mutableListOf(
-            Replay("#01", "01/01/0000", "OpponentX", listOf(TurnManager.fromString("E(0,6)"), TurnManager.fromString("P(3,9)"), TurnManager.fromString("E(5,3)"), TurnManager.fromString("P(9,9)"))),
-            Replay("#02", "01/02/0000", "OpponentY", listOf(TurnManager.fromString("E(1,7)"), TurnManager.fromString("P(4,0)"), TurnManager.fromString("E(6,4)"), TurnManager.fromString("P(0,0)"))),
-            Replay("#03", "02/01/0000", "OpponentZ", listOf(TurnManager.fromString("E(2,8)"), TurnManager.fromString("P(5,1)"), TurnManager.fromString("E(7,5)"), TurnManager.fromString("P(1,1)"))),
-            Replay("#04", "01/01/3000", "OpponentW", listOf(TurnManager.fromString("E(3,9)"), TurnManager.fromString("P(6,2)"), TurnManager.fromString("E(8,6)"), TurnManager.fromString("P(2,2)"))),
-            Replay("#05", "04/01/0000", "OpponentR", listOf(TurnManager.fromString("E(4,0)"), TurnManager.fromString("P(7,3)"), TurnManager.fromString("E(9,7)"), TurnManager.fromString("P(3,3)"))),
-            Replay("#06", "05/05/5000", "OpponentT", listOf(TurnManager.fromString("E(5,1)"), TurnManager.fromString("P(8,4)"), TurnManager.fromString("E(0,8)"), TurnManager.fromString("P(4,4)"))),
+            Replay("#01", "01/01/0000", "OpponentX", 23),
+            Replay("#02", "01/02/0000", "OpponentY", 18),
+            Replay("#03", "02/01/0000", "OpponentZ", 31),
+            Replay("#04", "01/01/3000", "OpponentW", 27),
+            Replay("#05", "04/01/0000", "OpponentR", 22),
+            Replay("#06", "05/05/5000", "OpponentT", 20),
         )
     )
 }

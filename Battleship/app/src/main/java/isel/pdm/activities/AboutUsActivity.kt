@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import isel.pdm.R
-import isel.pdm.ui.elements.NavigationHandlers
+import isel.pdm.ui.elements.topbar.NavigationHandlers
 import isel.pdm.ui.screen.AboutUsScreen
 import isel.pdm.ui.screen.HomeScreen
 
