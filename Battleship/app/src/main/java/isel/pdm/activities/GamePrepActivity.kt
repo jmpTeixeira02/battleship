@@ -3,18 +3,18 @@ package isel.pdm.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.ui.graphics.Color
-import isel.pdm.R
 import isel.pdm.data.PlayerMatchmaking
-import isel.pdm.service.FakeMatchmakingService
+import isel.pdm.data.game.Ship
+import isel.pdm.data.game.TypeOfShip
+import isel.pdm.ui.elements.ShipState
 import isel.pdm.ui.elements.buttons.BiState
-import isel.pdm.ui.elements.topbar.NavigationHandlers
-import isel.pdm.ui.screen.AboutUsScreen
+import isel.pdm.ui.screen.BoardCellHandler
 import isel.pdm.ui.screen.GamePrepScreen
+import isel.pdm.ui.screen.ShipRemoverHandler
+import isel.pdm.ui.screen.ShipSelectionHandler
 import isel.pdm.utils.viewModelInit
 
 class GamePrepActivity : ComponentActivity() {
@@ -34,37 +34,36 @@ class GamePrepActivity : ComponentActivity() {
         }
     }
 
-    private fun boatSelectedClick(idx: Int){
-        viewModel.updateSelectedList(idx)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val deleteBoatState =
+            val deleteButtonState =
                 if (viewModel.isDeleting) BiState.hasBeenPressed
                 else BiState.hasNotBeenPressed
-            val selectedBoatStateList =
-                viewModel.isSelectedList.map{
-                    bool ->
-                        if (bool) BiState.hasBeenPressed
-                        else BiState.hasNotBeenPressed
-            }
             GamePrepScreen(
                 players = listOf(
                     PlayerMatchmaking("Player 1"),
                     PlayerMatchmaking("Player 2")
                 ),
-                rotateBoat = {},
-                deleteBoatState = deleteBoatState,
-                deleteBoat = {viewModel.deleteBoat()},
-                onCellClick = { x: Int, y: Int ->
-                    Log.v("GamePrepActivity", "Cell: ${x}, ${y}")
-                },
-                selectedBoatStateList = selectedBoatStateList,
-                onBoatClick = {
-                    idx: Int -> boatSelectedClick(idx)
-                }
+                shipRemoverHandler = ShipRemoverHandler(
+                    deleteButtonState = deleteButtonState,
+                    onDeleteButtonClick = {viewModel.deleteBoatToggle()},
+                ),
+                onRandomShipPlacer = { viewModel.randomFleet() },
+                boardCellHandler = BoardCellHandler(
+                    onCellClick = { line: Int, column: Int, selectedShip: Ship? ->
+                        viewModel.boardClickHandler(line, column, selectedShip)},
+                    boardCellList = viewModel.boardCells,
+                ),
+                shipSelectionHandler = ShipSelectionHandler(
+                    selectedShip = viewModel.shipSelector
+                        .filterValues{ e -> e == ShipState.isSelected }.keys.firstOrNull(),
+                    shipSelector = viewModel.shipSelector,
+                    onShipSelectorClick = {
+                        boatSelected: TypeOfShip -> viewModel.shipSelectorHandler(boatSelected)
+                    }
+                ),
             )
         }
     }

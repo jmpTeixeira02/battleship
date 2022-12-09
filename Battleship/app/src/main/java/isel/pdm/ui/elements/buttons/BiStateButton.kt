@@ -9,7 +9,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.R
-import isel.pdm.data.InviteState
 import isel.pdm.ui.theme.BattleshipTheme
 
 
@@ -22,10 +21,13 @@ private fun BiStateButton(
     state: BiState,
     onClick: () -> Unit,
     biStateButtonStrings: BiStateButtonStrings,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    toggle: Boolean = false
 ) {
     Button(
-        enabled = state == BiState.hasNotBeenPressed,
+        enabled =
+            if (!toggle) state == BiState.hasNotBeenPressed
+            else true,
         onClick = onClick,
         modifier = modifier
     ) {
@@ -76,22 +78,19 @@ fun InviteButton(
 fun RemoveBoatButton(
     state: BiState,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ){
     BiStateButton(
         state = state,
         onClick = onClick,
         modifier = modifier,
+        toggle = true,
         biStateButtonStrings = BiStateButtonStrings(
             hasNotBeenPressedStr= stringResource(id = R.string.boatDeleteButtonReady),
             hasBeenPressedStrResStr = stringResource(id = R.string.boatDeleteButtonPending),
         )
     )
 }
-
-
-
-
 
 @Preview
 @Composable
@@ -108,7 +107,7 @@ fun RefreshButtonPreviewReady() {
 @Preview
 @Composable
 fun RefreshButtonPreviewRefreshing() {
-    BattleshipTheme() {
+    BattleshipTheme {
         RefreshButton(
             state = BiState.hasBeenPressed,
             onClick = { },
@@ -131,6 +130,26 @@ fun InviteButtonPreviewInvitePlayer() {
 @Composable
 fun InvitedButtonPlayerHasBeenInvited() {
     InviteButton(
+        state = BiState.hasBeenPressed,
+        onClick = { },
+        modifier = Modifier.padding(all = 16.dp)
+    )
+}
+
+@Preview
+@Composable
+fun RemoveBoatButtonHasNotBeenPressed() {
+    RemoveBoatButton(
+        state = BiState.hasNotBeenPressed,
+        onClick = { },
+        modifier = Modifier.padding(all = 16.dp)
+    )
+}
+
+@Preview
+@Composable
+fun RemoveBoatButtonHasBeenPressed() {
+    RemoveBoatButton(
         state = BiState.hasBeenPressed,
         onClick = { },
         modifier = Modifier.padding(all = 16.dp)

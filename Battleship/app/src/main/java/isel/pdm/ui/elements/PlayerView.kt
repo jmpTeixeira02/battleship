@@ -18,7 +18,7 @@ import isel.pdm.ui.elements.buttons.PendingInviteButtons
 import isel.pdm.ui.theme.BattleshipTheme
 
 data class MatchmakingHandlers(
-    val onAcceptInvite: () -> Unit = { },
+    val onAcceptInvite: (PlayerMatchmaking) -> Unit = { },
     val onDeleteInvite: (PlayerMatchmaking) -> Unit = { },
     val onInviteSend: (PlayerMatchmaking, InviteState) -> Unit = { _, _ -> },
 )
@@ -59,7 +59,7 @@ fun PlayerView(
                 )
             } else {
                 PendingInviteButtons(
-                    onAcceptInvite = matchMakingRequest.onAcceptInvite,
+                    onAcceptInvite = { matchMakingRequest.onAcceptInvite(player) },
                     onDeleteInvite = { matchMakingRequest.onDeleteInvite(player) },
                 )
             }

@@ -1,31 +1,14 @@
 package isel.pdm.data.game
 
-enum class ShipTypes(val type: String, val size: Int) {
-    Carrier("Porta-aviões", 5),
-    Battleship("Couraçado", 4),
-    Destroyer("Destruidor", 3),
-    Submarine("Submarino", 3),
-    PatrolBoat("Patrulha", 2)
+enum class TypeOfShip(val size: Int) {
+    Destroyer(2),
+    Submarine(3),
+    Cruiser(3),
+    BattleShip( 4),
+    Carrier(5)
 }
 
-data class Ship(val type: ShipTypes, val start: Coordinates, val end: Coordinates) {
+data class Ship(val type: TypeOfShip){
     val size = type.size
-    var hasDrowned: Boolean = false
-    var nHits: Int = 0
-        set(value) {
-            field = value
-            hasDrowned = value == size
-        }
-
-    override fun equals(other: Any?): Boolean {
-        return other == this ||
-                (other!!::class == Ship::class &&
-                        start == (other as Ship).start &&
-                        end == other.end &&
-                        type == other.type)
-    }
-
-    override fun toString(): String {
-        return type.type + " (" + type.size + " espaços) @ (" + start.toString() + ", " + end.toString() + ')'
-    }
+    val name = type.name
 }

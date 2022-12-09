@@ -33,7 +33,10 @@ class HomeActivity : ComponentActivity() {
                     replayListRequest = { SelectReplayActivity.navigate(origin = this) }
                 ),
                 matchMakingRequest = MatchmakingHandlers(
-                    onAcceptInvite = { GamePrepActivity.navigate(origin = this) },
+                    onAcceptInvite = { player: PlayerMatchmaking ->
+                        viewModel.removePlayer(player)
+                        GamePrepActivity.navigate(origin = this)
+                    },
                     onInviteSend = {
                         player: PlayerMatchmaking, state: InviteState ->
                             viewModel.updatePlayerState(player, state)

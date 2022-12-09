@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import isel.pdm.data.PlayerMatchmaking
 
 @Composable
-public fun GameTopBar(players: Iterable<PlayerMatchmaking>){
+fun GameTopBar(players: Iterable<PlayerMatchmaking>){
     Row(
         modifier = Modifier
             .fillMaxWidth()

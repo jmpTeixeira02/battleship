@@ -8,5 +8,5 @@
     <string name="refreshButtonReady">Refresh</string>
     <string name="refreshButtonRefreshing">Refreshing…</string>
     <string name="boatDeleteButtonReady">Delete Boat</string>
-    <string name="boatDeleteButtonPending">Selecting a boat do delete…</string>
+    <string name="boatDeleteButtonPending">Selecting a boat to delete…</string>
 </resources>

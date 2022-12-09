@@ -1,44 +1,57 @@
 package isel.pdm.ui.elements
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
+import isel.pdm.data.game.BOARD_SIDE
+import isel.pdm.data.game.Cell
+import isel.pdm.data.game.Ship
+import isel.pdm.data.game.TypeOfShip
 import isel.pdm.utils.drawCell
 
+enum class CellColor(val color: Color){
+    Water(Color.LightGray),
+    Destroyer(Color.Blue),
+    Submarine(Color.Cyan),
+    Cruiser(Color.Magenta),
+    BattleShip(Color.Yellow),
+    Carrier(Color.Green)
+}
 
 @Composable
 fun BoardView(
     modifier: Modifier = Modifier,
-    size: Int = 10,
     boarderColor: Color = Color.Black,
-    cellFillColor: Color = Color.LightGray,
     cellText: String = " ",
-    onClick: (x: Int, y: Int) -> Unit = {_,_ ->}
+    onClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ ->},
+    selectedBoat: TypeOfShip? = null,
+    boardCellList: List<List<Cell>> = List(BOARD_SIDE){ _ -> List(BOARD_SIDE){ _ -> Cell(null)} }
 ) {
     BoxWithConstraints(modifier = modifier) {
-        val cellHeight = this.maxHeight / size
-        val CellWidth = this.maxWidth / size
+        val cellHeight = this.maxHeight / BOARD_SIDE
+        val CellWidth = this.maxWidth / BOARD_SIDE
         Column()
         {
-            for (x in 1..10) {
+            repeat (BOARD_SIDE) { line ->
                 Row(
-                    modifier = Modifier
-                        .background(color = cellFillColor),
                     horizontalArrangement = Arrangement.Start
                 ) {
-                    for (y in 1..size) {
+                    repeat (BOARD_SIDE) { column ->
+
+                        val cellModifier = Modifier
                         drawCell(
-                            modifier = Modifier
+                            modifier = cellModifier
                                 .width(cellHeight)
                                 .height(CellWidth),
                             boarderColor = boarderColor,
-                            cellFillColor = cellFillColor,
+                            cellFillColor = CellColor.valueOf(boardCellList[line][column].value).color,
                             cellText = cellText,
-                            onClick = { onClick(x, y)}
+                            onClick = {
+                                if (selectedBoat != null) onClick(line, column, Ship(selectedBoat))
+                                else onClick(line,column,null)
+                            }
                         )
                     }
                 }
