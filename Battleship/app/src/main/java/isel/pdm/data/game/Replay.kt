@@ -5,8 +5,10 @@ import java.io.File
 import java.time.LocalDate
 import kotlinx.parcelize.Parcelize
 
+// TODO - finish correct date implementation, create dedicated data structure and create unit tests
+
 @Parcelize
-data class Replay(val replayId: String = "", val date: String = LocalDate.now().toString(), val opponentName: String, val turns: List<Turn> = listOf()) :
+data class Replay(val replayId: String = "", val date: String = /*LocalDate.now().toString()*/"", val opponentName: String, val turns: List<Turn> = listOf()) :
     Parcelable
 
 class ReplayManager {
@@ -20,7 +22,7 @@ class ReplayManager {
                 // This line tests if the given date is valid; if it is not valid, a DateTimeException
                 // is thrown. Since the main objective is date testing, the return variable can be
                 // discarded, since it will not be used
-                LocalDate.parse(rep.date)
+                //LocalDate.parse(rep.date)
 
                 dump = rep.replayId + "|||" + rep.date + "|||" + rep.opponentName + "\n--------------------"
                 rep.turns.forEach {
