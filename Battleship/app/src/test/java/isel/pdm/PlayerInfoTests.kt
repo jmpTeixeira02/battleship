@@ -1,7 +1,7 @@
 package isel.pdm
 
-import isel.pdm.data.player.PlayerMatchmaking
-import isel.pdm.data.player.validatePlayerUsername
+import isel.pdm.game.lobby.model.PlayerMatchmaking
+import isel.pdm.game.lobby.model.validatePlayerUsername
 import org.junit.Assert
 import org.junit.Test
 

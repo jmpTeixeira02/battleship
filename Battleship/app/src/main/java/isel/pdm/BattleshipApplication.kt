@@ -1,8 +1,8 @@
 package isel.pdm
 
 import android.app.Application
-import isel.pdm.data.player.PlayerInfoRepositorySharedPrefs
-import isel.pdm.data.player.PlayerRepository
+import isel.pdm.preferences.PlayerInfoRepositorySharedPrefs
+import isel.pdm.preferences.PlayerRepository
 
 
 interface DependenciesContainer {

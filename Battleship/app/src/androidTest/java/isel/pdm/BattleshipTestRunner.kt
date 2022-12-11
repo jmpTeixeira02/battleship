@@ -5,8 +5,8 @@ import android.content.Context
 import androidx.test.runner.AndroidJUnitRunner
 import io.mockk.every
 import io.mockk.mockk
-import isel.pdm.data.player.PlayerMatchmaking
-import isel.pdm.data.player.PlayerRepository
+import isel.pdm.game.lobby.model.PlayerMatchmaking
+import isel.pdm.preferences.PlayerRepository
 
 class BattleshipTestApplication : DependenciesContainer, Application() {
     override var playerRepo: PlayerRepository =

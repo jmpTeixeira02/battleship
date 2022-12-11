@@ -1,6 +1,6 @@
 package isel.pdm
 
-import isel.pdm.data.game.*
+import isel.pdm.game.prep.model.*
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -81,7 +81,7 @@ class BoardTests {
         val end1: Coordinate = Coordinate(1,5)
         board.placeShip(start1, end1, Ship(TypeOfShip.BattleShip))
 
-        val pred:(cells:Cell) -> Boolean =
+        val pred:(cells: Cell) -> Boolean =
             { cell -> cell.value == TypeOfShip.Carrier.name || cell.value == TypeOfShip.BattleShip.name }
 
         val carrierPlusBattleCells = board.cells.flatten().count { cell -> pred(cell) }
@@ -108,7 +108,7 @@ class BoardTests {
         val end1: Coordinate = Coordinate(1,5)
         board.placeShip(start1, end1, Ship(TypeOfShip.BattleShip))
 
-        val pred:(cells:Cell) -> Boolean =
+        val pred:(cells: Cell) -> Boolean =
             { cell -> cell.value == TypeOfShip.Carrier.name || cell.value == TypeOfShip.BattleShip.name }
 
         val carrierPlusBattleCells = board.cells.flatten().count { cell -> pred(cell) }
@@ -131,7 +131,7 @@ class BoardTests {
         val end1: Coordinate = Coordinate(1,5)
         board.placeShip(start1, end1, Ship(TypeOfShip.BattleShip))
 
-        val pred:(cells:Cell) -> Boolean =
+        val pred:(cells: Cell) -> Boolean =
             { cell -> cell.value == TypeOfShip.Carrier.name || cell.value == TypeOfShip.BattleShip.name }
 
         val occupiedCells = board.cells.flatten().count {cell -> pred(cell) }

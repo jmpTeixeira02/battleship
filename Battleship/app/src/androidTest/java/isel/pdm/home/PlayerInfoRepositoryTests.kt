@@ -2,8 +2,8 @@ package isel.pdm.home
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import isel.pdm.data.player.PlayerInfoRepositorySharedPrefs
-import isel.pdm.data.player.PlayerMatchmaking
+import isel.pdm.preferences.PlayerInfoRepositorySharedPrefs
+import isel.pdm.game.lobby.model.PlayerMatchmaking
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

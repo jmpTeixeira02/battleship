@@ -5,12 +5,12 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import isel.pdm.activities.LobbyActivity
+import isel.pdm.game.lobby.ui.LobbyActivity
 import isel.pdm.testutils.assertNotEmpty
-import isel.pdm.ui.elements.NavigateBackTestTag
-import isel.pdm.ui.elements.NavigateToAboutTestTag
-import isel.pdm.ui.elements.NavigateToEditUserTestTag
-import isel.pdm.ui.elements.NavigateToReplayTestTag
+import isel.pdm.ui.topbar.NavigateBackTestTag
+import isel.pdm.ui.topbar.NavigateToAboutTestTag
+import isel.pdm.ui.topbar.NavigateToEditUserTestTag
+import isel.pdm.ui.topbar.NavigateToReplayTestTag
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

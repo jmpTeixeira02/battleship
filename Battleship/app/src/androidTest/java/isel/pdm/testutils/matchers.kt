@@ -3,7 +3,7 @@
 package isel.pdm.testutils
 
 import androidx.compose.ui.test.SemanticsMatcher
-import isel.pdm.ui.elements.expandedPropertyKey
+import isel.pdm.replay.selector.ui.expandedPropertyKey
 
 /**
  * Checks whether a given composable has the semantic property defined by
