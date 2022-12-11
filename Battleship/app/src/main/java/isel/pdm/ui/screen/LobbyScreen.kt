@@ -8,12 +8,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.R
-import isel.pdm.data.InviteState
-import isel.pdm.data.PlayerMatchmaking
+import isel.pdm.data.player.InviteState
+import isel.pdm.data.player.PlayerMatchmaking
 import isel.pdm.ui.elements.MatchmakingHandlers
 import isel.pdm.ui.elements.topbar.NavigationHandlers
 import isel.pdm.ui.elements.PlayerView
@@ -26,6 +27,8 @@ import isel.pdm.ui.theme.BattleshipTheme
     val players: List<PlayerView> = emptyList()
 )*/
 
+const val HomeScreenTag = "HomeScreen"
+
 
 @Composable
 fun HomeScreen(
@@ -37,7 +40,9 @@ fun HomeScreen(
 ) {
     BattleshipTheme {
         Scaffold(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag(HomeScreenTag),
             backgroundColor = MaterialTheme.colors.background,
             topBar = {
                 NavigationTopBar(
@@ -91,6 +96,7 @@ private fun HomeScreenPreview() {
             PlayerMatchmaking("B", inviteState = InviteState.InvitePending),
             PlayerMatchmaking("C", inviteState = InviteState.InvitedDisabled),
         ),
-        matchMakingRequest = MatchmakingHandlers(onInviteSend = {_, _ ->  })
+        matchMakingRequest = MatchmakingHandlers(onInviteSend = { _, _ -> }),
+        //currentPlayer = PlayerMatchmaking("xd")
     )
 }

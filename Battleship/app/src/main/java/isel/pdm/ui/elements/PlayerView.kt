@@ -7,6 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,6 +31,7 @@ fun PlayerView(
 ) {
     Card(
         modifier = Modifier
+            .testTag("PlayerView")
             .fillMaxWidth()
             .padding(16.dp),
         elevation = 10.dp
@@ -39,7 +41,7 @@ fun PlayerView(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = player.name,
+                text = player.username,
                 style = MaterialTheme.typography.h6,
                 modifier = Modifier
                     .padding(all = 24.dp),
@@ -95,16 +97,16 @@ private fun PlayerViewInvitePendingPreview() {
 }
 
 private val inviteEnablePlayer = PlayerMatchmaking(
-    name = "Jogador 1",
+    username = "Jogador 1",
     inviteState = InviteState.InviteEnabled
 )
 
 private val invitePendingPlayer = PlayerMatchmaking(
-    name = "Jogador 2",
+    username = "Jogador 2",
     inviteState = InviteState.InvitePending
 )
 
 private val inviteDisablePlayer = PlayerMatchmaking(
-    name = "Jogador 3",
+    username = "Jogador 3",
     inviteState = InviteState.InvitedDisabled
 )

@@ -3,12 +3,12 @@ package isel.pdm.activities
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import isel.pdm.data.InviteState
-import isel.pdm.data.PlayerMatchmaking
+import isel.pdm.data.player.InviteState
+import isel.pdm.data.player.PlayerMatchmaking
 import isel.pdm.service.MatchmakingService
 import kotlinx.coroutines.launch
 
-class HomeScreenViewModel(private val matchmaking: MatchmakingService) : ViewModel() {
+class LobbyScreenViewModel(private val matchmaking: MatchmakingService) : ViewModel() {
 
     private var _players by mutableStateOf<List<PlayerMatchmaking>>(emptyList())
     //private var _players = mutableStateListOf<PlayerMatchmaking>()
