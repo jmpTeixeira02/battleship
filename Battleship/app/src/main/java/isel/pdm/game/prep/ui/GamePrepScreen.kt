@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -36,6 +37,8 @@ data class ShipSelectionHandler(
     val selectedShip: TypeOfShip? = null
 )
 
+const val RandomButtonTestTag = "RandomButton"
+
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GamePrepScreen(
@@ -64,12 +67,14 @@ fun GamePrepScreen(
                     boardCellList = boardCellHandler.boardCellList
                 )
                 FleetSelectorView(
-                    modifier = Modifier,
+                    modifier = Modifier.testTag(FleetSelectorTestTag),
                     onClick = shipSelectionHandler.onShipSelectorClick,
                     shipSelector = shipSelectionHandler.shipSelector
                 )
 
-                Button(onClick = onRandomShipPlacer, modifier = Modifier.padding(all = 16.dp)) {
+                Button(
+                    onClick = onRandomShipPlacer,
+                    modifier = Modifier.padding(all = 16.dp).testTag(RandomButtonTestTag)) {
                     Text(text = "Random")
                 }
 

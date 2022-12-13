@@ -17,7 +17,7 @@ import isel.pdm.ui.topbar.NavigateToEditUserTestTag
 import isel.pdm.ui.topbar.NavigateToReplayTestTag
 import isel.pdm.ui.buttons.SaveButtonTag
 import isel.pdm.preferences.ui.CreatePlayerScreenTag
-import isel.pdm.game.lobby.ui.HomeScreenTag
+import isel.pdm.game.lobby.ui.LobbyScreenTag
 import isel.pdm.preferences.ui.UsernameInputTag
 import org.junit.Rule
 import org.junit.Test
@@ -127,7 +127,7 @@ class CreatePlayerActivityEditModeTests {
             // Assert
             verify { mockRepo.playerInfo }
             testRule.onNodeWithTag(CreatePlayerScreenTag).assertDoesNotExist()
-            testRule.onNodeWithTag(HomeScreenTag).assertExists()
+            testRule.onNodeWithTag(LobbyScreenTag).assertExists()
         }
     }
 

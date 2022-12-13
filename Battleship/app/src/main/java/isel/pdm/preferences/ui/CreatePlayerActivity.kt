@@ -21,23 +21,14 @@ class CreatePlayerActivity : ComponentActivity() {
     }
 
     companion object {
-        fun navigate(context: Context, finishOnSave: Boolean = false) {
+        fun navigate(context: Context) {
             with(context) {
                 val intent = Intent(this, CreatePlayerActivity::class.java)
-                if (finishOnSave) {
-                    intent.putExtra(FINISH_ON_SAVE_EXTRA, true)
-                }
                 startActivity(intent)
             }
         }
     }
 
-
-    /* private val viewModel: CreatePlayerViewModel by viewModels {
-         viewModelInit {
-             CreatePlayerViewModel()
-         }
-     }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,23 +40,11 @@ class CreatePlayerActivity : ComponentActivity() {
                     backRequest = { finish() },
                     aboutUsRequest = { AboutUsActivity.navigate(origin = this) },
                 ),
-                /* playerRequest = PlayerHandler(
-                     onCreatePlayer = { player: PlayerMatchmaking ->
-                         viewModel.createPlayer(player)
-                         HomeActivity.navigate(origin = this, player)
-                     }
-                 ),*/
                 onSaveRequested = {
                     repo.playerInfo = it
-                    if (intent.getBooleanExtra(FINISH_ON_SAVE_EXTRA, false)) {
-                        finish()
-                    } else {
-                        LobbyActivity.navigate(this, player = repo.playerInfo) //mudar nome da activity (player lobby)
-                    }
+                    LobbyActivity.navigate(this, player = it) //mudar nome da activity (player lobby)
                 },
             )
-            Log.v("CURR_PLAYER", repo.playerInfo.toString())
-
         }
     }
 }

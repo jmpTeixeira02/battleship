@@ -1,12 +1,29 @@
 package isel.pdm.testutils
 
+import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import isel.pdm.BattleshipTestApplication
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
+
+/**
+ * Creates a test rule that starts an activity of type <A> with the received
+ * intent.
+ */
+fun <A : ComponentActivity> createAndroidComposeRule(
+    intent: Intent
+): AndroidComposeTestRule<ActivityScenarioRule<A>, A> = AndroidComposeTestRule(
+    activityRule = ActivityScenarioRule(intent),
+    activityProvider = { rule ->
+        var activity: A? = null
+        rule.scenario.onActivity { activity = it }
+        activity!!
+    }
+)
 
 class PreserveDefaultDependencies : TestRule {
 

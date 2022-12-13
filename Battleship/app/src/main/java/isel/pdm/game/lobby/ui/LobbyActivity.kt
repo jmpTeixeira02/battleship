@@ -21,12 +21,14 @@ class LobbyActivity : ComponentActivity() {
 
 
     companion object {
-        private const val PLAYER_EXTRA = "PLAYER_EXTRA"
+        const val PLAYER_EXTRA = "PLAYER_EXTRA"
+        const val LOCAL_PLAYER = "LOCAL_PLAYER"
         fun navigate(origin: Activity, player: PlayerMatchmaking? = null) {
             with(origin) {
                 val intent = Intent(this, LobbyActivity::class.java)
-                intent.putExtra(PLAYER_EXTRA, player)
-                intent.putExtra("local_player", player?.username)
+                Intent(this, LobbyActivity::class.java)
+                //intent.putExtra(PLAYER_EXTRA, player)
+                intent.putExtra(LOCAL_PLAYER, player?.username)
                 startActivity(intent)
             }
         }
@@ -40,7 +42,7 @@ class LobbyActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val localPlayer: String = intent.getStringExtra("local_player")!!
+        val localPlayer: String = intent.getStringExtra(LOCAL_PLAYER)!!
         setContent {
             val refreshState =
                 if (viewModel.isRefreshing) BiState.hasBeenPressed

@@ -17,6 +17,8 @@ class BiStateButtonStrings(val hasNotBeenPressedStr: String, val hasBeenPressedS
 
 enum class BiState {hasNotBeenPressed, hasBeenPressed}
 
+const val RemoveButtonTestTag = "RemoveButtonTag"
+
 @Composable
 private fun BiStateButton(
     state: BiState,
@@ -84,7 +86,7 @@ fun RemoveBoatButton(
     BiStateButton(
         state = state,
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.testTag("RemoveButtonTag"),
         toggle = true,
         biStateButtonStrings = BiStateButtonStrings(
             hasNotBeenPressedStr= stringResource(id = R.string.boatDeleteButtonReady),

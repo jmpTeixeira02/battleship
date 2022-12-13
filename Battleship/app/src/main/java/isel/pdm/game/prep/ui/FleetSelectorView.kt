@@ -7,6 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import isel.pdm.game.prep.model.TypeOfShip
@@ -14,24 +15,27 @@ import isel.pdm.game.prep.model.TypeOfShip
 
 enum class ShipState {hasBeenPlaced, isSelected, isNotSelected}
 
+const val FleetSelectorTestTag = "FleetSelector"
+
 @Composable
 fun FleetSelectorView(
     modifier: Modifier = Modifier,
     onClick: (boatSelected: TypeOfShip) -> Unit = { _->},
     shipSelector: Map<TypeOfShip, ShipState> = TypeOfShip.values().associateWith { _ -> ShipState.isNotSelected }
 ){
-    BoxWithConstraints(modifier = modifier.padding(4.dp)) {
+    BoxWithConstraints(modifier = modifier) {
         val maxBoatCellsSize = this.maxWidth / 6
         val spaceModifier = Modifier
             .height(4.dp)
             .width(4.dp)
+        val boatModifier = Modifier.padding(4.dp)
         Column(
                 verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ){
                 BuildBoatSelect(
                     size = TypeOfShip.Destroyer.size, name = TypeOfShip.Destroyer.name,
-                    maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
+                    maxBoatCellSize = maxBoatCellsSize, modifier = boatModifier,
                     onClick = onClick, state = shipSelector[TypeOfShip.Destroyer]!!,
                     boatSelected = shipSelector.keys.first { e -> e == TypeOfShip.Destroyer }
                 )
@@ -39,14 +43,14 @@ fun FleetSelectorView(
                 Row(horizontalArrangement = Arrangement.SpaceEvenly){
                     BuildBoatSelect(
                         size = TypeOfShip.Submarine.size, name = TypeOfShip.Submarine.name,
-                        maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
+                        maxBoatCellSize = maxBoatCellsSize, modifier = boatModifier,
                         onClick = onClick, state = shipSelector[TypeOfShip.Submarine]!!,
                         boatSelected = shipSelector.keys.first { e -> e == TypeOfShip.Submarine }
                     )
                     Spacer(modifier = spaceModifier)
                     BuildBoatSelect(
                         size = TypeOfShip.Cruiser.size, name = TypeOfShip.Cruiser.name,
-                        maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
+                        maxBoatCellSize = maxBoatCellsSize, modifier = boatModifier,
                         onClick = onClick, state = shipSelector[TypeOfShip.Cruiser]!!,
                         boatSelected = shipSelector.keys.first { e -> e == TypeOfShip.Cruiser }
                     )
@@ -54,14 +58,14 @@ fun FleetSelectorView(
                 Spacer(modifier = spaceModifier)
                 BuildBoatSelect(
                     size = TypeOfShip.BattleShip.size, name = TypeOfShip.BattleShip.name,
-                    maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
+                    maxBoatCellSize = maxBoatCellsSize, modifier = boatModifier,
                     onClick = onClick, state = shipSelector[TypeOfShip.BattleShip]!!,
                     boatSelected = shipSelector.keys.first { e -> e == TypeOfShip.BattleShip }
                 )
                 Spacer(modifier = spaceModifier)
                 BuildBoatSelect(
                     size = TypeOfShip.Carrier.size, name = TypeOfShip.Carrier.name,
-                    maxBoatCellSize = maxBoatCellsSize, modifier = modifier,
+                    maxBoatCellSize = maxBoatCellsSize, modifier = boatModifier,
                     onClick = onClick, state = shipSelector[TypeOfShip.Carrier]!!,
                     boatSelected = shipSelector.keys.first { e -> e == TypeOfShip.Carrier }
                 )

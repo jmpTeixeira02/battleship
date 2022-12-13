@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import isel.pdm.game.prep.model.BOARD_SIDE
 import isel.pdm.game.prep.model.Cell
@@ -19,6 +20,8 @@ enum class CellColor(val color: Color){
     Carrier(Color.Green)
 }
 
+const val BoardTestTag = "BoardTag"
+
 @Composable
 fun BoardView(
     modifier: Modifier = Modifier,
@@ -28,7 +31,7 @@ fun BoardView(
     selectedBoat: TypeOfShip? = null,
     boardCellList: List<List<Cell>> = List(BOARD_SIDE){ _ -> List(BOARD_SIDE){ _ -> Cell(null) } }
 ) {
-    BoxWithConstraints(modifier = modifier) {
+    BoxWithConstraints(modifier = modifier.testTag(BoardTestTag)) {
         val cellHeight = this.maxHeight / BOARD_SIDE
         val CellWidth = this.maxWidth / BOARD_SIDE
         Column()

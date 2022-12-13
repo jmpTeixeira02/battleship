@@ -25,7 +25,7 @@ import isel.pdm.ui.theme.BattleshipTheme
     val players: List<PlayerView> = emptyList()
 )*/
 
-const val HomeScreenTag = "HomeScreen"
+const val LobbyScreenTag = "HomeScreen"
 
 
 @Composable
@@ -40,7 +40,7 @@ fun LobbyScreen(
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
-                .testTag(HomeScreenTag),
+                .testTag(LobbyScreenTag),
             backgroundColor = MaterialTheme.colors.background,
             topBar = {
                 NavigationTopBar(

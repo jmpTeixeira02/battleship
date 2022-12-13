@@ -34,7 +34,6 @@ const val UsernameInputTag = "UsernameInput"
 fun CreatePlayerScreen(
     player: PlayerMatchmaking?,
     navigationRequest: NavigationHandlers = NavigationHandlers(),
-    //playerRequest: PlayerHandler = PlayerHandler(),
     onSaveRequested: (PlayerMatchmaking) -> Unit = { }
 ) {
 

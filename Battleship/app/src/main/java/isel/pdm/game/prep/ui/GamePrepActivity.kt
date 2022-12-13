@@ -16,11 +16,13 @@ import isel.pdm.utils.viewModelInit
 class GamePrepActivity : ComponentActivity() {
 
     companion object {
+        const val LOCAL_PLAYER = "local"
+        const val OPPONENT_PLAYER = "OPPONENT"
         fun navigate(origin: Activity, local:String, opponent: String) {
             with(origin) {
                 val intent = Intent(this, GamePrepActivity::class.java)
-                intent.putExtra("local", local)
-                intent.putExtra("opponent", opponent)
+                intent.putExtra(LOCAL_PLAYER, local)
+                intent.putExtra(OPPONENT_PLAYER, opponent)
                 startActivity(intent)
             }
         }
@@ -35,8 +37,8 @@ class GamePrepActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val opponent: String = intent.getStringExtra("opponent")!!
-        val local: String = intent.getStringExtra("local")!!
+        val opponent: String = intent.getStringExtra(OPPONENT_PLAYER)!!
+        val local: String = intent.getStringExtra(LOCAL_PLAYER)!!
         setContent {
             val deleteButtonState =
                 if (viewModel.isDeleting) BiState.hasBeenPressed
