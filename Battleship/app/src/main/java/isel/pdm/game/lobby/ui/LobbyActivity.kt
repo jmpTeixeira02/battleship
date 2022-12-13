@@ -3,6 +3,7 @@ package isel.pdm.game.lobby.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -25,6 +26,7 @@ class LobbyActivity : ComponentActivity() {
             with(origin) {
                 val intent = Intent(this, LobbyActivity::class.java)
                 intent.putExtra(PLAYER_EXTRA, player)
+                intent.putExtra("local_player", player?.username)
                 startActivity(intent)
             }
         }
@@ -38,6 +40,7 @@ class LobbyActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val localPlayer: String = intent.getStringExtra("local_player")!!
         setContent {
             val refreshState =
                 if (viewModel.isRefreshing) BiState.hasBeenPressed
@@ -52,7 +55,11 @@ class LobbyActivity : ComponentActivity() {
                 matchMakingRequest = MatchmakingHandlers(
                     onAcceptInvite = { player: PlayerMatchmaking ->
                         viewModel.removePlayer(player)
-                        GamePrepActivity.navigate(origin = this)
+                        GamePrepActivity.navigate(
+                            origin = this,
+                            local = localPlayer,
+                            opponent = player.username
+                        )
                     },
                     onInviteSend = {
                             player: PlayerMatchmaking, state: InviteState ->
@@ -65,7 +72,6 @@ class LobbyActivity : ComponentActivity() {
                 refreshState = refreshState,
                 refreshPlayers = { viewModel.findPlayer() },
                 players = viewModel.players,
-                //currentPlayer = playerExtra
             )
         }
     }

@@ -1,5 +1,6 @@
 package isel.pdm.game.prep.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -35,6 +36,7 @@ data class ShipSelectionHandler(
     val selectedShip: TypeOfShip? = null
 )
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GamePrepScreen(
     players: List<PlayerMatchmaking>,
@@ -47,7 +49,7 @@ fun GamePrepScreen(
         Scaffold(
             backgroundColor = MaterialTheme.colors.background,
             topBar = { GameTopBar(players) }
-        ) {
+        ) { _ ->
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,

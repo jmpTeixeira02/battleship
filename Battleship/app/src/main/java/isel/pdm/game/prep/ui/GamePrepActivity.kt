@@ -3,6 +3,7 @@ package isel.pdm.game.prep.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -15,9 +16,11 @@ import isel.pdm.utils.viewModelInit
 class GamePrepActivity : ComponentActivity() {
 
     companion object {
-        fun navigate(origin: Activity) {
+        fun navigate(origin: Activity, local:String, opponent: String) {
             with(origin) {
                 val intent = Intent(this, GamePrepActivity::class.java)
+                intent.putExtra("local", local)
+                intent.putExtra("opponent", opponent)
                 startActivity(intent)
             }
         }
@@ -32,14 +35,16 @@ class GamePrepActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val opponent: String = intent.getStringExtra("opponent")!!
+        val local: String = intent.getStringExtra("local")!!
         setContent {
             val deleteButtonState =
                 if (viewModel.isDeleting) BiState.hasBeenPressed
                 else BiState.hasNotBeenPressed
             GamePrepScreen(
                 players = listOf(
-                    PlayerMatchmaking("Player 1"),
-                    PlayerMatchmaking("Player 2")
+                    PlayerMatchmaking(local),
+                    PlayerMatchmaking(opponent)
                 ),
                 shipRemoverHandler = ShipRemoverHandler(
                     deleteButtonState = deleteButtonState,

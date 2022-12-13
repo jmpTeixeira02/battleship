@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
 
     private fun startGame() {
         if (repo.playerInfo != null)
-            LobbyActivity.navigate(this)
+            LobbyActivity.navigate(this, repo.playerInfo)
         else
             CreatePlayerActivity.navigate(this)
     }
