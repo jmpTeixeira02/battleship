@@ -60,7 +60,7 @@ class CreatePlayerActivity : ComponentActivity() {
                     if (intent.getBooleanExtra(FINISH_ON_SAVE_EXTRA, false)) {
                         finish()
                     } else {
-                        LobbyActivity.navigate(this) //mudar nome da activity (player lobby)
+                        LobbyActivity.navigate(this, player = repo.playerInfo) //mudar nome da activity (player lobby)
                     }
                 },
             )
