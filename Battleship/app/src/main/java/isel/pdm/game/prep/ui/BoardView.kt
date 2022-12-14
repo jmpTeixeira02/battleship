@@ -22,6 +22,9 @@ enum class CellColor(val color: Color){
 
 const val BoardTestTag = "BoardTag"
 
+fun BoardCellTestTag(line: Int, column: Int): String{
+    return "BoardCell${line}${column}Tag"
+}
 @Composable
 fun BoardView(
     modifier: Modifier = Modifier,
@@ -41,12 +44,12 @@ fun BoardView(
                     horizontalArrangement = Arrangement.Start
                 ) {
                     repeat (BOARD_SIDE) { column ->
-
                         val cellModifier = Modifier
                         drawCell(
                             modifier = cellModifier
                                 .width(cellHeight)
-                                .height(CellWidth),
+                                .height(CellWidth)
+                                .testTag(BoardCellTestTag(line, column)),
                             boarderColor = boarderColor,
                             cellFillColor = CellColor.valueOf(boardCellList[line][column].value).color,
                             cellText = cellText,

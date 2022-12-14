@@ -28,7 +28,7 @@ class GamePrepActivity : ComponentActivity() {
         }
     }
 
-    private val viewModel: GamePrepViewModel by viewModels {
+    val viewModel: GamePrepViewModel by viewModels {
         viewModelInit {
             GamePrepViewModel()
         }
