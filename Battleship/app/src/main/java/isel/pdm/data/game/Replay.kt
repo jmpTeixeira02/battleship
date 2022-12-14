@@ -13,10 +13,10 @@ data class Replay(val replayId: String = "", val date: String = /*LocalDate.now(
 
 class ReplayManager {
     companion object {
-        private var dump: String = ""
 
-        fun dump(/*path: String, */rep: Replay) {
+        fun dump(/*path: String, */rep: Replay): String {
             try {
+                var data = ""
                 if (rep.replayId.contains("|||")) throw Exception("replay ID had illegal character sequence")
 
                 // This line tests if the given date is valid; if it is not valid, a DateTimeException
@@ -24,9 +24,9 @@ class ReplayManager {
                 // discarded, since it will not be used
                 //LocalDate.parse(rep.date)
 
-                dump = rep.replayId + "|||" + rep.date + "|||" + rep.opponentName + "\n--------------------"
+                data = rep.replayId + "|||" + rep.date + "|||" + rep.opponentName + "\n--------------------"
                 rep.turns.forEach {
-                    dump += "\n" + it
+                    data += "\n" + TurnManager.toString(it)
                 }
 
                 /*
@@ -36,17 +36,20 @@ class ReplayManager {
                     file.appendText("\n" + it)
                 }
                  */
+
+                return data
             }
             catch (e: Exception) {
                 throw Exception("Could not mark game as favorite - ${e.message}")
             }
         }
 
-        fun read(/*path: String*/) : Replay {
+        fun read(/*path*/data: String) : Replay {
             try {
-                val header = readHeaderInfo()
+                val header = readHeaderInfo(data)
                 val turns = mutableListOf<Turn>()
-                dump.substring(dump.indexOf("\n--------------------\n") + 22, dump.length + 1).split(Regex.fromLiteral("\n")).forEach {
+                val turnList = data.substring(data.indexOf("\n--------------------\n") + 22, data.length)
+                turnList.split(Regex.fromLiteral("\n")).forEach {
                     turns.add(TurnManager.fromString(it))
                 }
 
@@ -63,9 +66,9 @@ class ReplayManager {
             }
         }
 
-        fun readHeaderInfo(/*path: String*/): List<String> {
+        fun readHeaderInfo(/*path*/data: String): List<String> {
             try {
-                return dump.substring(0, dump.indexOf("\n")).split("|||")
+                return data.substring(0, data.indexOf("\n")).split("|||")
 
                 /*
                 val header = File(path).readLines()[0]

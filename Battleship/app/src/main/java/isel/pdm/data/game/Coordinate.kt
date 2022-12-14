@@ -18,12 +18,18 @@ data class Coordinate(val line: Int, val column: Int) : Parcelable {
             val interval = (min until max)
             return Coordinate(interval.random(), interval.random())
         }
+
         fun fromString(coords: String): Coordinate {
             val index = coords.indexOf(",")
+            val x = coords.substring(1, index)
+            val y = coords.substring(index + 1, coords.length - 1)
             return Coordinate(
-                Integer.parseInt(coords.subSequence(1, index).toString()),
-                Integer.parseInt(coords.subSequence(index + 2, coords.length + 1).toString())
+                Integer.parseInt(x), Integer.parseInt(y)
             )
+        }
+
+        fun toString(coords: Coordinate): String {
+            return "(${coords.line},${coords.column})"
         }
     }
 }
