@@ -6,18 +6,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import isel.pdm.game.prep.model.BOARD_SIDE
-import isel.pdm.game.prep.model.Cell
-import isel.pdm.game.prep.model.Ship
-import isel.pdm.game.prep.model.TypeOfShip
+import isel.pdm.game.prep.model.*
 
-enum class CellColor(val color: Color){
+enum class CellColor(val color: Color) {
     Water(Color.LightGray),
     Destroyer(Color.Blue),
     Submarine(Color.Cyan),
     Cruiser(Color.Magenta),
     BattleShip(Color.Yellow),
-    Carrier(Color.Green)
+    Carrier(Color.Green),
+    ShotTaken(Color.DarkGray),
+    Ship(Color.Red)
 }
 
 const val BoardTestTag = "BoardTag"
@@ -27,32 +26,32 @@ fun BoardView(
     modifier: Modifier = Modifier,
     boarderColor: Color = Color.Black,
     cellText: String = " ",
-    onClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ ->},
+    onClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ -> },
     selectedBoat: TypeOfShip? = null,
-    boardCellList: List<List<Cell>> = List(BOARD_SIDE){ _ -> List(BOARD_SIDE){ _ -> Cell(null) } }
+    boardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell(CellState.Water) } }
 ) {
     BoxWithConstraints(modifier = modifier.testTag(BoardTestTag)) {
         val cellHeight = this.maxHeight / BOARD_SIDE
-        val CellWidth = this.maxWidth / BOARD_SIDE
+        val cellWidth = this.maxWidth / BOARD_SIDE
         Column()
         {
-            repeat (BOARD_SIDE) { line ->
+            repeat(BOARD_SIDE) { line ->
                 Row(
                     horizontalArrangement = Arrangement.Start
                 ) {
-                    repeat (BOARD_SIDE) { column ->
+                    repeat(BOARD_SIDE) { column ->
 
                         val cellModifier = Modifier
                         drawCell(
                             modifier = cellModifier
                                 .width(cellHeight)
-                                .height(CellWidth),
+                                .height(cellWidth),
                             boarderColor = boarderColor,
-                            cellFillColor = CellColor.valueOf(boardCellList[line][column].value).color,
+                            cellFillColor = CellColor.valueOf(boardCellList[line][column].value!!).color,
                             cellText = cellText,
                             onClick = {
                                 if (selectedBoat != null) onClick(line, column, Ship(selectedBoat))
-                                else onClick(line,column,null)
+                                else onClick(line, column, null)
                             }
                         )
                     }
@@ -64,6 +63,6 @@ fun BoardView(
 
 @Preview
 @Composable
-fun BoardViewPreview(){
+fun BoardViewPreview() {
     BoardView()
 }

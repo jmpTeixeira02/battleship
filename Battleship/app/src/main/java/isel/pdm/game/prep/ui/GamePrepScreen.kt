@@ -1,24 +1,27 @@
 package isel.pdm.game.prep.ui
 
 import android.annotation.SuppressLint
+import android.os.CountDownTimer
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import isel.pdm.game.lobby.model.PlayerMatchmaking
-import isel.pdm.game.prep.model.BOARD_SIDE
-import isel.pdm.game.prep.model.Cell
-import isel.pdm.game.prep.model.Ship
-import isel.pdm.game.prep.model.TypeOfShip
+import isel.pdm.game.prep.model.*
 import isel.pdm.ui.buttons.BiState
 import isel.pdm.ui.buttons.RemoveBoatButton
-import isel.pdm.ui.topbar.GameTopBar
 import isel.pdm.ui.theme.BattleshipTheme
+import isel.pdm.ui.topbar.GameTopBar
+import java.util.*
+
 
 val BOARD_SIZE: Dp = 248.dp
 
@@ -27,13 +30,16 @@ data class ShipRemoverHandler(
     val onDeleteButtonClick: () -> Unit = {},
     val deleteButtonState: BiState = BiState.hasNotBeenPressed,
 )
+
 data class BoardCellHandler(
     val onCellClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ -> },
-    val boardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell(null) } },
+    val boardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell(CellState.Water) } },
 )
+
 data class ShipSelectionHandler(
     val onShipSelectorClick: (boatSelected: TypeOfShip) -> Unit = { _ -> },
-    val shipSelector: Map<TypeOfShip, ShipState> = TypeOfShip.values().associateWith { _ -> ShipState.isNotSelected },
+    val shipSelector: Map<TypeOfShip, ShipState> = TypeOfShip.values()
+        .associateWith { _ -> ShipState.isNotSelected },
     val selectedShip: TypeOfShip? = null
 )
 
@@ -47,8 +53,10 @@ fun GamePrepScreen(
     shipRemoverHandler: ShipRemoverHandler = ShipRemoverHandler(),
     boardCellHandler: BoardCellHandler = BoardCellHandler(),
     shipSelectionHandler: ShipSelectionHandler = ShipSelectionHandler(),
-){
+    onCheckBoardPrepRequest: () -> Unit
+) {
     BattleshipTheme {
+
         Scaffold(
             backgroundColor = MaterialTheme.colors.background,
             topBar = { GameTopBar(players) }
@@ -57,7 +65,8 @@ fun GamePrepScreen(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
-            ){
+            ) {
+                CountdownPrepTimer(gamePrepDuration = 10000, onCheckBoardPrepRequest)
                 BoardView(
                     modifier = Modifier
                         .width(BOARD_SIZE)
@@ -74,23 +83,93 @@ fun GamePrepScreen(
 
                 Button(
                     onClick = onRandomShipPlacer,
-                    modifier = Modifier.padding(all = 16.dp).testTag(RandomButtonTestTag)) {
+                    modifier = Modifier
+                        .padding(all = 16.dp)
+                        .testTag(RandomButtonTestTag)
+                ) {
                     Text(text = "Random")
                 }
 
-                RemoveBoatButton(state = shipRemoverHandler.deleteButtonState, onClick = shipRemoverHandler.onDeleteButtonClick)
+                RemoveBoatButton(
+                    state = shipRemoverHandler.deleteButtonState,
+                    onClick = shipRemoverHandler.onDeleteButtonClick
+                )
             }
         }
     }
 }
 
+@Composable
+fun CountdownPrepTimer(
+    gamePrepDuration: Long,
+    onCheckBoardPrepRequest: () -> Unit
+) {
+
+    val minutes = gamePrepDuration / 1000 / 60
+    val seconds = gamePrepDuration / 1000 % 60
+
+    val timeData = remember { mutableStateOf(gamePrepDuration) }
+    val minutesTimer = remember { mutableStateOf(minutes) }
+    val secondsTimer = remember { mutableStateOf(seconds) }
+    var visible by remember { mutableStateOf(false) }
+
+    val countDownTimer =
+        object : CountDownTimer(gamePrepDuration, 1000) {
+            override fun onTick(timeLeft: Long) {
+                timeData.value = timeLeft
+                minutesTimer.value = timeData.value / 1000 / 60
+                secondsTimer.value = timeData.value / 1000 % 60
+            }
+
+            override fun onFinish() {
+                visible = !visible
+                onCheckBoardPrepRequest()
+            }
+
+        }
+
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        if (visible) {
+            Text("Time's up!")
+        }
+
+        Text(
+            text = if (secondsTimer.value < 10) "0${minutesTimer.value}:0${secondsTimer.value}"
+            else "0${minutesTimer.value}:${secondsTimer.value}",
+            color = Color.Red,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+        )
+    }
+
+    DisposableEffect(key1 = "key") {
+        countDownTimer.start()
+        onDispose {
+            countDownTimer.cancel()
+        }
+    }
+
+}
+
+
 @Preview
 @Composable
-private fun GamePrepScreenPreview(){
+fun CountdownPrepTimerPreview() {
+    CountdownPrepTimer(59000, onCheckBoardPrepRequest = {})
+}
+
+@Preview
+@Composable
+private fun GamePrepScreenPreview() {
     GamePrepScreen(
         players = listOf(
             PlayerMatchmaking("Player 1"),
             PlayerMatchmaking("Player 2")
         ),
+        onCheckBoardPrepRequest = {}
     )
 }

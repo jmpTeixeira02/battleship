@@ -52,7 +52,7 @@ class LobbyActivity : ComponentActivity() {
                     backRequest = { finish() },
                     aboutUsRequest = { AboutUsActivity.navigate(origin = this) },
                     replayListRequest = { SelectReplayActivity.navigate(origin = this) },
-                    editUserRequest = { CreatePlayerActivity.navigate(context = this,) }
+                    editUserRequest = { CreatePlayerActivity.navigate(context = this) }
                 ),
                 matchMakingRequest = MatchmakingHandlers(
                     onAcceptInvite = { player: PlayerMatchmaking ->

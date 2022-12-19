@@ -7,10 +7,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import isel.pdm.replay.selector.model.Replay
-import isel.pdm.replay.viewer.ui.ReplayGameActivity
 import isel.pdm.replay.viewer.model.FakeReplayService
+import isel.pdm.replay.viewer.ui.ReplayGameActivity
 import isel.pdm.ui.topbar.NavigationHandlers
-import isel.pdm.replay.selector.ui.ReplayHandler
 import isel.pdm.utils.viewModelInit
 
 class SelectReplayActivity : ComponentActivity() {
