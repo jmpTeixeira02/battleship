@@ -18,6 +18,8 @@ import isel.pdm.game.play.model.Marker
 import isel.pdm.game.prep.model.*
 import isel.pdm.game.prep.ui.BoardCellHandler
 import isel.pdm.game.prep.ui.BoardView
+import isel.pdm.ui.MyGameBoard
+import isel.pdm.ui.OpponentGameBoard
 import isel.pdm.ui.theme.BattleshipTheme
 import isel.pdm.ui.topbar.GameTopBar
 
@@ -34,7 +36,7 @@ data class GameScreenState(
 fun GameScreen(
     state: GameScreenState,
     players: List<PlayerMatchmaking>,
-   boardCellHandler: BoardCellHandler = BoardCellHandler(),
+    boardCellHandler: BoardCellHandler = BoardCellHandler(),
     myPrepBoard: Board,
 ) {
 
@@ -51,7 +53,7 @@ fun GameScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                BoardView(
+                MyGameBoard(
                     modifier = Modifier
                         .width(PREVIEW_MY_GAME_BOARD_SIZE)
                         .height(PREVIEW_MY_GAME_BOARD_SIZE),
@@ -70,7 +72,7 @@ fun GameScreen(
                     color = MaterialTheme.colors.primaryVariant
                 )
 
-                BoardView(
+                OpponentGameBoard(
                     modifier = Modifier
                         .width(OPPONENT_GAME_BOARD_SIZE)
                         .height(OPPONENT_GAME_BOARD_SIZE),

@@ -7,17 +7,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import isel.pdm.game.prep.model.*
+import isel.pdm.ui.CellColor
 
-enum class CellColor(val color: Color) {
-    Water(Color.LightGray),
-    Destroyer(Color.Blue),
-    Submarine(Color.Cyan),
-    Cruiser(Color.Magenta),
-    BattleShip(Color.Yellow),
-    Carrier(Color.Green),
-    ShotTaken(Color.DarkGray),
-    Ship(Color.Red)
-}
 
 const val BoardTestTag = "BoardTag"
 
@@ -28,7 +19,7 @@ fun BoardView(
     cellText: String = " ",
     onClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ -> },
     selectedBoat: TypeOfShip? = null,
-    boardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell(CellState.Water) } }
+    boardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell() } }
 ) {
     BoxWithConstraints(modifier = modifier.testTag(BoardTestTag)) {
         val cellHeight = this.maxHeight / BOARD_SIDE
@@ -47,7 +38,7 @@ fun BoardView(
                                 .width(cellHeight)
                                 .height(cellWidth),
                             boarderColor = boarderColor,
-                            cellFillColor = CellColor.valueOf(boardCellList[line][column].value!!).color,
+                            cellFillColor = CellColor.valueOf(boardCellList[line][column].prepCellValue).color,
                             cellText = cellText,
                             onClick = {
                                 if (selectedBoat != null) onClick(line, column, Ship(selectedBoat))

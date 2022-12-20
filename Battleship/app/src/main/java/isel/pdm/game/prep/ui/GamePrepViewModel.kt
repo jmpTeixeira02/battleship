@@ -5,7 +5,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.ViewModel
 import isel.pdm.game.prep.model.*
 
-data class ShipPlacer(var line: Int, var column: Int, var cellTenant: Cell = Cell(CellState.Water))
+data class ShipPlacer(var line: Int, var column: Int, var cellTenant: Cell = Cell())
 
 
 class GamePrepViewModel : ViewModel() {
@@ -35,10 +35,10 @@ class GamePrepViewModel : ViewModel() {
             return
 
         if (_shipStarter == null) {
-            _boardCells[line][column] = Cell(CellState.Ship, selectedShip)
-            _shipStarter = ShipPlacer(line, column, Cell(CellState.Ship, selectedShip))
+            _boardCells[line][column] = Cell(ship = selectedShip)
+            _shipStarter = ShipPlacer(line, column, Cell(ship = selectedShip))
         } else if (_shipStarter!!.cellTenant.ship == selectedShip) {
-            placeShip(ShipPlacer(line, column, Cell(CellState.Ship, selectedShip)))
+            placeShip(ShipPlacer(line, column, Cell(ship = selectedShip)))
         }
     }
 
@@ -102,7 +102,7 @@ class GamePrepViewModel : ViewModel() {
     private fun placeShip(shipEnd: ShipPlacer) {
         val ship = shipEnd.cellTenant.ship!!
         try {
-            _boardCells[_shipStarter!!.line][_shipStarter!!.column] = Cell(CellState.Water)
+            _boardCells[_shipStarter!!.line][_shipStarter!!.column] = Cell()
             _board.placeShip(
                 Coordinate(_shipStarter!!.line, _shipStarter!!.column),
                 Coordinate(shipEnd.line, shipEnd.column),
@@ -111,7 +111,7 @@ class GamePrepViewModel : ViewModel() {
             _shipSelector[ship.type] = ShipState.hasBeenPlaced
             _shipStarter = null
         } catch (e: Exception) { // Invalid ship placement, restart from shipStarter
-            _boardCells[_shipStarter!!.line][_shipStarter!!.column] = Cell(CellState.Ship, ship)
+            _boardCells[_shipStarter!!.line][_shipStarter!!.column] = Cell(ship = ship)
         }
     }
 

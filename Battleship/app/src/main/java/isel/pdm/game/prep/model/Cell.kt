@@ -4,17 +4,22 @@ import android.os.Parcelable
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
-enum class CellState { Water, Ship, ShotTaken }
+
+enum class BiStateGameCellShot { HasBeenShot, HasNotBeenShot }
 
 @Parcelize
-data class Cell(var state: CellState, var ship: Ship? = null) : Parcelable {
+data class Cell(
+    var state: BiStateGameCellShot = BiStateGameCellShot.HasNotBeenShot,
+    var ship: Ship? = null
+) : Parcelable {
 
-    //var value = ship?.name ?: "Water"
+    /* VERIFICAR CONDIÇÕES */
     @IgnoredOnParcel
-    var value =
-        when (state) {
-            CellState.Ship -> ship?.name
-            CellState.ShotTaken -> "ShotTaken"
-            else -> "Water"
-        }
+    var gameCellValue = if (state == BiStateGameCellShot.HasNotBeenShot && ship == null) "Water"
+    else if (state == BiStateGameCellShot.HasBeenShot && ship == null) "ShotTaken"
+    else "Ship"
+
+    @IgnoredOnParcel
+    var prepCellValue = ship?.name ?: "Water"
+
 }

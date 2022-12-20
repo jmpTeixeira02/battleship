@@ -1,18 +1,15 @@
 package isel.pdm.game.play.model
 
 import androidx.compose.runtime.toMutableStateList
-import isel.pdm.game.prep.model.BOARD_SIDE
-import isel.pdm.game.prep.model.Cell
-import isel.pdm.game.prep.model.CellState
-import isel.pdm.game.prep.model.Coordinate
+import isel.pdm.game.prep.model.*
 
 
 data class GameBoard(
     var turn: Marker = Marker.firstToMove,
-    var cells:  MutableList<MutableList<Cell>> = MutableList(BOARD_SIDE) { _ ->
+    var cells: MutableList<MutableList<Cell>> = MutableList(BOARD_SIDE) { _ ->
         MutableList(
             BOARD_SIDE
-        ) { _ -> Cell(CellState.Water) }.toMutableStateList()
+        ) { _ -> Cell() }.toMutableStateList()
     }.toMutableStateList()
 ) {
 
@@ -21,14 +18,16 @@ data class GameBoard(
         try {
             val shotCoordinates = cells[coordinate.line][coordinate.column]
 
-            return if(shotCoordinates.state == CellState.Ship) {
-                cells[coordinate.line][coordinate.column] = Cell(CellState.ShotTaken)
-                turn = turn.other
+            return if (shotCoordinates.ship != null) {
+                cells[coordinate.line][coordinate.column] =
+                    Cell(state = BiStateGameCellShot.HasBeenShot, ship = shotCoordinates.ship)
                 true
-            } else false
-
-
-        }  catch (e: Exception) {
+            } else {
+                cells[coordinate.line][coordinate.column] =
+                    Cell(state = BiStateGameCellShot.HasBeenShot, ship = null)
+                false
+            }
+        } catch (e: Exception) {
             throw e
         }
     }

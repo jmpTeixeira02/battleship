@@ -15,7 +15,7 @@ data class Board(
     var cells: MutableList<MutableList<Cell>> = MutableList(BOARD_SIDE) { _ ->
         MutableList(
             BOARD_SIDE
-        ) { _ -> Cell(CellState.Water) }.toMutableStateList()
+        ) { _ -> Cell() }.toMutableStateList()
     }.toMutableStateList()
 ): Parcelable {
 
@@ -28,7 +28,7 @@ data class Board(
     fun deleteShip(ship: Ship) {
         repeat(BOARD_SIDE) { line ->
             repeat(BOARD_SIDE) { column ->
-                if (cells[line][column].ship == ship) cells[line][column] = Cell(CellState.Water)
+                if (cells[line][column].ship == ship) cells[line][column] = Cell()
             }
         }
     }
@@ -37,7 +37,7 @@ data class Board(
         try {
             val shipCoordinates = canPlaceShip(start, end, ship)
             shipCoordinates.forEach {
-                cells[it.line][it.column] = Cell(CellState.Ship, ship)
+                cells[it.line][it.column] = Cell(ship = ship)
             }
         } catch (e: Exception) {
             throw e
@@ -47,7 +47,7 @@ data class Board(
     fun clearBoard() {
         repeat(BOARD_SIDE) { line ->
             repeat(BOARD_SIDE) { column ->
-                cells[line][column] = Cell(CellState.Water)
+                cells[line][column] = Cell()
             }
         }
     }

@@ -74,7 +74,7 @@ class BoardTests {
         val start: Coordinate = Coordinate(0,0)
         val end: Coordinate = Coordinate(0,5)
         board.placeShip(start, end, Ship(TypeOfShip.Carrier))
-        val carrierCellsFirst = board.cells.flatten().count { cell -> cell.value == TypeOfShip.Carrier.name }
+        val carrierCellsFirst = board.cells.flatten().count { cell -> cell.prepCellValue == TypeOfShip.Carrier.name }
         assertTrue(carrierCellsFirst == TypeOfShip.Carrier.size)
 
         val start1: Coordinate = Coordinate(1,0)
@@ -82,7 +82,7 @@ class BoardTests {
         board.placeShip(start1, end1, Ship(TypeOfShip.BattleShip))
 
         val pred:(cells: Cell) -> Boolean =
-            { cell -> cell.value == TypeOfShip.Carrier.name || cell.value == TypeOfShip.BattleShip.name }
+            { cell -> cell.prepCellValue == TypeOfShip.Carrier.name || cell.prepCellValue == TypeOfShip.BattleShip.name }
 
         val carrierPlusBattleCells = board.cells.flatten().count { cell -> pred(cell) }
         assertTrue(carrierPlusBattleCells == TypeOfShip.Carrier.size + TypeOfShip.BattleShip.size)
@@ -101,7 +101,7 @@ class BoardTests {
         val start: Coordinate = Coordinate(0,0)
         val end: Coordinate = Coordinate(0,5)
         board.placeShip(start, end, Ship(TypeOfShip.Carrier))
-        val carrierCellsFirst = board.cells.flatten().count { cell -> cell.value == TypeOfShip.Carrier.name }
+        val carrierCellsFirst = board.cells.flatten().count { cell -> cell.prepCellValue == TypeOfShip.Carrier.name }
         assertTrue(carrierCellsFirst == TypeOfShip.Carrier.size)
 
         val start1: Coordinate = Coordinate(1,0)
@@ -109,13 +109,13 @@ class BoardTests {
         board.placeShip(start1, end1, Ship(TypeOfShip.BattleShip))
 
         val pred:(cells: Cell) -> Boolean =
-            { cell -> cell.value == TypeOfShip.Carrier.name || cell.value == TypeOfShip.BattleShip.name }
+            { cell -> cell.prepCellValue == TypeOfShip.Carrier.name || cell.prepCellValue == TypeOfShip.BattleShip.name }
 
         val carrierPlusBattleCells = board.cells.flatten().count { cell -> pred(cell) }
         assertTrue(carrierPlusBattleCells == TypeOfShip.Carrier.size + TypeOfShip.BattleShip.size)
 
         board.deleteShip(Ship(TypeOfShip.Submarine))
-        assertTrue(carrierPlusBattleCells == board.cells.flatten().count{cell -> cell.value != "Water"})
+        assertTrue(carrierPlusBattleCells == board.cells.flatten().count{cell -> cell.prepCellValue != "Water"})
 
     }
 
@@ -132,7 +132,7 @@ class BoardTests {
         board.placeShip(start1, end1, Ship(TypeOfShip.BattleShip))
 
         val pred:(cells: Cell) -> Boolean =
-            { cell -> cell.value == TypeOfShip.Carrier.name || cell.value == TypeOfShip.BattleShip.name }
+            { cell -> cell.prepCellValue == TypeOfShip.Carrier.name || cell.prepCellValue == TypeOfShip.BattleShip.name }
 
         val occupiedCells = board.cells.flatten().count {cell -> pred(cell) }
         assertTrue(occupiedCells == TypeOfShip.Carrier.size + TypeOfShip.BattleShip.size)

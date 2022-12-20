@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.game.prep.model.*
+import isel.pdm.ui.GamePrepBoard
 import isel.pdm.ui.buttons.BiState
 import isel.pdm.ui.buttons.RemoveBoatButton
 import isel.pdm.ui.theme.BattleshipTheme
@@ -33,7 +34,7 @@ data class ShipRemoverHandler(
 
 data class BoardCellHandler(
     val onCellClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ -> },
-    val boardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell(CellState.Water) } },
+    val boardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell() } },
 )
 
 data class ShipSelectionHandler(
@@ -67,7 +68,7 @@ fun GamePrepScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 CountdownPrepTimer(gamePrepDuration = 10000, onCheckBoardPrepRequest)
-                BoardView(
+                GamePrepBoard(
                     modifier = Modifier
                         .width(BOARD_SIZE)
                         .height(BOARD_SIZE),

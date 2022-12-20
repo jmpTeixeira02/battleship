@@ -2,10 +2,7 @@ package isel.pdm.game.play.ui
 
 import androidx.lifecycle.ViewModel
 import isel.pdm.game.play.model.GameBoard
-import isel.pdm.game.prep.model.Board
-import isel.pdm.game.prep.model.Cell
-import isel.pdm.game.prep.model.CellState
-import isel.pdm.game.prep.model.Coordinate
+import isel.pdm.game.prep.model.*
 
 
 class GameViewModel : ViewModel() {
@@ -17,7 +14,7 @@ class GameViewModel : ViewModel() {
 
 
     fun gameBoardClickHandler(line: Int, column: Int) {
-        if (_gameBoardCells[line][column].state == CellState.ShotTaken) return
+        if (_gameBoardCells[line][column].state == BiStateGameCellShot.HasBeenShot) return
         else takeShot(line, column)
     }
 
@@ -25,7 +22,7 @@ class GameViewModel : ViewModel() {
         try {
 
             val shipHit: Boolean = _gameBoard.takeShot(Coordinate(line, column))
-            _gameBoardCells[line][column] = Cell(CellState.ShotTaken)
+           // _gameBoardCells[line][column] = Cell(CellState.ShotTaken)
 
             if (!shipHit) _gameBoard.turn.other
 
