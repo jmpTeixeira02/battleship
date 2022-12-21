@@ -7,10 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import isel.pdm.game.prep.model.*
-import isel.pdm.game.prep.ui.drawCell
 
-
-enum class BoardType { PrepBoard, GameBoard }
 
 enum class CellColor(val color: Color) {
     Water(Color.LightGray),
@@ -28,16 +25,14 @@ enum class GameCellColor(val color: Color) {
 }
 
 
-
 @Composable
-fun TriStateBoard(
+fun BoardView(
     modifier: Modifier = Modifier,
     boarderColor: Color,
     onClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ -> },
     selectedBoat: TypeOfShip? = null,
-    boardCellList: List<List<Cell>>,
-    gameColorPalette: Boolean,
-    boardType: BoardType
+    cellText: (line: Int, column: Int) -> String = { _, _ -> " " },
+    cellFillColor: (line: Int, column: Int) -> Color
 ) {
 
     BoxWithConstraints(modifier = modifier/*.testTag(BoardTestTag)*/) {
@@ -57,14 +52,8 @@ fun TriStateBoard(
                                 .width(cellHeight)
                                 .height(cellWidth),
                             boarderColor = boarderColor,
-                            cellFillColor =
-                            if (!gameColorPalette) {
-                                CellColor.valueOf(boardCellList[line][column].prepCellValue).color
-                            } else {
-                                GameCellColor.valueOf(boardCellList[line][column].gameCellValue).color
-                            },
-                            cellText = if (boardType == BoardType.PrepBoard && boardCellList[line][column].state == BiStateGameCellShot.HasBeenShot) "X"
-                            else " ",
+                            cellFillColor = cellFillColor(line, column),
+                            cellText = cellText(line, column),
                             onClick = {
                                 if (selectedBoat != null) onClick(line, column, Ship(selectedBoat))
                                 else onClick(line, column, null)
@@ -85,14 +74,12 @@ fun GamePrepBoard(
     selectedBoat: TypeOfShip? = null,
     boardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell() } }
 ) {
-    TriStateBoard(
+    BoardView(
         modifier = modifier.testTag("GamePrepBoardTag"),
         boarderColor = boarderColor,
         onClick = onClick,
         selectedBoat = selectedBoat,
-        boardCellList = boardCellList,
-        gameColorPalette = false,
-        boardType = BoardType.PrepBoard
+        cellFillColor = { line: Int, column: Int -> CellColor.valueOf(boardCellList[line][column].prepCellValue).color }
     )
 }
 
@@ -101,15 +88,17 @@ fun MyGameBoard(
     modifier: Modifier = Modifier,
     boarderColor: Color = Color.Black,
     onClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit,
-    boardCellList: List<List<Cell>>
+    boardCellList: List<List<Cell>>,
 ) {
-    TriStateBoard(
+    BoardView(
         modifier = modifier.testTag("MyGameBoardTag"),
         boarderColor = boarderColor,
         onClick = onClick,
-        boardCellList = boardCellList,
-        gameColorPalette = false,
-        boardType = BoardType.PrepBoard
+        cellText = { line: Int, column: Int ->
+            if (boardCellList[line][column].state == BiStateGameCellShot.HasBeenShot) "X"
+            else " "
+        },
+        cellFillColor = { line: Int, column: Int -> CellColor.valueOf(boardCellList[line][column].prepCellValue).color }
     )
 }
 
@@ -120,13 +109,11 @@ fun OpponentGameBoard(
     onClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit,
     boardCellList: List<List<Cell>>
 ) {
-    TriStateBoard(
+    BoardView(
         modifier = modifier.testTag("OpponentGameBoardTag"),
         boarderColor = boarderColor,
         onClick = onClick,
-        boardCellList = boardCellList,
-        gameColorPalette = true,
-        boardType = BoardType.GameBoard
+        cellFillColor = { line: Int, column: Int -> GameCellColor.valueOf(boardCellList[line][column].gameCellValue).color }
     )
 }
 
@@ -134,5 +121,5 @@ fun OpponentGameBoard(
 @Preview
 @Composable
 fun GamePrepBoardPreview() {
-    GamePrepBoard(onClick = {_, _, _ -> })
+    GamePrepBoard(onClick = { _, _, _ -> })
 }

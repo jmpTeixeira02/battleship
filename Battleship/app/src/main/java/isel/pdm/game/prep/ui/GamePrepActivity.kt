@@ -81,7 +81,7 @@ class GamePrepActivity : ComponentActivity() {
             val opponent: String = intent.getStringExtra(OPPONENT_PLAYER)!!
             val local: String = intent.getStringExtra(LOCAL_PLAYER)!!
             val prepBoard = viewModel.getBoard()
-            GameActivity.navigate(this, local, opponent, prepBoard)
+            GameActivity.navigate(this, local, opponent, prepBoard, prepBoard)
 
         } else { /* time's up e barcos não postos totalmente */
             MainActivity.navigate(this)

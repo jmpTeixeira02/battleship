@@ -1,4 +1,4 @@
-package isel.pdm.game.prep.ui
+package isel.pdm.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

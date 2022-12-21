@@ -15,9 +15,10 @@ data class Cell(
 
     /* VERIFICAR CONDIÇÕES */
     @IgnoredOnParcel
-    var gameCellValue = if (state == BiStateGameCellShot.HasNotBeenShot && ship == null) "Water"
-    else if (state == BiStateGameCellShot.HasBeenShot && ship == null) "ShotTaken"
-    else "Ship"
+    var gameCellValue =
+        if (state == BiStateGameCellShot.HasNotBeenShot && ship == null || state == BiStateGameCellShot.HasNotBeenShot && ship != null) "Water"
+        else if (state == BiStateGameCellShot.HasBeenShot && ship == null) "ShotTaken"
+        else "Ship"
 
     @IgnoredOnParcel
     var prepCellValue = ship?.name ?: "Water"

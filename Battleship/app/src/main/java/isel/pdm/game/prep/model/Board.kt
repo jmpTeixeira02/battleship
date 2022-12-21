@@ -1,7 +1,9 @@
 package isel.pdm.game.prep.model
 
 import android.os.Parcelable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
+import isel.pdm.game.play.model.Game
 import isel.pdm.game.play.model.GameBoard
 import isel.pdm.utils.CellIsAlreadyOccupiedException
 import isel.pdm.utils.InvalidOrientationException
@@ -87,6 +89,10 @@ data class Board(
             throw InvalidOrientationException("Invalid Boat Orientation!")
         }
         return temp
+    }
+
+    fun toGameBoard(): GameBoard {
+        return GameBoard(cells = cells.map { i -> i.toMutableStateList() }.toMutableStateList())
     }
 
 }

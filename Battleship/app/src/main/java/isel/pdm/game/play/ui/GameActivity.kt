@@ -20,13 +20,15 @@ class GameActivity : ComponentActivity() {
     companion object {
         const val LOCAL_PLAYER = "local"
         const val OPPONENT_PLAYER = "OPPONENT"
-        const val MY_PREP_BOARD = "PREP_BOARD"
-        fun navigate(origin: Activity, local: String, opponent: String, prepBoard: Board) {
+        const val MY_BOARD = "PREP_BOARD"
+        const val OPPONENT_BOARD = "OPPONENT_PREP_BOARD"
+        fun navigate(origin: Activity, local: String, opponent: String, prepBoard: Board, opponentBoard : Board) {
             with(origin) {
                 val intent = Intent(this, GameActivity::class.java)
                 intent.putExtra(LOCAL_PLAYER, local)
                 intent.putExtra(OPPONENT_PLAYER, opponent)
-                intent.putExtra(MY_PREP_BOARD, prepBoard)
+                intent.putExtra(MY_BOARD, prepBoard)
+                intent.putExtra(OPPONENT_BOARD, prepBoard)
                 startActivity(intent)
             }
         }
@@ -34,8 +36,10 @@ class GameActivity : ComponentActivity() {
 
 
     private val viewModel: GameViewModel by viewModels {
+        val localBoard: Board = intent.getParcelableExtra(MY_BOARD)!!
+        val opponentBoard: Board = intent.getParcelableExtra(OPPONENT_BOARD)!!
         viewModelInit {
-            GameViewModel()
+            GameViewModel(localBoard.toGameBoard(), opponentBoard.toGameBoard())
         }
     }
 
@@ -44,7 +48,6 @@ class GameActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val opponent: String = intent.getStringExtra(OPPONENT_PLAYER)!!
         val local: String = intent.getStringExtra(LOCAL_PLAYER)!!
-        val prepBoard: Board = intent.getParcelableExtra(MY_PREP_BOARD)!!
 
         setContent {
             val game = Game(Marker.LOCAL, GameBoard())
@@ -58,9 +61,9 @@ class GameActivity : ComponentActivity() {
                     onCellClick = { line: Int, column: Int, _ ->
                         viewModel.gameBoardClickHandler(line, column)
                     },
-                    boardCellList = viewModel.gameBoardCells,
+                    boardCellList = viewModel.myCells,
                 ),
-                myPrepBoard = prepBoard
+                //myPrepBoard = prepBoard
             )
         }
     }

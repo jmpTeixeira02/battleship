@@ -5,26 +5,29 @@ import isel.pdm.game.play.model.GameBoard
 import isel.pdm.game.prep.model.*
 
 
-class GameViewModel : ViewModel() {
+class GameViewModel(myBoard: GameBoard, opponentBoard: GameBoard) : ViewModel() {
 
-    private val _gameBoard = GameBoard()
+    private val _myBoard = myBoard
+    private val _myCells = _myBoard.cells
+    val myCells = _myCells
 
-    private val _gameBoardCells = _gameBoard.cells
-    val gameBoardCells = _gameBoardCells
+
+    private val _opponentBoard = opponentBoard
+    private val _opponentCells = _opponentBoard.cells
+    val opponentCells = _opponentCells
 
 
     fun gameBoardClickHandler(line: Int, column: Int) {
-        if (_gameBoardCells[line][column].state == BiStateGameCellShot.HasBeenShot) return
+        if (_myCells[line][column].state == BiStateGameCellShot.HasBeenShot) return
         else takeShot(line, column)
     }
 
     private fun takeShot(line: Int, column: Int) {
         try {
 
-            val shipHit: Boolean = _gameBoard.takeShot(Coordinate(line, column))
-           // _gameBoardCells[line][column] = Cell(CellState.ShotTaken)
+            val shipHit: Boolean = _myBoard.takeShot(Coordinate(line, column))
 
-            if (!shipHit) _gameBoard.turn.other
+            if (!shipHit) _myBoard.turn.other
 
         } catch (e: Exception) {
             throw e

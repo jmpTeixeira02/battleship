@@ -8,16 +8,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.game.play.model.Game
-import isel.pdm.game.play.model.GameBoard
-import isel.pdm.game.play.model.Marker
 import isel.pdm.game.prep.model.*
 import isel.pdm.game.prep.ui.BoardCellHandler
-import isel.pdm.game.prep.ui.BoardView
 import isel.pdm.ui.MyGameBoard
 import isel.pdm.ui.OpponentGameBoard
 import isel.pdm.ui.theme.BattleshipTheme
@@ -37,7 +33,7 @@ fun GameScreen(
     state: GameScreenState,
     players: List<PlayerMatchmaking>,
     boardCellHandler: BoardCellHandler = BoardCellHandler(),
-    myPrepBoard: Board,
+   // myPrepBoard: Board,
 ) {
 
     BattleshipTheme {
@@ -58,7 +54,7 @@ fun GameScreen(
                         .width(PREVIEW_MY_GAME_BOARD_SIZE)
                         .height(PREVIEW_MY_GAME_BOARD_SIZE),
                     onClick = { _, _, _ -> },
-                    boardCellList = myPrepBoard.cells
+                    boardCellList = boardCellHandler.boardCellList
                 )
 
                 Spacer(modifier = Modifier.height(80.dp))
@@ -87,7 +83,7 @@ fun GameScreen(
 }
 
 
-@Preview
+/*@Preview
 @Composable
 private fun GameScreenPreview() {
     GameScreen(
@@ -99,10 +95,10 @@ private fun GameScreenPreview() {
         boardCellHandler = BoardCellHandler(),
         myPrepBoard = Board()
     )
-}
+}*/
 
 
-private val aBoard = GameBoard(
+/*private val aBoard = GameBoard(
     turn = Marker.LOCAL,
     cells = mutableListOf(
         mutableListOf(),
@@ -116,4 +112,4 @@ private val aBoard = GameBoard(
         mutableListOf(),
         mutableListOf(),
     )
-)
+)*/
