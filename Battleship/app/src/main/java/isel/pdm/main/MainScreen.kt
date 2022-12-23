@@ -15,13 +15,15 @@ import androidx.compose.ui.unit.dp
 import isel.pdm.R
 import isel.pdm.ui.theme.BattleshipTheme
 
+const val MainScreenTestTag = "MainScreen"
+
 @Composable
 fun MainScreen(onStartRequested: () -> Unit) {
     BattleshipTheme {
         Surface(
             modifier = Modifier
                 .fillMaxSize()
-                .testTag("MainScreen"),
+                .testTag(MainScreenTestTag),
         ) {
             Column(
                 verticalArrangement = Arrangement.SpaceAround,

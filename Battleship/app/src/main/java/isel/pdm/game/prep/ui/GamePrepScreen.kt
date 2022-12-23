@@ -35,6 +35,10 @@ data class ShipRemoverHandler(
 data class BoardCellHandler(
     val onCellClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ -> },
     val boardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell() } },
+    val onLocalPlayerShotTaken: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ -> },
+    val onOpponentPlayerShotTaken: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ -> },
+    val localBoardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell() } },
+    val opponentBoardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell() } },
 )
 
 data class ShipSelectionHandler(
@@ -44,7 +48,9 @@ data class ShipSelectionHandler(
     val selectedShip: TypeOfShip? = null
 )
 
+const val GamePrepScreenTestTag = "GamePrepScreen"
 const val RandomButtonTestTag = "RandomButton"
+const val CountdownPrepTimerTestTag = "CountdownTimer"
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -63,11 +69,17 @@ fun GamePrepScreen(
             topBar = { GameTopBar(players) }
         ) { _ ->
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .testTag(GamePrepScreenTestTag),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                CountdownPrepTimer(gamePrepDuration = 10000, onCheckBoardPrepRequest)
+                CountdownPrepTimer(
+                    modifier = Modifier.testTag(CountdownPrepTimerTestTag),
+                    gamePrepDuration = 10000,
+                    onCheckBoardPrepRequest
+                )
                 GamePrepBoard(
                     modifier = Modifier
                         .width(BOARD_SIZE)
@@ -102,6 +114,7 @@ fun GamePrepScreen(
 
 @Composable
 fun CountdownPrepTimer(
+    modifier: Modifier,
     gamePrepDuration: Long,
     onCheckBoardPrepRequest: () -> Unit
 ) {
@@ -131,6 +144,7 @@ fun CountdownPrepTimer(
 
 
     Column(
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -160,7 +174,7 @@ fun CountdownPrepTimer(
 @Preview
 @Composable
 fun CountdownPrepTimerPreview() {
-    CountdownPrepTimer(59000, onCheckBoardPrepRequest = {})
+    CountdownPrepTimer(modifier = Modifier, 59000, onCheckBoardPrepRequest = {})
 }
 
 @Preview

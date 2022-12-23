@@ -9,6 +9,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import isel.pdm.game.prep.model.*
 
 
+const val GamePrepBoardTag = "GamePrepBoardTag"
+
 enum class CellColor(val color: Color) {
     Water(Color.LightGray),
     Destroyer(Color.Blue),
@@ -50,7 +52,8 @@ fun BoardView(
                         drawCell(
                             modifier = cellModifier
                                 .width(cellHeight)
-                                .height(cellWidth),
+                                .height(cellWidth)
+                                .testTag(BoardCellTestTag(line, column)),
                             boarderColor = boarderColor,
                             cellFillColor = cellFillColor(line, column),
                             cellText = cellText(line, column),
@@ -66,6 +69,10 @@ fun BoardView(
     }
 }
 
+fun BoardCellTestTag(line: Int, column: Int): String {
+    return "BoardCell${line}${column}Tag"
+}
+
 @Composable
 fun GamePrepBoard(
     modifier: Modifier = Modifier,
@@ -75,7 +82,7 @@ fun GamePrepBoard(
     boardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell() } }
 ) {
     BoardView(
-        modifier = modifier.testTag("GamePrepBoardTag"),
+        modifier = modifier.testTag(GamePrepBoardTag),
         boarderColor = boarderColor,
         onClick = onClick,
         selectedBoat = selectedBoat,

@@ -1,26 +1,25 @@
 package isel.pdm.game
 
 import android.content.Intent
-import android.util.Log
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import isel.pdm.game.prep.model.Cell
+import isel.pdm.game.lobby.model.PlayerMatchmaking
+import isel.pdm.game.play.model.FakeOpponent
+import isel.pdm.game.play.ui.GameScreenTestTag
+import isel.pdm.game.prep.model.Board
 import isel.pdm.game.prep.model.TypeOfShip
 import isel.pdm.game.prep.ui.*
 import isel.pdm.game.prep.ui.GamePrepActivity.Companion.LOCAL_PLAYER
 import isel.pdm.game.prep.ui.GamePrepActivity.Companion.OPPONENT_PLAYER
+import isel.pdm.main.MainScreenTestTag
 import isel.pdm.testutils.*
+import isel.pdm.ui.BoardCellTestTag
+import isel.pdm.ui.GamePrepBoardTag
 import isel.pdm.ui.buttons.RemoveButtonTestTag
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-
-
 
 
 @RunWith(AndroidJUnit4::class)
@@ -32,13 +31,16 @@ class GamePrepTest {
 
     @get:Rule
     val testRule = createAndroidComposeRule<GamePrepActivity>(
-        intent = intent.putExtra(LOCAL_PLAYER, "local").putExtra(OPPONENT_PLAYER, "opponent")
+        intent = intent.putExtra(LOCAL_PLAYER, "local").putExtra(OPPONENT_PLAYER, FakeOpponent(
+            fakeUser = PlayerMatchmaking("fake"),
+            fakePrepBoard = Board(),
+        ))
     )
 
     @Test
     fun screen_has_all_navigation_options() {
         // Assert
-        testRule.onNodeWithTag(BoardTestTag).assertExists()
+        testRule.onNodeWithTag(GamePrepBoardTag).assertExists()
         testRule.onNodeWithTag(FleetSelectorTestTag).assertExists()
         testRule.onNodeWithTag(RandomButtonTestTag).assertExists()
         testRule.onNodeWithTag(RemoveButtonTestTag).assertExists()
@@ -55,7 +57,7 @@ class GamePrepTest {
     fun ship_selector_select_ship() {
         val vm = testRule.activity.viewModel
 
-        testRule.performClickAndWaitForIdle(FleetSelectorDestoyerTestTag)
+        testRule.performClickAndWaitForIdle(FleetSelectorDestroyerTestTag)
 
         assert(vm.shipSelector[TypeOfShip.Destroyer] == ShipState.isSelected)
     }
@@ -64,7 +66,7 @@ class GamePrepTest {
     fun ship_selector_swap_selected_ship() {
         val vm = testRule.activity.viewModel
 
-        testRule.performClickAndWaitForIdle(FleetSelectorDestoyerTestTag)
+        testRule.performClickAndWaitForIdle(FleetSelectorDestroyerTestTag)
         testRule.performClickAndWaitForIdle(FleetSelectorBattleShipTestTag)
 
         assert(
@@ -88,7 +90,7 @@ class GamePrepTest {
         val vm = testRule.activity.viewModel
 
         // Place ship
-        testRule.performClickAndWaitForIdle(FleetSelectorDestoyerTestTag)
+        testRule.performClickAndWaitForIdle(FleetSelectorDestroyerTestTag)
         testRule.performClickAndWaitForIdle(BoardCellTestTag(0, 0))
         testRule.performClickAndWaitForIdle(BoardCellTestTag(0, 9))
 
@@ -225,7 +227,7 @@ class GamePrepTest {
         val vm = testRule.activity.viewModel
 
         // Place ship
-        testRule.performClickAndWaitForIdle(FleetSelectorDestoyerTestTag)
+        testRule.performClickAndWaitForIdle(FleetSelectorDestroyerTestTag)
         testRule.performClickAndWaitForIdle(BoardCellTestTag(0, 0))
         testRule.performClickAndWaitForIdle(BoardCellTestTag(0, 9))
 
@@ -242,7 +244,7 @@ class GamePrepTest {
         val vm = testRule.activity.viewModel
 
         // Place Ship
-        testRule.performClickAndWaitForIdle(FleetSelectorDestoyerTestTag)
+        testRule.performClickAndWaitForIdle(FleetSelectorDestroyerTestTag)
         testRule.performClickAndWaitForIdle(BoardCellTestTag(0, 0))
         testRule.performClickAndWaitForIdle(BoardCellTestTag(0, 9))
         assert(
@@ -281,7 +283,7 @@ class GamePrepTest {
         val vm = testRule.activity.viewModel
 
         // Place Ship
-        testRule.performClickAndWaitForIdle(FleetSelectorDestoyerTestTag)
+        testRule.performClickAndWaitForIdle(FleetSelectorDestroyerTestTag)
         testRule.performClickAndWaitForIdle(BoardCellTestTag(0, 0))
         testRule.performClickAndWaitForIdle(BoardCellTestTag(0, 9))
 
@@ -303,7 +305,7 @@ class GamePrepTest {
         val vm = testRule.activity.viewModel
 
         // Place Ship
-        testRule.performClickAndWaitForIdle(FleetSelectorDestoyerTestTag)
+        testRule.performClickAndWaitForIdle(FleetSelectorDestroyerTestTag)
         testRule.performClickAndWaitForIdle(BoardCellTestTag(0, 0))
         testRule.performClickAndWaitForIdle(BoardCellTestTag(0, 9))
 
@@ -311,7 +313,7 @@ class GamePrepTest {
         testRule.performClickAndWaitForIdle(RemoveButtonTestTag)
 
         // Select ship from board
-        testRule.performClickAndWaitForIdle(FleetSelectorDestoyerTestTag)
+        testRule.performClickAndWaitForIdle(FleetSelectorDestroyerTestTag)
 
         assert(vm.shipSelector[TypeOfShip.Destroyer] == ShipState.isNotSelected)
         assert(
@@ -321,7 +323,7 @@ class GamePrepTest {
     }
 
     @Test
-    fun random_button_places_all_ships(){
+    fun random_button_places_all_ships() {
         val vm = testRule.activity.viewModel
 
         // Press random button
@@ -329,7 +331,28 @@ class GamePrepTest {
 
         assert(
             vm.shipSelector.values.count { e -> e == ShipState.hasBeenPlaced } ==
-            vm.shipSelector.values.size
+                    vm.shipSelector.values.size
         )
     }
+
+    @Test
+    fun navigate_to_game_screen_when_timer_reaches_zero_and_all_ships_are_placed() {
+        val vm = testRule.activity.viewModel
+
+        testRule.onNodeWithTag(GamePrepScreenTestTag).assertExists()
+
+
+        // Press random button and wait for timer to reach zero
+        testRule.performClickAndWaitForTimer(RandomButtonTestTag, 10000)
+
+        assert(
+            vm.shipSelector.values.count { e -> e == ShipState.hasBeenPlaced } ==
+                    vm.shipSelector.values.size
+        )
+
+        testRule.onNodeWithTag(GamePrepScreenTestTag).assertDoesNotExist()
+        testRule.onNodeWithTag(GameScreenTestTag).assertExists()
+
+    }
+
 }

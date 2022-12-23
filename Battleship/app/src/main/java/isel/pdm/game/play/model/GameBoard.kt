@@ -1,6 +1,5 @@
 package isel.pdm.game.play.model
 
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import isel.pdm.game.prep.model.*
 
@@ -15,7 +14,7 @@ data class GameBoard(
 ) {
 
 
-    fun takeShot(coordinate: Coordinate): Boolean {
+    fun shoot(coordinate: Coordinate): Boolean {
         try {
             val shotCoordinates = cells[coordinate.line][coordinate.column]
 

@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.game.lobby.ui.LobbyActivity
+import isel.pdm.game.play.model.FakeOpponent
 import isel.pdm.game.play.ui.GameActivity
 import isel.pdm.game.prep.model.Ship
 import isel.pdm.game.prep.model.TypeOfShip
@@ -21,7 +22,7 @@ class GamePrepActivity : ComponentActivity() {
     companion object {
         const val LOCAL_PLAYER = "local"
         const val OPPONENT_PLAYER = "OPPONENT"
-        fun navigate(origin: Activity, local: String, opponent: String) {
+        fun navigate(origin: Activity, local: String, opponent: FakeOpponent) {
             with(origin) {
                 val intent = Intent(this, GamePrepActivity::class.java)
                 intent.putExtra(LOCAL_PLAYER, local)
@@ -40,7 +41,7 @@ class GamePrepActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val opponent: String = intent.getStringExtra(OPPONENT_PLAYER)!!
+        val opponent: FakeOpponent = intent.getParcelableExtra(OPPONENT_PLAYER)!!
         val local: String = intent.getStringExtra(LOCAL_PLAYER)!!
         setContent {
             val deleteButtonState =
@@ -49,7 +50,7 @@ class GamePrepActivity : ComponentActivity() {
             GamePrepScreen(
                 players = listOf(
                     PlayerMatchmaking(local),
-                    PlayerMatchmaking(opponent)
+                    PlayerMatchmaking(opponent.fakeUser.username)
                 ),
                 shipRemoverHandler = ShipRemoverHandler(
                     deleteButtonState = deleteButtonState,
@@ -77,11 +78,16 @@ class GamePrepActivity : ComponentActivity() {
 
     private fun checkBoardPrepState() {
         if (viewModel.allShipsPlaced()) { /* time's up e barcos postos totalmente*/
-
-            val opponent: String = intent.getStringExtra(OPPONENT_PLAYER)!!
+            val opponent: FakeOpponent = intent.getParcelableExtra(OPPONENT_PLAYER)!!
             val local: String = intent.getStringExtra(LOCAL_PLAYER)!!
             val prepBoard = viewModel.getBoard()
-            GameActivity.navigate(this, local, opponent, prepBoard, prepBoard)
+            GameActivity.navigate(
+                this,
+                local,
+                opponent.fakeUser.username,
+                prepBoard,
+                opponent.fakePrepBoard
+            )
 
         } else { /* time's up e barcos não postos totalmente */
             MainActivity.navigate(this)

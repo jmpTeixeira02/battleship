@@ -7,6 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import isel.pdm.game.prep.model.TypeOfShip
@@ -16,7 +17,7 @@ import isel.pdm.ui.drawCell
 enum class ShipState {hasBeenPlaced, isSelected, isNotSelected}
 
 const val FleetSelectorTestTag = "FleetSelector"
-const val FleetSelectorDestoyerTestTag = "FleetSelectorDestoyer"
+const val FleetSelectorDestroyerTestTag = "FleetSelectorDestroyer"
 const val FleetSelectorSubmarineTestTag = "FleetSelectorSubmarine"
 const val FleetSelectorCruiserTestTag = "FleetSelectorCruiser"
 const val FleetSelectorBattleShipTestTag = "FleetSelectorBattleShip"
@@ -40,7 +41,7 @@ fun FleetSelectorView(
             ){
                 BuildBoatSelect(
                     size = TypeOfShip.Destroyer.size, name = TypeOfShip.Destroyer.name,
-                    maxBoatCellSize = maxBoatCellsSize, modifier = boatModifier.testTag(FleetSelectorDestoyerTestTag),
+                    maxBoatCellSize = maxBoatCellsSize, modifier = boatModifier.testTag(FleetSelectorDestroyerTestTag),
                     onClick = onClick, state = shipSelector[TypeOfShip.Destroyer]!!,
                     boatSelected = shipSelector.keys.first { e -> e == TypeOfShip.Destroyer }
                 )

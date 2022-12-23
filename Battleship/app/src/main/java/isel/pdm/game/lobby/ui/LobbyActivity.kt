@@ -3,7 +3,6 @@ package isel.pdm.game.lobby.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -11,6 +10,7 @@ import isel.pdm.info.AboutUsActivity
 import isel.pdm.game.lobby.model.InviteState
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.game.lobby.model.FakeMatchmakingService
+import isel.pdm.game.play.model.FakeOpponentService
 import isel.pdm.game.prep.ui.GamePrepActivity
 import isel.pdm.preferences.ui.CreatePlayerActivity
 import isel.pdm.replay.selector.ui.SelectReplayActivity
@@ -43,6 +43,7 @@ class LobbyActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val localPlayer: String = intent.getStringExtra(LOCAL_PLAYER)!!
+        val fakeOpponent = FakeOpponentService()
         setContent {
             val refreshState =
                 if (viewModel.isRefreshing) BiState.hasBeenPressed
@@ -60,7 +61,7 @@ class LobbyActivity : ComponentActivity() {
                         GamePrepActivity.navigate(
                             origin = this,
                             local = localPlayer,
-                            opponent = player.username
+                            opponent = fakeOpponent.opponent //player.username
                         )
                     },
                     onInviteSend = {

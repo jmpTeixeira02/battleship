@@ -22,13 +22,19 @@ class GameActivity : ComponentActivity() {
         const val OPPONENT_PLAYER = "OPPONENT"
         const val MY_BOARD = "PREP_BOARD"
         const val OPPONENT_BOARD = "OPPONENT_PREP_BOARD"
-        fun navigate(origin: Activity, local: String, opponent: String, prepBoard: Board, opponentBoard : Board) {
+        fun navigate(
+            origin: Activity,
+            local: String,
+            opponent: String,
+            prepBoard: Board,
+            opponentBoard: Board
+        ) {
             with(origin) {
                 val intent = Intent(this, GameActivity::class.java)
                 intent.putExtra(LOCAL_PLAYER, local)
                 intent.putExtra(OPPONENT_PLAYER, opponent)
                 intent.putExtra(MY_BOARD, prepBoard)
-                intent.putExtra(OPPONENT_BOARD, prepBoard)
+                intent.putExtra(OPPONENT_BOARD, opponentBoard)
                 startActivity(intent)
             }
         }
@@ -47,23 +53,28 @@ class GameActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val opponent: String = intent.getStringExtra(OPPONENT_PLAYER)!!
+        /*val localBoard: Board = intent.getParcelableExtra(MY_BOARD)!!
+        val opponentBoard: Board = intent.getParcelableExtra(OPPONENT_BOARD)!!*/
         val local: String = intent.getStringExtra(LOCAL_PLAYER)!!
 
         setContent {
-            val game = Game(Marker.LOCAL, GameBoard())
             GameScreen(
-                state = GameScreenState(game),
                 players = listOf(
                     PlayerMatchmaking(local),
                     PlayerMatchmaking(opponent)
                 ),
                 boardCellHandler = BoardCellHandler(
-                    onCellClick = { line: Int, column: Int, _ ->
-                        viewModel.gameBoardClickHandler(line, column)
+                    onLocalPlayerShotTaken = { line: Int, column: Int, _ ->
+                        viewModel.opponentGameBoardClickHandler(line, column)
                     },
-                    boardCellList = viewModel.myCells,
+                    onOpponentPlayerShotTaken = { line: Int, column: Int, _ ->
+                        viewModel.localGameBoardClickHandler(line, column)
+                    },
+                    localBoardCellList = viewModel.myCells,
+                    opponentBoardCellList = viewModel.opponentCells,
                 ),
-                //myPrepBoard = prepBoard
+                turn = viewModel.isTurn,
+                winner = viewModel.winnerFound
             )
         }
     }

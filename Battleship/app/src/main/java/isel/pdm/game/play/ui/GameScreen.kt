@@ -8,10 +8,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.game.play.model.Game
+import isel.pdm.game.play.model.Marker
 import isel.pdm.game.prep.model.*
 import isel.pdm.game.prep.ui.BoardCellHandler
 import isel.pdm.ui.MyGameBoard
@@ -26,14 +28,15 @@ data class GameScreenState(
     val game: Game
 )
 
+const val GameScreenTestTag = "GameScreen"
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GameScreen(
-    state: GameScreenState,
     players: List<PlayerMatchmaking>,
     boardCellHandler: BoardCellHandler = BoardCellHandler(),
-   // myPrepBoard: Board,
+    turn: Marker,
+    winner: Boolean
 ) {
 
     BattleshipTheme {
@@ -45,7 +48,8 @@ fun GameScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 16.dp),
+                    .padding(top = 16.dp)
+                    .testTag(GameScreenTestTag),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
@@ -53,17 +57,23 @@ fun GameScreen(
                     modifier = Modifier
                         .width(PREVIEW_MY_GAME_BOARD_SIZE)
                         .height(PREVIEW_MY_GAME_BOARD_SIZE),
-                    onClick = { _, _, _ -> },
-                    boardCellList = boardCellHandler.boardCellList
+                    onClick = boardCellHandler.onOpponentPlayerShotTaken,
+                    boardCellList = boardCellHandler.localBoardCellList
                 )
 
                 Spacer(modifier = Modifier.height(80.dp))
 
                 val turnTextId =
-                    if (state.game.localPlayer == state.game.board.turn) "It's your turn"
+                    if (turn == Marker.LOCAL) "It's your turn"
                     else "Opponent's turn"
+
+                val winnerTextId =
+                    if (turn == Marker.LOCAL) "${players[0].username} wins!"
+                    else "${players[1].username} wins!"
+
+
                 Text(
-                    text = turnTextId,
+                    text = if(winner) winnerTextId else turnTextId,
                     style = MaterialTheme.typography.h4,
                     color = MaterialTheme.colors.primaryVariant
                 )
@@ -72,44 +82,11 @@ fun GameScreen(
                     modifier = Modifier
                         .width(OPPONENT_GAME_BOARD_SIZE)
                         .height(OPPONENT_GAME_BOARD_SIZE),
-                    onClick = boardCellHandler.onCellClick,
-                    boardCellList = boardCellHandler.boardCellList
+                    onClick = boardCellHandler.onLocalPlayerShotTaken,
+                    boardCellList = boardCellHandler.opponentBoardCellList
                 )
             }
         }
 
     }
-
 }
-
-
-/*@Preview
-@Composable
-private fun GameScreenPreview() {
-    GameScreen(
-        state = GameScreenState(Game(Marker.LOCAL, aBoard)),
-        players = listOf(
-            PlayerMatchmaking("Player 1"),
-            PlayerMatchmaking("Player 2")
-        ),
-        boardCellHandler = BoardCellHandler(),
-        myPrepBoard = Board()
-    )
-}*/
-
-
-/*private val aBoard = GameBoard(
-    turn = Marker.LOCAL,
-    cells = mutableListOf(
-        mutableListOf(),
-        mutableListOf(),
-        mutableListOf(),
-        mutableListOf(),
-        mutableListOf(),
-        mutableListOf(),
-        mutableListOf(),
-        mutableListOf(),
-        mutableListOf(),
-        mutableListOf(),
-    )
-)*/

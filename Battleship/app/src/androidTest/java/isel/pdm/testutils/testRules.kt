@@ -1,6 +1,5 @@
 package isel.pdm.testutils
 
-import android.app.Activity
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -9,7 +8,7 @@ import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import isel.pdm.BattleshipTestApplication
-import isel.pdm.game.prep.ui.FleetSelectorCruiserTestTag
+import isel.pdm.game.prep.ui.GamePrepViewModel
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -40,8 +39,9 @@ class PreserveDefaultDependencies : TestRule {
         object : Statement() {
             override fun evaluate() {
                 val defaultUserInfoRepo = testApplication.playerRepo
-                try { test.evaluate() }
-                finally {
+                try {
+                    test.evaluate()
+                } finally {
                     testApplication.playerRepo = defaultUserInfoRepo
                 }
             }
@@ -57,7 +57,17 @@ fun createPreserveDefaultDependenciesComposeRule() =
     )
 
 
-fun <T: ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<T>, T>.performClickAndWaitForIdle(testTag: String){
+fun <T : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<T>, T>.performClickAndWaitForIdle(
+    testTag: String
+) {
     this.onNodeWithTag(testTag).performClick()
     this.waitForIdle()
+}
+
+fun <T : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<T>, T>.performClickAndWaitForTimer(
+    testTag: String,
+    milliseconds: Long,
+) {
+    this.onNodeWithTag(testTag).performClick()
+    Thread.sleep(milliseconds)
 }
