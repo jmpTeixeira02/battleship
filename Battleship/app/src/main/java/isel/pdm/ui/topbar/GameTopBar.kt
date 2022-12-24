@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import isel.pdm.game.lobby.model.PlayerInfo
-import isel.pdm.game.lobby.model.PlayerMatchmaking
 
 @Composable
 fun GameTopBar(players: Iterable<PlayerInfo>){

@@ -1,6 +1,6 @@
 package isel.pdm
 
-import isel.pdm.game.lobby.model.PlayerMatchmaking
+import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.lobby.model.validatePlayerUsername
 import org.junit.Assert
 import org.junit.Test
@@ -9,12 +9,12 @@ class PlayerInfoTests {
 
     @Test(expected = IllegalArgumentException::class)
     fun `create instance with blank username throws`() {
-        PlayerMatchmaking(username = "\n  \t ")
+        PlayerInfo(username = "\n  \t ")
     }
 
     @Test
     fun `create instance with non empty username`() {
-        PlayerMatchmaking(username = "username")
+        PlayerInfo(username = "username")
     }
 
     @Test

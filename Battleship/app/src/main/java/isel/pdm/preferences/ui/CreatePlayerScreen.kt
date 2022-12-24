@@ -4,7 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,14 +18,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.R
 import isel.pdm.game.lobby.model.PlayerInfo
-import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.game.lobby.model.userNameOrNull
 import isel.pdm.ui.IsReadOnly
-import isel.pdm.ui.topbar.NavigationHandlers
-import isel.pdm.ui.topbar.NavigationTopBar
 import isel.pdm.ui.buttons.EditFab
 import isel.pdm.ui.buttons.FabMode
 import isel.pdm.ui.theme.BattleshipTheme
+import isel.pdm.ui.topbar.NavigationHandlers
+import isel.pdm.ui.topbar.NavigationTopBar
 
 /*data class PlayerHandler(
     val onCreatePlayer: (PlayerMatchmaking) -> Unit = { },

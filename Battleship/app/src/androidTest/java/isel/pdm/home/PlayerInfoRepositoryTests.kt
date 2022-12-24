@@ -2,8 +2,8 @@ package isel.pdm.home
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.preferences.PlayerInfoRepositorySharedPrefs
-import isel.pdm.game.lobby.model.PlayerMatchmaking
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,7 +19,7 @@ class PlayerInfoRepositoryTests {
     @Test
     fun setting_to_null_clears_playerInfo() {
         // Arrange
-        repo.playerInfo = PlayerMatchmaking("user", )
+        repo.playerInfo = PlayerInfo("user", )
         Assert.assertNotNull(repo.playerInfo)
 
         // Act

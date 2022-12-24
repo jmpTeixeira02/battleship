@@ -2,9 +2,8 @@ package isel.pdm.game.play.model
 
 import android.os.Parcelable
 import isel.pdm.game.lobby.model.PlayerInfo
-import isel.pdm.game.lobby.model.PlayerMatchmaking
-import isel.pdm.game.prep.model.*
-import kotlinx.coroutines.delay
+import isel.pdm.game.prep.model.Board
+import isel.pdm.game.prep.model.Coordinate
 import kotlinx.parcelize.Parcelize
 
 interface PlayGameService {
@@ -13,7 +12,7 @@ interface PlayGameService {
 
 @Parcelize
 data class FakeOpponent(
-    val fakeUser: PlayerMatchmaking,
+    val fakeUser: PlayerInfo,
     val fakePrepBoard: Board,
 ) : Parcelable
 
@@ -28,7 +27,7 @@ class FakeOpponentService : PlayGameService {
 
 
     val opponent = FakeOpponent(
-        fakeUser = PlayerMatchmaking(playerInfo = PlayerInfo("fake")),
+        fakeUser = PlayerInfo("fake"),
         fakePrepBoard = addShipsToFakePrepBoard(),
     )
 

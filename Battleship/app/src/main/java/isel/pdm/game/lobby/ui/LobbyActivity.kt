@@ -14,9 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import isel.pdm.DependenciesContainer
 import isel.pdm.info.AboutUsActivity
-import isel.pdm.game.lobby.model.InviteState
 import isel.pdm.game.lobby.model.PlayerInfo
-import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.game.play.model.FakeOpponentService
 import isel.pdm.game.prep.ui.GamePrepActivity
 import isel.pdm.preferences.ui.CreatePlayerActivity
@@ -63,23 +61,8 @@ class LobbyActivity : ComponentActivity() {
                     replayListRequest = { SelectReplayActivity.navigate(origin = this) },
                     editUserRequest = { CreatePlayerActivity.navigate(context = this) }
                 ),
-                matchMakingRequest = MatchmakingHandlers(
-                    onAcceptInvite = { player: PlayerMatchmaking ->
-                        //viewModel.removePlayer(player)
-                        GamePrepActivity.navigate(
-                            origin = this,
-                            local = localPlayer,
-                            opponent = fakeOpponent.opponent //player.username
-                        )
-                    },
-                    onInviteSend = { player: PlayerMatchmaking, state: InviteState ->
-                        //viewModel.updatePlayerState(player, state)
-                    },
-                    onDeleteInvite = { player: PlayerMatchmaking ->
-                        //viewModel.removePlayer(player)
-                    }
-                ),
-                state = LobbyScreenState(players.map { playerInfo -> PlayerMatchmaking(playerInfo) }),
+                onPlayerSelected = { player -> viewModel.sendChallenge(player) },
+                state = LobbyScreenState(players.map { playerInfo -> playerInfo }),
             )
 
         }
@@ -104,16 +87,5 @@ class LobbyActivity : ComponentActivity() {
             }
         }
     }
-
-
-   /* @Suppress("deprecation")
-    private val playerExtra: PlayerMatchmaking?
-        get() =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                intent.getParcelableExtra(PLAYER_EXTRA, PlayerMatchmaking::class.java)
-            else
-                intent.getParcelableExtra(PLAYER_EXTRA)*/
-
-
 }
 

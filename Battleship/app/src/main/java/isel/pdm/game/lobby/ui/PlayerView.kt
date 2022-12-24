@@ -1,6 +1,10 @@
 package isel.pdm.game.lobby.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -11,30 +15,20 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import isel.pdm.game.lobby.model.InviteState
 import isel.pdm.game.lobby.model.PlayerInfo
-import isel.pdm.game.lobby.model.PlayerMatchmaking
-import isel.pdm.ui.buttons.BiState
-import isel.pdm.ui.buttons.InviteButton
-import isel.pdm.ui.buttons.PendingInviteButtons
 import isel.pdm.ui.theme.BattleshipTheme
-
-data class MatchmakingHandlers(
-    val onAcceptInvite: (PlayerMatchmaking) -> Unit = { },
-    val onDeleteInvite: (PlayerMatchmaking) -> Unit = { },
-    val onInviteSend: (PlayerMatchmaking, InviteState) -> Unit = { _, _ -> },
-)
 
 @Composable
 fun PlayerView(
-    player: PlayerMatchmaking,
-    matchMakingRequest: MatchmakingHandlers = MatchmakingHandlers()
+    player: PlayerInfo,
+    onPlayerSelected: (PlayerInfo) -> Unit
 ) {
     Card(
         modifier = Modifier
             .testTag("PlayerView")
             .fillMaxWidth()
-            .padding(16.dp),
+            .clickable{onPlayerSelected(player)}
+            .padding(4.dp),
         elevation = 10.dp
     ) {
         Row(
@@ -42,30 +36,12 @@ fun PlayerView(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = player.playerInfo.username,
+                text = player.username,
                 style = MaterialTheme.typography.h6,
                 modifier = Modifier
                     .padding(all = 24.dp),
                 textAlign = TextAlign.Center
             )
-            if (player.inviteState == InviteState.InviteEnabled) {
-                InviteButton(
-                    state = BiState.hasNotBeenPressed,
-                    onClick = {matchMakingRequest.onInviteSend(player, InviteState.InvitedDisabled)},
-                    modifier = Modifier.padding(all = 16.dp)
-                )
-            } else if (player.inviteState == InviteState.InvitedDisabled) {
-                InviteButton(
-                    state = BiState.hasBeenPressed,
-                    onClick = {},
-                    modifier = Modifier.padding(all = 16.dp)
-                )
-            } else {
-                PendingInviteButtons(
-                    onAcceptInvite = { matchMakingRequest.onAcceptInvite(player) },
-                    onDeleteInvite = { matchMakingRequest.onDeleteInvite(player) },
-                )
-            }
         }
     }
 }
@@ -74,7 +50,10 @@ fun PlayerView(
 @Composable
 private fun PlayerViewInviteEnabledPreview() {
     BattleshipTheme {
-        PlayerView(player = inviteEnablePlayer)
+        PlayerView(
+            player = PlayerInfo("Jogador 1"),
+            onPlayerSelected = { }
+        )
     }
 
 }
@@ -83,7 +62,10 @@ private fun PlayerViewInviteEnabledPreview() {
 @Composable
 private fun PlayerViewInviteDisabledPreview() {
     BattleshipTheme {
-        PlayerView(player = inviteDisablePlayer)
+        PlayerView(
+            player = PlayerInfo("Jogador 2"),
+            onPlayerSelected = { }
+        )
     }
 
 }
@@ -92,22 +74,9 @@ private fun PlayerViewInviteDisabledPreview() {
 @Composable
 private fun PlayerViewInvitePendingPreview() {
     BattleshipTheme {
-        PlayerView(player = invitePendingPlayer)
+        PlayerView(
+            player = PlayerInfo("Jogador 3"),
+            onPlayerSelected = { })
     }
 
 }
-
-private val inviteEnablePlayer = PlayerMatchmaking(
-    playerInfo = PlayerInfo("Jogador 1"),
-    inviteState = InviteState.InviteEnabled
-)
-
-private val invitePendingPlayer = PlayerMatchmaking(
-    playerInfo = PlayerInfo("Jogador 2"),
-    inviteState = InviteState.InvitePending
-)
-
-private val inviteDisablePlayer = PlayerMatchmaking(
-    playerInfo = PlayerInfo("Jogador 3"),
-    inviteState = InviteState.InvitedDisabled
-)

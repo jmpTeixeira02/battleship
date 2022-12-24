@@ -3,7 +3,10 @@ package isel.pdm.game.prep.ui
 import android.annotation.SuppressLint
 import android.os.CountDownTimer
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,14 +18,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import isel.pdm.game.lobby.model.PlayerInfo
-import isel.pdm.game.lobby.model.PlayerMatchmaking
-import isel.pdm.game.prep.model.*
+import isel.pdm.game.prep.model.BOARD_SIDE
+import isel.pdm.game.prep.model.Cell
+import isel.pdm.game.prep.model.Ship
+import isel.pdm.game.prep.model.TypeOfShip
 import isel.pdm.ui.GamePrepBoard
 import isel.pdm.ui.buttons.BiState
 import isel.pdm.ui.buttons.RemoveBoatButton
 import isel.pdm.ui.theme.BattleshipTheme
 import isel.pdm.ui.topbar.GameTopBar
-import java.util.*
 
 
 val BOARD_SIZE: Dp = 248.dp

@@ -7,10 +7,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import isel.pdm.game.lobby.model.PlayerInfo
-import isel.pdm.game.lobby.model.PlayerMatchmaking
-import isel.pdm.game.play.model.Game
-import isel.pdm.game.play.model.GameBoard
-import isel.pdm.game.play.model.Marker
 import isel.pdm.game.prep.model.Board
 import isel.pdm.game.prep.ui.BoardCellHandler
 import isel.pdm.utils.viewModelInit

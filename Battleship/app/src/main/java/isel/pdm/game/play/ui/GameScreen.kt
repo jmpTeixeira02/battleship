@@ -12,10 +12,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import isel.pdm.game.lobby.model.PlayerInfo
-import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.game.play.model.Game
 import isel.pdm.game.play.model.Marker
-import isel.pdm.game.prep.model.*
 import isel.pdm.game.prep.ui.BoardCellHandler
 import isel.pdm.ui.MyGameBoard
 import isel.pdm.ui.OpponentGameBoard

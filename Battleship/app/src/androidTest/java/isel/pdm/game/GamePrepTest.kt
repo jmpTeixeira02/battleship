@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import isel.pdm.game.lobby.model.PlayerMatchmaking
+import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.play.model.FakeOpponent
 import isel.pdm.game.play.ui.GameScreenTestTag
 import isel.pdm.game.prep.model.Board
@@ -12,7 +12,6 @@ import isel.pdm.game.prep.model.TypeOfShip
 import isel.pdm.game.prep.ui.*
 import isel.pdm.game.prep.ui.GamePrepActivity.Companion.LOCAL_PLAYER
 import isel.pdm.game.prep.ui.GamePrepActivity.Companion.OPPONENT_PLAYER
-import isel.pdm.main.MainScreenTestTag
 import isel.pdm.testutils.*
 import isel.pdm.ui.BoardCellTestTag
 import isel.pdm.ui.GamePrepBoardTag
@@ -32,7 +31,7 @@ class GamePrepTest {
     @get:Rule
     val testRule = createAndroidComposeRule<GamePrepActivity>(
         intent = intent.putExtra(LOCAL_PLAYER, "local").putExtra(OPPONENT_PLAYER, FakeOpponent(
-            fakeUser = PlayerMatchmaking("fake"),
+            fakeUser = PlayerInfo("fake"),
             fakePrepBoard = Board(),
         ))
     )

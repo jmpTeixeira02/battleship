@@ -114,7 +114,7 @@ class CreatePlayerActivityEditModeTests {
         }
     }
 
-    @Test
+    /*@Test
     fun pressing_save_button_stores_info_and_navigates_to_home_screen() {
 
         application.playerRepo = mockRepo
@@ -129,6 +129,6 @@ class CreatePlayerActivityEditModeTests {
             testRule.onNodeWithTag(CreatePlayerScreenTag).assertDoesNotExist()
             testRule.onNodeWithTag(LobbyScreenTag).assertExists()
         }
-    }
+    }*/
 
 }

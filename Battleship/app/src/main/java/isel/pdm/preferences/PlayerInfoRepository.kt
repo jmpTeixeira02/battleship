@@ -2,7 +2,6 @@ package isel.pdm.preferences
 
 import android.content.Context
 import isel.pdm.game.lobby.model.PlayerInfo
-import isel.pdm.game.lobby.model.PlayerMatchmaking
 
 interface PlayerRepository {
 
