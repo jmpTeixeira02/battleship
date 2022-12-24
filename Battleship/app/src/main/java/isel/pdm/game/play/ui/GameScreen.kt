@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.game.play.model.Game
 import isel.pdm.game.play.model.Marker
@@ -33,7 +34,7 @@ const val GameScreenTestTag = "GameScreen"
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GameScreen(
-    players: List<PlayerMatchmaking>,
+    players: List<PlayerInfo>,
     boardCellHandler: BoardCellHandler = BoardCellHandler(),
     turn: Marker,
     winner: Boolean

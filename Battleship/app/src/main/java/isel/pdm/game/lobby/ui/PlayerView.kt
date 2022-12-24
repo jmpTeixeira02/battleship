@@ -12,6 +12,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.game.lobby.model.InviteState
+import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.ui.buttons.BiState
 import isel.pdm.ui.buttons.InviteButton
@@ -41,7 +42,7 @@ fun PlayerView(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = player.username,
+                text = player.playerInfo.username,
                 style = MaterialTheme.typography.h6,
                 modifier = Modifier
                     .padding(all = 24.dp),
@@ -97,16 +98,16 @@ private fun PlayerViewInvitePendingPreview() {
 }
 
 private val inviteEnablePlayer = PlayerMatchmaking(
-    username = "Jogador 1",
+    playerInfo = PlayerInfo("Jogador 1"),
     inviteState = InviteState.InviteEnabled
 )
 
 private val invitePendingPlayer = PlayerMatchmaking(
-    username = "Jogador 2",
+    playerInfo = PlayerInfo("Jogador 2"),
     inviteState = InviteState.InvitePending
 )
 
 private val inviteDisablePlayer = PlayerMatchmaking(
-    username = "Jogador 3",
+    playerInfo = PlayerInfo("Jogador 3"),
     inviteState = InviteState.InvitedDisabled
 )

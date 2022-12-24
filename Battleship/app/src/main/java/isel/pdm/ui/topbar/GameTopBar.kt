@@ -15,10 +15,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 
 @Composable
-fun GameTopBar(players: Iterable<PlayerMatchmaking>){
+fun GameTopBar(players: Iterable<PlayerInfo>){
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -48,7 +49,7 @@ private fun GameTopBarText(text: String){
 @Composable
 private fun GameTopBarPreview(){
     GameTopBar(players = listOf(
-        PlayerMatchmaking("Player 1"),
-        PlayerMatchmaking("Player 2")
+        PlayerInfo("Player 1"),
+        PlayerInfo("Player 2")
     ))
 }

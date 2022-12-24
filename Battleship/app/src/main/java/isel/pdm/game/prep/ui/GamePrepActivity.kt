@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.game.lobby.ui.LobbyActivity
 import isel.pdm.game.play.model.FakeOpponent
@@ -49,8 +50,8 @@ class GamePrepActivity : ComponentActivity() {
                 else BiState.hasNotBeenPressed
             GamePrepScreen(
                 players = listOf(
-                    PlayerMatchmaking(local),
-                    PlayerMatchmaking(opponent.fakeUser.username)
+                    PlayerInfo(local),
+                    opponent.fakeUser.playerInfo
                 ),
                 shipRemoverHandler = ShipRemoverHandler(
                     deleteButtonState = deleteButtonState,
@@ -84,7 +85,7 @@ class GamePrepActivity : ComponentActivity() {
             GameActivity.navigate(
                 this,
                 local,
-                opponent.fakeUser.username,
+                opponent.fakeUser.playerInfo.username,
                 prepBoard,
                 opponent.fakePrepBoard
             )

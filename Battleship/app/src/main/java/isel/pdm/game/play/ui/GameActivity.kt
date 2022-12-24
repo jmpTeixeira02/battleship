@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.game.play.model.Game
 import isel.pdm.game.play.model.GameBoard
@@ -59,10 +60,7 @@ class GameActivity : ComponentActivity() {
 
         setContent {
             GameScreen(
-                players = listOf(
-                    PlayerMatchmaking(local),
-                    PlayerMatchmaking(opponent)
-                ),
+                players = listOf(PlayerInfo(local), PlayerInfo(opponent)),
                 boardCellHandler = BoardCellHandler(
                     onLocalPlayerShotTaken = { line: Int, column: Int, _ ->
                         viewModel.opponentGameBoardClickHandler(line, column)

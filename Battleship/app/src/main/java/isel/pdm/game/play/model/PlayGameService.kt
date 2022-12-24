@@ -1,6 +1,7 @@
 package isel.pdm.game.play.model
 
 import android.os.Parcelable
+import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.game.prep.model.*
 import kotlinx.coroutines.delay
@@ -27,7 +28,7 @@ class FakeOpponentService : PlayGameService {
 
 
     val opponent = FakeOpponent(
-        fakeUser = PlayerMatchmaking("fake"),
+        fakeUser = PlayerMatchmaking(playerInfo = PlayerInfo("fake")),
         fakePrepBoard = addShipsToFakePrepBoard(),
     )
 

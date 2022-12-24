@@ -1,6 +1,7 @@
 package isel.pdm.preferences
 
 import android.content.Context
+import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 
 interface PlayerRepository {
@@ -9,7 +10,7 @@ interface PlayerRepository {
      * The user information, if already stored, or null otherwise. Accesses to
      * this property CAN be made on the main thread (a.k.a. UI thread)
      */
-    var playerInfo: PlayerMatchmaking?
+    var playerInfo: PlayerInfo?
 }
 
 /**
@@ -23,11 +24,11 @@ class PlayerInfoRepositorySharedPrefs(private val context: Context): PlayerRepos
         context.getSharedPreferences("UserInfoPrefs", Context.MODE_PRIVATE)
     }
 
-    override var playerInfo: PlayerMatchmaking?
+    override var playerInfo: PlayerInfo?
         get() {
             val savedUsername = prefs.getString(userNameKey, null)
             return if (savedUsername != null)
-                PlayerMatchmaking(savedUsername)
+                PlayerInfo(savedUsername)
             else
                 null
         }

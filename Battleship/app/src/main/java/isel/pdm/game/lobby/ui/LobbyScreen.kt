@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.R
 import isel.pdm.game.lobby.model.InviteState
+import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.ui.topbar.NavigationHandlers
 import isel.pdm.ui.buttons.BiState
@@ -27,14 +28,15 @@ import isel.pdm.ui.theme.BattleshipTheme
 
 const val LobbyScreenTag = "HomeScreen"
 
+data class LobbyScreenState(
+    val players: List<PlayerMatchmaking> = emptyList()
+)
 
 @Composable
 fun LobbyScreen(
     navigationRequest: NavigationHandlers = NavigationHandlers(),
     matchMakingRequest: MatchmakingHandlers = MatchmakingHandlers(),
-    refreshPlayers: () -> Unit,
-    refreshState: BiState = BiState.hasNotBeenPressed,
-    players: List<PlayerMatchmaking>
+    state: LobbyScreenState = LobbyScreenState(),
 ) {
     BattleshipTheme {
         Scaffold(
@@ -59,21 +61,12 @@ fun LobbyScreen(
                         .padding(innerPadding)
 
                 ) {
-                    items(players) {
+                    items(state.players) {
                         PlayerView(
                             player = it,
                             matchMakingRequest = matchMakingRequest
                         )
                     }
-                }
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Bottom,
-                    modifier = Modifier
-                        .padding(24.dp)
-                        .fillMaxWidth()
-                ) {
-                    RefreshButton(state = refreshState, onClick = refreshPlayers)
                 }
             }
         }
@@ -84,17 +77,17 @@ fun LobbyScreen(
 @Composable
 private fun LobbyScreenPreview() {
     LobbyScreen(
-        refreshPlayers = {},
         navigationRequest = NavigationHandlers(replayListRequest = {}, aboutUsRequest = {}),
-        players = mutableListOf(
-            PlayerMatchmaking("A"),
-            PlayerMatchmaking("B", inviteState = InviteState.InvitePending),
-            PlayerMatchmaking("C", inviteState = InviteState.InvitedDisabled),
-            PlayerMatchmaking("A"),
-            PlayerMatchmaking("B", inviteState = InviteState.InvitePending),
-            PlayerMatchmaking("C", inviteState = InviteState.InvitedDisabled),
+        state = LobbyScreenState(
+            mutableListOf(
+                PlayerMatchmaking(PlayerInfo("A")),
+                PlayerMatchmaking(PlayerInfo("B"), inviteState = InviteState.InvitePending),
+                PlayerMatchmaking(PlayerInfo("C"), inviteState = InviteState.InvitedDisabled),
+                PlayerMatchmaking(PlayerInfo("D")),
+                PlayerMatchmaking(PlayerInfo("E"), inviteState = InviteState.InvitePending),
+                PlayerMatchmaking(PlayerInfo("F"), inviteState = InviteState.InvitedDisabled),
+            )
         ),
         matchMakingRequest = MatchmakingHandlers(onInviteSend = { _, _ -> }),
-        //currentPlayer = PlayerMatchmaking("xd")
     )
 }

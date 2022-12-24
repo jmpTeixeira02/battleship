@@ -14,6 +14,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.R
+import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.game.lobby.model.userNameOrNull
 import isel.pdm.ui.IsReadOnly
@@ -32,9 +33,9 @@ const val UsernameInputTag = "UsernameInput"
 
 @Composable
 fun CreatePlayerScreen(
-    player: PlayerMatchmaking?,
+    player: PlayerInfo?,
     navigationRequest: NavigationHandlers = NavigationHandlers(),
-    onSaveRequested: (PlayerMatchmaking) -> Unit = { }
+    onSaveRequested: (PlayerInfo) -> Unit = { }
 ) {
 
     BattleshipTheme {
@@ -101,7 +102,7 @@ fun CreatePlayerScreen(
 @Composable
 private fun PreferencesScreenViewModePreview() {
     CreatePlayerScreen(
-        player = PlayerMatchmaking("my user"),
+        player = PlayerInfo("my user"),
     )
 }
 

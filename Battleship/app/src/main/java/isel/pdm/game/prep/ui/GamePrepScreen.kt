@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.lobby.model.PlayerMatchmaking
 import isel.pdm.game.prep.model.*
 import isel.pdm.ui.GamePrepBoard
@@ -55,7 +56,7 @@ const val CountdownPrepTimerTestTag = "CountdownTimer"
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GamePrepScreen(
-    players: List<PlayerMatchmaking>,
+    players: List<PlayerInfo>,
     onRandomShipPlacer: () -> Unit = {},
     shipRemoverHandler: ShipRemoverHandler = ShipRemoverHandler(),
     boardCellHandler: BoardCellHandler = BoardCellHandler(),
@@ -182,8 +183,8 @@ fun CountdownPrepTimerPreview() {
 private fun GamePrepScreenPreview() {
     GamePrepScreen(
         players = listOf(
-            PlayerMatchmaking("Player 1"),
-            PlayerMatchmaking("Player 2")
+            PlayerInfo("Player 1"),
+            PlayerInfo("Player 2")
         ),
         onCheckBoardPrepRequest = {}
     )
