@@ -4,6 +4,10 @@ import android.app.Application
 import android.content.Context
 import androidx.test.runner.AndroidJUnitRunner
 import androidx.test.runner.screenshot.Screenshot.capture
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -56,6 +60,15 @@ class BattleshipTestApplication : DependenciesContainer, Application() {
 
             coEvery { leave() } returns Unit
         }
+
+    val emulatedFirestoreDb: FirebaseFirestore by lazy {
+        Firebase.firestore.also {
+            it.useEmulator("10.0.2.2", 8080)
+            it.firestoreSettings = FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build()
+        }
+    }
 }
 
 @Suppress("unused")
