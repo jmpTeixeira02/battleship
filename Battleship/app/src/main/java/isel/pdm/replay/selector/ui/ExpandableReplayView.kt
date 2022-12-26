@@ -1,9 +1,12 @@
 package isel.pdm.replay.selector.ui
 
+import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -49,6 +52,7 @@ fun ExpandableReplayView(replay: Replay, replayRequest: ReplayHandler = ReplayHa
 val expandedPropertyKey: SemanticsPropertyKey<Boolean> = SemanticsPropertyKey("Expanded")
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun StatelessExpandableReplayView(
     replay: Replay,
@@ -63,12 +67,15 @@ private fun StatelessExpandableReplayView(
         modifier = Modifier
             .testTag("ExpandableReplayView")
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(8.dp)
             .semantics { set(expandedPropertyKey, isExpanded) }
     ) {
         Column(
             modifier = Modifier
-                .clickable(onClick = onSelected)
+                .combinedClickable(
+                    onClick = { replayRequest.onOpenSelectedReplay(replay) },
+                    onLongClick = onExpandedToggleRequest
+                )
                 .padding(8.dp)
         ) {
             Row(
@@ -95,10 +102,6 @@ private fun StatelessExpandableReplayView(
                         .weight(1.0f)
                         .align(Alignment.CenterVertically),
                 )
-                ReplayButton(
-                    id = R.drawable.ic_replay_button_icon,
-                    onClick = { replayRequest.onOpenSelectedReplay(replay) }
-                )
 
                 val icon =
                     if (isExpanded) Icons.Default.ArrowDropUp
@@ -107,7 +110,7 @@ private fun StatelessExpandableReplayView(
                     imageVector = icon,
                     contentDescription = null,
                     modifier = Modifier
-                        .size(32.dp)
+                        .size(48.dp)
                         .clickable(onClick = onExpandedToggleRequest)
                         .testTag("ExpandableReplayView.ExpandAction")
                 )
