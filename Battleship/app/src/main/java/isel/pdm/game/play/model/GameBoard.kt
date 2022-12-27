@@ -1,9 +1,11 @@
 package isel.pdm.game.play.model
 
+import android.os.Parcelable
 import androidx.compose.runtime.toMutableStateList
 import isel.pdm.game.prep.model.*
+import kotlinx.parcelize.Parcelize
 
-
+@Parcelize
 data class GameBoard(
     var turn: Marker = Marker.firstToMove,
     var cells: MutableList<MutableList<Cell>> = MutableList(BOARD_SIDE) { _ ->
@@ -11,7 +13,7 @@ data class GameBoard(
             BOARD_SIDE
         ) { _ -> Cell() }.toMutableStateList()
     }.toMutableStateList()
-) {
+) : Parcelable {
 
 
     fun shoot(coordinate: Coordinate): Boolean {

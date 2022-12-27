@@ -1,9 +1,13 @@
 package isel.pdm.game.prep.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 /**
  * Represents coordinates
  */
-data class Coordinate(val line: Int, val column: Int) {
+@Parcelize
+data class Coordinate(val line: Int, val column: Int) : Parcelable {
     init {
         require(isValidRow(line) && isValidColumn(column))
     }

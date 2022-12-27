@@ -10,6 +10,8 @@ import isel.pdm.game.prep.model.*
 
 
 const val GamePrepBoardTag = "GamePrepBoardTag"
+const val MyGameBoard = "MyGameBoardTag"
+const val OpponentGameBoard = "OpponentGameBoardTag"
 
 enum class CellColor(val color: Color) {
     Water(Color.LightGray),
@@ -28,7 +30,7 @@ enum class GameCellColor(val color: Color) {
 
 
 @Composable
-fun BoardView(
+private fun BoardView(
     modifier: Modifier = Modifier,
     boarderColor: Color,
     onClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ -> },
@@ -98,7 +100,7 @@ fun MyGameBoard(
     boardCellList: List<List<Cell>>,
 ) {
     BoardView(
-        modifier = modifier.testTag("MyGameBoardTag"),
+        modifier = modifier.testTag(MyGameBoard),
         boarderColor = boarderColor,
         onClick = onClick,
         cellText = { line: Int, column: Int ->
@@ -117,7 +119,7 @@ fun OpponentGameBoard(
     boardCellList: List<List<Cell>>
 ) {
     BoardView(
-        modifier = modifier.testTag("OpponentGameBoardTag"),
+        modifier = modifier.testTag(OpponentGameBoard),
         boarderColor = boarderColor,
         onClick = onClick,
         cellFillColor = { line: Int, column: Int -> GameCellColor.valueOf(boardCellList[line][column].gameCellValue).color }

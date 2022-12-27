@@ -6,19 +6,32 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import isel.pdm.game.play.model.GameBoard
+import isel.pdm.game.play.ui.GameActivity
+import isel.pdm.game.play.ui.GameViewModel
+import isel.pdm.game.prep.model.*
 import isel.pdm.replay.selector.model.Replay
 import isel.pdm.ui.topbar.NavigationHandlers
+import isel.pdm.utils.viewModelInit
 
 class ReplayGameActivity : ComponentActivity() {
 
+
     companion object {
-        private const val REPLAY_EXTRA = "REPLAY_EXTRA"
+        const val REPLAY_EXTRA = "REPLAY_EXTRA"
         fun navigate(origin: Activity, replay: Replay? = null) {
             with(origin) {
                 val intent = Intent(this, ReplayGameActivity::class.java)
                 intent.putExtra(REPLAY_EXTRA, replay)
                 startActivity(intent)
             }
+        }
+    }
+
+    val viewModel: ReplayGameViewModel by viewModels {
+        viewModelInit {
+            ReplayGameViewModel(replayExtra!!)
         }
     }
 
@@ -29,7 +42,12 @@ class ReplayGameActivity : ComponentActivity() {
                 navigationRequest = NavigationHandlers(
                     backRequest = { finish() },
                 ),
-                replay = replayExtra!!
+                replay = replayExtra!!,
+                moveNumber = viewModel.moveCounter,
+                onFowardMove = { viewModel.moveForward() },
+                onBackwardMove = { viewModel.moveBackward() },
+                myReplayCells = viewModel.myReplayCells,
+                opponentReplayCells = viewModel.opponentReplayCells
             )
         }
     }
