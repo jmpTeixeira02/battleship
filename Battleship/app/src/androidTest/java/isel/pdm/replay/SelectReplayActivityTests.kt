@@ -108,7 +108,7 @@ class SelectReplayActivityTests {
 
         ReplayManager.dump(path, rep)
 
-        val file = File(path + rep.replayId + ".rep")
+        val file = File(path + "/" + rep.replayId + ".rep")
         var jsonSaved = ""
         val lineNo = file.readLines().size
 
