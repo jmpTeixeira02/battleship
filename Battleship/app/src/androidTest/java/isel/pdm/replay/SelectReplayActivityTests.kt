@@ -121,6 +121,6 @@ class SelectReplayActivityTests {
         val repDec = ReplayManager.read(path)
         assert(ReplayManager.equals(rep, repDec))
 
-        assert(File(path + rep.replayId + ".rep").delete()) { "Unable to delete file" }
+        assert(File(path + "/" + rep.replayId + ".rep").delete()) { "Unable to delete file" }
     }
 }
