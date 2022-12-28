@@ -45,7 +45,7 @@ data class Board(var cells: MutableList<MutableList<Cell>> = MutableList(BOARD_S
     private fun randomPlaceShip(ship:Ship){
         repeat(MAX_BOAT_PLACING_TRIES){
             try{
-                placeShip(Coordinate.random(), Coordinate.random(), ship)
+                placeShip(CoordinateManager.random(), CoordinateManager.random(), ship)
                 return
             }
             catch (e:Exception){

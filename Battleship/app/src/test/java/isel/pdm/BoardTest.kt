@@ -16,8 +16,8 @@ class BoardTests {
     fun `place ship on a board`() {
         val board = Board()
 
-        val start: Coordinate = Coordinate(0,0)
-        val end: Coordinate = Coordinate(0,5)
+        val start = Coordinate(0,0)
+        val end = Coordinate(0,5)
 
         board.placeShip(start, end, Ship(TypeOfShip.Carrier))
         assert(board.cells[0].filter { e -> e.ship?.type == TypeOfShip.Carrier }.size == TypeOfShip.Carrier.size)
@@ -27,8 +27,8 @@ class BoardTests {
     fun `placing ship out of bounds`() {
         val fixed = 0
         try{
-            val start: Coordinate = Coordinate(fixed,0)
-            val end: Coordinate = Coordinate(fixed,-1)
+            val start = Coordinate(fixed,0)
+            val end = Coordinate(fixed,-1)
         }catch (e: Exception){
             assertTrue(true)
         }
@@ -38,8 +38,8 @@ class BoardTests {
     fun `placing ship on top of another boat`(){
         val board = Board()
 
-        val start: Coordinate = Coordinate(0,0)
-        val end: Coordinate = Coordinate(0,5)
+        val start = Coordinate(0,0)
+        val end = Coordinate(0,5)
 
         board.placeShip(start, end, Ship(TypeOfShip.Carrier))
         assert(board.cells[0].filter { e -> e.ship?.type == TypeOfShip.Carrier }.size == TypeOfShip.Carrier.size)
@@ -56,8 +56,8 @@ class BoardTests {
     fun `placing ship diagonally`(){
         val board = Board()
 
-        val start: Coordinate = Coordinate(0,0)
-        val end: Coordinate = Coordinate(1,5)
+        val start = Coordinate(0,0)
+        val end = Coordinate(1,5)
 
         try {
             board.placeShip(start, end, Ship(TypeOfShip.Carrier))
@@ -71,14 +71,14 @@ class BoardTests {
     fun `remove ship`(){
         val board = Board()
 
-        val start: Coordinate = Coordinate(0,0)
-        val end: Coordinate = Coordinate(0,5)
+        val start = Coordinate(0,0)
+        val end = Coordinate(0,5)
         board.placeShip(start, end, Ship(TypeOfShip.Carrier))
         val carrierCellsFirst = board.cells.flatten().count { cell -> cell.value == TypeOfShip.Carrier.name }
         assertTrue(carrierCellsFirst == TypeOfShip.Carrier.size)
 
-        val start1: Coordinate = Coordinate(1,0)
-        val end1: Coordinate = Coordinate(1,5)
+        val start1 = Coordinate(1,0)
+        val end1 = Coordinate(1,5)
         board.placeShip(start1, end1, Ship(TypeOfShip.BattleShip))
 
         val pred:(cells:Cell) -> Boolean =
@@ -98,14 +98,14 @@ class BoardTests {
     fun `remove non-existing ship`(){
         val board = Board()
 
-        val start: Coordinate = Coordinate(0,0)
-        val end: Coordinate = Coordinate(0,5)
+        val start = Coordinate(0,0)
+        val end = Coordinate(0,5)
         board.placeShip(start, end, Ship(TypeOfShip.Carrier))
         val carrierCellsFirst = board.cells.flatten().count { cell -> cell.value == TypeOfShip.Carrier.name }
         assertTrue(carrierCellsFirst == TypeOfShip.Carrier.size)
 
-        val start1: Coordinate = Coordinate(1,0)
-        val end1: Coordinate = Coordinate(1,5)
+        val start1 = Coordinate(1,0)
+        val end1 = Coordinate(1,5)
         board.placeShip(start1, end1, Ship(TypeOfShip.BattleShip))
 
         val pred:(cells:Cell) -> Boolean =
@@ -123,12 +123,12 @@ class BoardTests {
     fun `clear board`(){
         val board = Board()
 
-        val start: Coordinate = Coordinate(0,0)
-        val end: Coordinate = Coordinate(0,5)
+        val start = Coordinate(0,0)
+        val end = Coordinate(0,5)
         board.placeShip(start, end, Ship(TypeOfShip.Carrier))
 
-        val start1: Coordinate = Coordinate(1,0)
-        val end1: Coordinate = Coordinate(1,5)
+        val start1 = Coordinate(1,0)
+        val end1 = Coordinate(1,5)
         board.placeShip(start1, end1, Ship(TypeOfShip.BattleShip))
 
         val pred:(cells:Cell) -> Boolean =

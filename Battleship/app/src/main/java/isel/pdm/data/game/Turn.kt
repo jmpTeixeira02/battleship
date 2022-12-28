@@ -13,7 +13,7 @@ enum class TurnUser(val type: Char) {
             return when (c) {
                 'E' -> Enemy
                 'P' -> Player
-                else -> throw IllegalArgumentException("No")
+                else -> throw IllegalArgumentException("No turn user with corresponding character")
             }
         }
     }
@@ -27,12 +27,12 @@ class TurnManager {
     companion object {
         fun fromString(turn: String) : Turn {
             val user = TurnUser.valueOf(turn[0])
-            val coords = Coordinate.fromString(turn.substring(1))
+            val coords = CoordinateManager.fromString(turn.substring(1))
             return Turn(user, coords)
         }
 
-        fun toString(turn: Turn): String {
-            return turn.user.type.toString() + Coordinate.toString(turn.coords)
+        fun equals(first: Turn, second: Turn): Boolean {
+            return first == second || (first.user == second.user && first.coords == second.coords)
         }
     }
 }

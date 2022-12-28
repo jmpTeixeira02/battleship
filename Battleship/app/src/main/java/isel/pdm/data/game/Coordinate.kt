@@ -13,10 +13,14 @@ data class Coordinate(val line: Int, val column: Int) : Parcelable {
     init {
         require(isValidRow(line) && isValidColumn(column))
     }
+}
+
+class CoordinateManager {
     companion object{
         private val min = 0
         private val max = BOARD_SIDE
-        fun random():Coordinate{
+
+        fun random() : Coordinate {
             val interval = (min until max)
             return Coordinate(interval.random(), interval.random())
         }
@@ -25,13 +29,12 @@ data class Coordinate(val line: Int, val column: Int) : Parcelable {
             val index = coords.indexOf(",")
             val x = coords.substring(1, index)
             val y = coords.substring(index + 1, coords.length - 1)
-            return Coordinate(
-                Integer.parseInt(x), Integer.parseInt(y)
-            )
+
+            return Coordinate(Integer.parseInt(x), Integer.parseInt(y))
         }
 
-        fun toString(coords: Coordinate): String {
-            return "(${coords.line},${coords.column})"
+        fun equals(first: Coordinate, second: Coordinate): Boolean {
+            return first == second || (first.line == second.line && first.column == second.column)
         }
     }
 }
