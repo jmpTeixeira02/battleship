@@ -2,6 +2,7 @@ package isel.pdm.game.prep.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 enum class TypeOfShip(val size: Int) {
     Destroyer(2),
@@ -12,6 +13,7 @@ enum class TypeOfShip(val size: Int) {
 }
 
 @Parcelize
+@Serializable
 data class Ship(val type: TypeOfShip) : Parcelable {
     val size = type.size
     val name = type.name

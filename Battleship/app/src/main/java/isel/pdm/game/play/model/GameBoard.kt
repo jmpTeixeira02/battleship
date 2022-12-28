@@ -4,8 +4,10 @@ import android.os.Parcelable
 import androidx.compose.runtime.toMutableStateList
 import isel.pdm.game.prep.model.*
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 @Parcelize
+@Serializable
 data class GameBoard(
     var turn: Marker = Marker.firstToMove,
     var cells: MutableList<MutableList<Cell>> = MutableList(BOARD_SIDE) { _ ->

@@ -36,8 +36,8 @@ class ReplayGameViewModel(
         }
         makeMove(
             myMove = {cord -> _opponentCells[cord.line][cord.column]},
-            opponentMove = BiStateGameCellShot.HasBeenShot,
-            )
+            opponentMove = BiStateGameCellShot.HasBeenShot
+        )
         _moveCounter++
     }
 

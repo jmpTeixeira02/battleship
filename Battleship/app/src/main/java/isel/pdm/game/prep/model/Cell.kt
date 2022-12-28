@@ -3,11 +3,12 @@ package isel.pdm.game.prep.model
 import android.os.Parcelable
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-
+import kotlinx.serialization.Serializable
 
 enum class BiStateGameCellShot { HasBeenShot, HasNotBeenShot }
 
 @Parcelize
+@Serializable
 data class Cell(
     var state: BiStateGameCellShot = BiStateGameCellShot.HasNotBeenShot,
     var ship: Ship? = null
