@@ -58,7 +58,7 @@ class ReplayManager {
 
                 val json = Json { prettyPrint = true }
 
-                val filepath = path + rep.replayId + ".rep"
+                val filepath = path + "/" + rep.replayId + ".rep"
 
                 val replay = json.encodeToString(rep)
 
