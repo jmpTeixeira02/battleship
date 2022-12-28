@@ -39,7 +39,7 @@ class ReplayManager {
 
         private fun checkDate(date: String): Boolean {
             val members = date.split(Regex.fromLiteral("-"))
-            if (members.size != 3) return false;
+            if (members.size != 3) return false
 
             val numbersList = listOf(Integer.parseInt(members[0]), Integer.parseInt(members[1]), Integer.parseInt(members[2]))
 
@@ -53,12 +53,12 @@ class ReplayManager {
 
         fun dump(path: String, rep: Replay) {
             try {
+                if (!File(path).isDirectory) throw Exception("given path is not a directory")
                 if (!checkDate(rep.date)) throw Exception("invalid date in replay properties")
 
                 val json = Json { prettyPrint = true }
 
-                var filepath = path
-                if (!path.endsWith(".rep")) filepath += ".rep"
+                val filepath = path + rep.replayId + ".rep"
 
                 val replay = json.encodeToString(rep)
 

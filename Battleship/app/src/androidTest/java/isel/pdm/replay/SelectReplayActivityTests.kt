@@ -4,6 +4,9 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.lifecycle.Lifecycle
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import isel.pdm.replay.selector.model.Replay
+import isel.pdm.replay.selector.model.ReplayManager
 import isel.pdm.replay.selector.ui.SelectReplayActivity
 import isel.pdm.testutils.assertNotEmpty
 import isel.pdm.testutils.isExpanded
@@ -11,9 +14,12 @@ import isel.pdm.ui.topbar.NavigateBackTestTag
 import isel.pdm.ui.topbar.NavigateToAboutTestTag
 import isel.pdm.ui.topbar.NavigateToEditUserTestTag
 import isel.pdm.ui.topbar.NavigateToReplayTestTag
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.File
 
 
 @RunWith(AndroidJUnit4::class)
@@ -92,5 +98,29 @@ class SelectReplayActivityTests {
         assert(testRule.activityRule.scenario.state == Lifecycle.State.DESTROYED)
     }
 
+    @Test
+    fun selecting_replay_reads_the_file() {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val path = context.filesDir.absolutePath
 
+        val json = Json { prettyPrint = true }
+        val rep = Replay("ID000001", "2019-02-28", "JoseMariaVenancioDasCouves", 35)
+
+        ReplayManager.dump(path, rep)
+
+        val file = File(path)
+        var jsonSaved = ""
+        val lineNo = file.readLines().size
+
+        for (i in 0 until lineNo) {
+            jsonSaved += file.readLines()[i] + if (i != lineNo - 1) "\n" else ""
+        }
+
+        assert(jsonSaved == json.encodeToString(rep))
+
+        val repDec = ReplayManager.read(path)
+        assert(ReplayManager.equals(rep, repDec))
+
+        assert(File(path + rep.replayId + ".rep").delete()) { "Unable to delete file" }
+    }
 }
