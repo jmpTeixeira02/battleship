@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".BattleshipApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,7 +14,7 @@
         android:theme="@style/Theme.Battleship"
         tools:targetApi="31">
         <activity
-            android:name=".activities.HomeActivity"
+            android:name=".main.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Battleship">
@@ -27,20 +28,34 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity
-            android:name=".activities.AboutUsActivity"
+            android:name=".game.play.ui.GameActivity"
             android:exported="false" />
 
         <activity
-            android:name=".activities.SelectReplayActivity"
+            android:name=".preferences.ui.CreatePlayerActivity"
+            android:exported="false"
+            android:noHistory="true" />
+
+        <activity
+            android:name=".game.lobby.ui.LobbyActivity"
             android:exported="false" />
 
         <activity
-            android:name=".activities.ReplayGameActivity"
+            android:name=".info.AboutUsActivity"
             android:exported="false" />
 
         <activity
-            android:name=".activities.GamePrepActivity"
+            android:name=".replay.selector.ui.SelectReplayActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".replay.viewer.ui.ReplayGameActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".game.prep.ui.GamePrepActivity"
             android:exported="false" />
     </application>
 
