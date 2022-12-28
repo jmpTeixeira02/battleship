@@ -2,6 +2,7 @@ package isel.pdm.data.game
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 enum class TurnUser(val type: Char) {
     Enemy('E'),
@@ -19,6 +20,7 @@ enum class TurnUser(val type: Char) {
 }
 
 @Parcelize
+@Serializable
 data class Turn(val user: TurnUser, val coords: Coordinate) : Parcelable
 
 class TurnManager {

@@ -2,12 +2,13 @@ package isel.pdm.data.game
 
 import android.os.Parcelable
 import java.io.File
-import java.time.LocalDate
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 // TODO - finish correct date implementation, create dedicated data structure and create unit tests
 
 @Parcelize
+@Serializable
 data class Replay(val replayId: String = "", val date: String = /*LocalDate.now().toString()*/"", val opponentName: String, val turns: List<Turn> = listOf()) :
     Parcelable
 
