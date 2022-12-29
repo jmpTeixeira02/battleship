@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import isel.pdm.game.lobby.model.PlayerInfo
 
 @Composable
-fun GameTopBar(players: Iterable<PlayerInfo>){
+fun GameTopBar(players: Iterable<String>){
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -27,7 +27,7 @@ fun GameTopBar(players: Iterable<PlayerInfo>){
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         players.forEach{
-            GameTopBarText(text = it.username)
+            GameTopBarText(text = it)
         }
     }
 }
@@ -48,7 +48,7 @@ private fun GameTopBarText(text: String){
 @Composable
 private fun GameTopBarPreview(){
     GameTopBar(players = listOf(
-        PlayerInfo("Player 1"),
-        PlayerInfo("Player 2")
+       "Player 1",
+        "Player 2"
     ))
 }

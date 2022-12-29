@@ -49,7 +49,7 @@ fun ReplayGameScreen(
                     navigation = navigationRequest,
                     title = "${replay.replayId} Vs. ${replay.opponentName}"
                 )
-            }
+            },
         ) { innerPadding ->
             Column(
                 modifier = Modifier
@@ -64,7 +64,8 @@ fun ReplayGameScreen(
                         .width(PREVIEW_MY_GAME_BOARD_SIZE)
                         .height(PREVIEW_MY_GAME_BOARD_SIZE),
                     onClick = {_, _, _, ->},
-                    boardCellList = myReplayCells
+                    boardCellList = myReplayCells,
+                    //enabled = false
                 )
 
                 Spacer(modifier = Modifier.height(80.dp))
@@ -74,7 +75,8 @@ fun ReplayGameScreen(
                         .width(OPPONENT_GAME_BOARD_SIZE)
                         .height(OPPONENT_GAME_BOARD_SIZE),
                     onClick = {_, _, _, ->},
-                    boardCellList = opponentReplayCells
+                    boardCellList = opponentReplayCells,
+                    //enabled = false
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))

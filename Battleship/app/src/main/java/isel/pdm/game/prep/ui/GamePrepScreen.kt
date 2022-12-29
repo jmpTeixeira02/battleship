@@ -60,7 +60,7 @@ const val CountdownPrepTimerTestTag = "CountdownTimer"
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GamePrepScreen(
-    players: List<PlayerInfo>,
+    players: List<String>,
     onRandomShipPlacer: () -> Unit = {},
     shipRemoverHandler: ShipRemoverHandler = ShipRemoverHandler(),
     boardCellHandler: BoardCellHandler = BoardCellHandler(),
@@ -91,12 +91,13 @@ fun GamePrepScreen(
                         .height(BOARD_SIZE),
                     onClick = boardCellHandler.onCellClick,
                     selectedBoat = shipSelectionHandler.selectedShip,
-                    boardCellList = boardCellHandler.boardCellList
+                    boardCellList = boardCellHandler.boardCellList,
+                    //enabled = true
                 )
                 FleetSelectorView(
                     modifier = Modifier.testTag(FleetSelectorTestTag),
                     onClick = shipSelectionHandler.onShipSelectorClick,
-                    shipSelector = shipSelectionHandler.shipSelector
+                    shipSelector = shipSelectionHandler.shipSelector,
                 )
 
                 Button(
@@ -187,8 +188,8 @@ fun CountdownPrepTimerPreview() {
 private fun GamePrepScreenPreview() {
     GamePrepScreen(
         players = listOf(
-            PlayerInfo("Player 1"),
-            PlayerInfo("Player 2")
+            "Player 1",
+           "Player 2"
         ),
         onCheckBoardPrepRequest = {}
     )

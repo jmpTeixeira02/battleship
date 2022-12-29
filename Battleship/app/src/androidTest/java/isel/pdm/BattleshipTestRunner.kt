@@ -13,6 +13,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import isel.pdm.game.lobby.model.*
+import isel.pdm.game.play.model.Match
 import isel.pdm.preferences.PlayerRepository
 import kotlinx.coroutines.flow.flow
 
@@ -60,6 +61,9 @@ class BattleshipTestApplication : DependenciesContainer, Application() {
 
             coEvery { leave() } returns Unit
         }
+
+
+    override var match: Match = TODO()
 
     val emulatedFirestoreDb: FirebaseFirestore by lazy {
         Firebase.firestore.also {

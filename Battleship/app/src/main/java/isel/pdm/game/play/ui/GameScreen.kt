@@ -1,6 +1,7 @@
 package isel.pdm.game.play.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -24,6 +25,7 @@ val PREVIEW_MY_GAME_BOARD_SIZE: Dp = 192.dp
 val OPPONENT_GAME_BOARD_SIZE: Dp = 312.dp
 
 data class GameScreenState(
+    val title: String?,
     val game: Game
 )
 
@@ -32,9 +34,10 @@ const val GameScreenTestTag = "GameScreen"
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GameScreen(
-    players: List<PlayerInfo>,
+    players: List<String>,
+    state: GameScreenState,
     boardCellHandler: BoardCellHandler = BoardCellHandler(),
-    turn: Marker,
+    //turn: Marker,
     winner: Boolean
 ) {
 
@@ -56,23 +59,26 @@ fun GameScreen(
                     modifier = Modifier
                         .width(PREVIEW_MY_GAME_BOARD_SIZE)
                         .height(PREVIEW_MY_GAME_BOARD_SIZE),
-                    onClick = boardCellHandler.onOpponentPlayerShotTaken,
-                    boardCellList = boardCellHandler.localBoardCellList
+                    onClick = {_, _, _ -> }/*boardCellHandler.onOpponentPlayerShotTaken*/,
+                    boardCellList = boardCellHandler.localBoardCellList,
                 )
 
                 Spacer(modifier = Modifier.height(80.dp))
 
-                val turnTextId =
-                    if (turn == Marker.LOCAL) "It's your turn"
-                    else "Opponent's turn"
+                val titleTextId = when {
+                    state.title != null -> state.title
+                    state.game.localPlayerMarker == state.game.localBoard.turn ->
+                        "It's your turn!"
+                    else -> "Opponent's turn!"
+                }
 
                 val winnerTextId =
-                    if (turn == Marker.LOCAL) "${players[0].username} wins!"
-                    else "${players[1].username} wins!"
+                    if (state.game.localBoard.turn == Marker.LOCAL) "${players[0]} wins!"
+                    else "${players[1]} wins!"
 
 
                 Text(
-                    text = if(winner) winnerTextId else turnTextId,
+                    text = if(winner) winnerTextId else titleTextId,
                     style = MaterialTheme.typography.h4,
                     color = MaterialTheme.colors.primaryVariant
                 )
@@ -82,7 +88,8 @@ fun GameScreen(
                         .width(OPPONENT_GAME_BOARD_SIZE)
                         .height(OPPONENT_GAME_BOARD_SIZE),
                     onClick = boardCellHandler.onLocalPlayerShotTaken,
-                    boardCellList = boardCellHandler.opponentBoardCellList
+                    boardCellList = boardCellHandler.opponentBoardCellList,
+                  //  enabled = true // só se o turn permitir
                 )
             }
         }

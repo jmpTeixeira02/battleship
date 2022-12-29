@@ -22,14 +22,20 @@ fun drawCell(
     boarderColor: Color,
     cellFillColor: Color,
     cellText: String = " ",
-    onClick: () -> Unit = {}
-){
-    Box(modifier = modifier
-        .border(width = 1.dp, color = boarderColor)
-        .background(cellFillColor)
-        .clickable(onClick = onClick),
+    onClick: () -> Unit = {},
+    enabled: Boolean = false
+) {
+    Box(
+        modifier = modifier
+            .border(width = 1.dp, color = boarderColor)
+            .background(cellFillColor)
+            .clickable(
+                onClick = onClick,
+                //enabled = enabled
+            ),
+
         contentAlignment = Alignment.Center,
-    ){
+    ) {
         Text(
             text = cellText,
             textAlign = TextAlign.Center,
@@ -39,7 +45,7 @@ fun drawCell(
 
 @Preview
 @Composable
-private fun drawCellPreview(){
+private fun drawCellPreview() {
     drawCell(
         boarderColor = Color.Black,
         cellFillColor = Color.Red,
