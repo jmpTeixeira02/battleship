@@ -53,7 +53,13 @@ class ReplayManager {
 
         fun dump(path: String, rep: Replay) {
             try {
-                if (!File(path).isDirectory) throw Exception("given path is not a directory")
+                val f = File(path)
+
+                if (!f.exists())
+                    if (!f.mkdirs())
+                        throw Exception("unable to create path $path")
+
+                if (!f.isDirectory) throw Exception("given path is not a directory")
                 if (!checkDate(rep.date)) throw Exception("invalid date in replay properties")
 
                 val json = Json { prettyPrint = true }

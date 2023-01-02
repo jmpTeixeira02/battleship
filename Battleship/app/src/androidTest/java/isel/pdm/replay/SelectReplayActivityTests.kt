@@ -118,7 +118,7 @@ class SelectReplayActivityTests {
 
         assert(jsonSaved == json.encodeToString(rep))
 
-        val repDec = ReplayManager.read(path)
+        val repDec = ReplayManager.read(path + "/" + rep.replayId + ".rep")
         assert(ReplayManager.equals(rep, repDec))
 
         assert(File(path + "/" + rep.replayId + ".rep").delete()) { "Unable to delete file" }
