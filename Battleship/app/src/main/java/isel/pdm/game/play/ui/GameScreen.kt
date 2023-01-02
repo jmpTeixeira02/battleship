@@ -37,7 +37,6 @@ fun GameScreen(
     players: List<String>,
     state: GameScreenState,
     boardCellHandler: BoardCellHandler = BoardCellHandler(),
-    //turn: Marker,
     winner: Boolean
 ) {
 
@@ -89,7 +88,7 @@ fun GameScreen(
                         .height(OPPONENT_GAME_BOARD_SIZE),
                     onClick = boardCellHandler.onLocalPlayerShotTaken,
                     boardCellList = boardCellHandler.opponentBoardCellList,
-                  //  enabled = true // só se o turn permitir
+                    enabled = state.game.localPlayerMarker == state.game.localBoard.turn // só se o turn permitir
                 )
             }
         }

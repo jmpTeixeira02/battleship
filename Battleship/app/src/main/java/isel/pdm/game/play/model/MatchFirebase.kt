@@ -33,7 +33,7 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
                             val game = Game(
                                 localPlayerMarker = localPlayerMarker,
                                 forfeitedBy = it.second,
-                                /* SUS */localBoard = it.first
+                                /* SUS ? */localBoard = it.first
                             )
                             val gameEvent = when {
                                 onGoingGame == null -> GameStarted(game)
@@ -48,23 +48,33 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
             }
 
 
-
-    /* PROBLEMA AQUI ? */
-
-    private suspend fun publishGame(game: Game, gameId: String) {
-            db.collection(ONGOING)
-                .document(gameId)
-                .set(game.localBoard.toDocumentContent())
-                .await()
+    private suspend fun publishLocalGame(game: Game, gameId: String) {
+        db.collection(ONGOING)
+            .document(gameId)
+            .set(game.localBoard.toDocumentContent())
+            .await()
     }
 
 
-    private suspend fun updateLocalGame(game: Game, gameId: String) {
-           db.collection(ONGOING)
-               .document(gameId)
-               .update(game.localBoard.toDocumentContent())
-               .await()
+    private suspend fun getFireStoreBoard(gameId: String): String {
+        val docRef = db.collection(ONGOING).document(gameId)
+        var ret = ""
+
+         docRef.get().addOnSuccessListener { document ->
+           ret = document.getBoardAsString()!!
+        }.await()
+
+        return ret
     }
+
+    private fun DocumentSnapshot.getBoardAsString() : String? {
+        val docData = data
+        if(docData != null) {
+            return docData["board"] as String
+        }
+        return null
+    }
+
 
 
     private suspend fun updateOpponentGame(game: Game, gameId: String) {
@@ -74,26 +84,38 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
             .await()
     }
 
-    override fun start(localPlayer: PlayerInfo, challenge: Challenge, gameBoard: GameBoard): Flow<GameEvent> {
+    private suspend fun updateLocalGame(game: Game, gameId: String) {
+        db.collection(ONGOING)
+            .document(gameId)
+            .update(game.localBoard.toDocumentContent())
+            .await()
+    }
+
+
+    override fun start(
+        localPlayer: PlayerInfo,
+        challenge: Challenge,
+        localGameBoard: GameBoard
+    ): Flow<GameEvent> {
         check(onGoingGame == null)
 
         return callbackFlow {
             val newGame = Game(
                 localPlayerMarker = getLocalPlayerMarker(localPlayer, challenge),
-                localBoard = GameBoard(cells = gameBoard.cells ),
-                opponentBoard = GameBoard(cells = gameBoard.cells)
+                localBoard = GameBoard(cells = localGameBoard.cells),
             )
-            val gameId = challenge.challenger.id.toString()
-            Log.v("NEW_GAME", newGame.toString()+ "\n"+ gameId)
+            
+            val challengerGameId = challenge.challenger.id.toString()
+            val challengedGameId = challenge.challenged.id.toString()
             var gameSubscription: ListenerRegistration? = null
             try {
-                if (localPlayer == challenge.challenged) {
-                    publishGame(newGame, gameId)
-                }
+                if (localPlayer == challenge.challenger) {
+                    publishLocalGame(newGame, challengerGameId)
+                } else publishLocalGame(newGame, challengedGameId)
 
                 gameSubscription = subscribeGameStateUpdated(
                     localPlayerMarker = newGame.localPlayerMarker,
-                    gameId = gameId,
+                    gameId = challengerGameId,
                     flow = this
                 )
             } catch (e: Throwable) {
@@ -106,20 +128,36 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
         }
     }
 
-    override suspend fun takeLocalBoardShot(at: Coordinate) {
+
+    override suspend fun opponentBoardShot(
+        at: Coordinate,
+        localPlayer: PlayerInfo,
+        challenge: Challenge,
+    ) {
         onGoingGame = checkNotNull(onGoingGame).also {
-            val game = it.copy(first = it.first.takeLocalBoardShot(at))
-            updateLocalGame(game.first, game.second)
+
+            if (it.first.localPlayerMarker == Marker.LOCAL) {
+
+                val stringBoard = getFireStoreBoard(challenge.challenged.id.toString())
+
+                val moves = stringBoard.toMovesList()
+
+                val challengedGameBoard = GameBoard.fromMovesList(it.first.localBoard.turn, moves)
+                val game = it.copy(first = it.first.shootOpponentBoard(at, challengedGameBoard))
+                updateOpponentGame(game.first,  challenge.challenged.id.toString())
+                game.first.localBoard.turn = Marker.OPPONENT
+                updateLocalGame(game.first, challenge.challenger.id.toString())
+            } else {
+                val stringBoard = getFireStoreBoard(challenge.challenger.id.toString())
+
+                val moves = stringBoard.toMovesList()
+
+                val challengerGameBoard = GameBoard.fromMovesList(it.first.localBoard.turn, moves)
+                val game = it.copy(first = it.first.shootOpponentBoard(at, challengerGameBoard))
+                updateOpponentGame(game.first, challenge.challenger.id.toString())
+            }
         }
     }
-
-    override suspend fun takeOpponentBoardShot(at: Coordinate) {
-        onGoingGame = checkNotNull(onGoingGame).also {
-            val game = it.copy(first = it.first.takeOpponentBoardShot(at))
-            updateOpponentGame(game.first, game.second)
-        }
-    }
-
 
     override suspend fun forfeit() {
         onGoingGame = checkNotNull(onGoingGame).also {
@@ -156,7 +194,7 @@ const val FORFEIT_FIELD = "forfeit"
  */
 fun GameBoard.toDocumentContent() = mapOf(
     TURN_FIELD to turn.name,
-    BOARD_FIELD to toMovesList().joinToString(separator = "|") {
+    BOARD_FIELD to toMovesList().joinToString(separator = "") {
         when (it) {
             Cell(BiStateGameCellShot.HasNotBeenShot, Ship(TypeOfShip.BattleShip)) -> "B"
             Cell(BiStateGameCellShot.HasNotBeenShot, Ship(TypeOfShip.Carrier)) -> "CA"
@@ -193,23 +231,38 @@ fun DocumentSnapshot.toMatchStateOrNull(): Pair<GameBoard, Marker?>? =
 /**
  * Converts this string to a list of moves in the board
  */
-fun String.toMovesList(): List<Cell> = map {
-    when (it) {
-        'B' -> Cell(BiStateGameCellShot.HasNotBeenShot, Ship(TypeOfShip.BattleShip))
-        'C' -> if (this[1] == 'A') Cell(
-            BiStateGameCellShot.HasNotBeenShot,
-            Ship(TypeOfShip.Carrier)
-        ) else Cell(BiStateGameCellShot.HasNotBeenShot, Ship(TypeOfShip.Cruiser))
-        'D' -> Cell(BiStateGameCellShot.HasNotBeenShot, Ship(TypeOfShip.Destroyer))
-        'S' -> Cell(BiStateGameCellShot.HasNotBeenShot, Ship(TypeOfShip.Submarine))
-        'X' -> Cell(BiStateGameCellShot.HasBeenShot, null)
-        'b' -> Cell(BiStateGameCellShot.HasBeenShot, Ship(TypeOfShip.BattleShip))
-        'c' -> if (this[1] == 'a') Cell(
-            BiStateGameCellShot.HasNotBeenShot,
-            Ship(TypeOfShip.Carrier)
-        ) else Cell(BiStateGameCellShot.HasNotBeenShot, Ship(TypeOfShip.Cruiser))
-        'd' -> Cell(BiStateGameCellShot.HasBeenShot, Ship(TypeOfShip.Destroyer))
-        's' -> Cell(BiStateGameCellShot.HasBeenShot, Ship(TypeOfShip.Submarine))
-        else -> Cell(BiStateGameCellShot.HasNotBeenShot, null)
+fun String.toMovesList(): List<Cell> {
+    var idx = 0
+    val cellList: MutableList<Cell> = mutableListOf()
+    this.forEach { char ->
+        if (char == 'A' || char == 'a' || char == 'R' || char == 'r')
+            return@forEach
+
+        cellList.add(
+            when (char) {
+                'B' -> Cell(BiStateGameCellShot.HasNotBeenShot, Ship(TypeOfShip.BattleShip))
+                'C' -> if (this[++idx] == 'A')
+                    Cell(
+                        BiStateGameCellShot.HasNotBeenShot,
+                        Ship(TypeOfShip.Carrier)
+                    )
+                else Cell(BiStateGameCellShot.HasNotBeenShot, Ship(TypeOfShip.Cruiser))
+
+
+                'D' -> Cell(BiStateGameCellShot.HasNotBeenShot, Ship(TypeOfShip.Destroyer))
+                'S' -> Cell(BiStateGameCellShot.HasNotBeenShot, Ship(TypeOfShip.Submarine))
+                'X' -> Cell(BiStateGameCellShot.HasBeenShot, null)
+                'b' -> Cell(BiStateGameCellShot.HasBeenShot, Ship(TypeOfShip.BattleShip))
+                'c' -> if (this[++idx] == 'a') Cell(
+                    BiStateGameCellShot.HasBeenShot,
+                    Ship(TypeOfShip.Carrier)
+                ) else Cell(BiStateGameCellShot.HasBeenShot, Ship(TypeOfShip.Cruiser))
+                'd' -> Cell(BiStateGameCellShot.HasBeenShot, Ship(TypeOfShip.Destroyer))
+                's' -> Cell(BiStateGameCellShot.HasBeenShot, Ship(TypeOfShip.Submarine))
+                else -> Cell(BiStateGameCellShot.HasNotBeenShot, null)
+            }
+        )
+        idx++
     }
+    return cellList
 }

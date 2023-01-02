@@ -2,6 +2,7 @@ package isel.pdm.game.prep.ui
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -20,6 +21,7 @@ import isel.pdm.main.MainActivity
 import isel.pdm.ui.buttons.BiState
 import isel.pdm.utils.viewModelInit
 import kotlinx.parcelize.Parcelize
+import java.util.UUID
 
 class GamePrepActivity : ComponentActivity() {
 
@@ -47,8 +49,6 @@ class GamePrepActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val matchInfo: MatchInfo = intent.getParcelableExtra(MATCH_INFO_EXTRA)!!
 
         setContent {
             val deleteButtonState =
@@ -89,16 +89,16 @@ class GamePrepActivity : ComponentActivity() {
 
     }
 
+
     private fun checkBoardPrepState() {
         if (viewModel.allShipsPlaced()) { /* time's up e barcos postos totalmente*/
-            val matchInfo: MatchInfo = intent.getParcelableExtra(MATCH_INFO_EXTRA)!!
 
             val prepBoard = viewModel.getBoard()
 
             GameActivity.navigate(
                 this,
-                localPlayer = PlayerInfo(matchInfo.localPlayerNick),
-                challenge = Challenge(PlayerInfo(matchInfo.localPlayerNick), PlayerInfo(matchInfo.opponentNick)),
+                localPlayer = localPlayer,
+                challenge = challenge ,
                 prepBoard,
                 prepBoard
             )
@@ -106,7 +106,41 @@ class GamePrepActivity : ComponentActivity() {
             MainActivity.navigate(this)
         }
     }
+
+    @Suppress("deprecation")
+    val matchInfo: MatchInfo by lazy {
+        val info =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                intent.getParcelableExtra(MATCH_INFO_EXTRA, MatchInfo::class.java)
+            else
+                intent.getParcelableExtra(MATCH_INFO_EXTRA)
+
+        checkNotNull(info)
+    }
+
+
+    private val challenge: Challenge by lazy {
+        val opponent = PlayerInfo(
+            username = matchInfo.opponentNick,
+            id = UUID.fromString(matchInfo.opponentId)
+        )
+
+        if (localPlayer.id.toString() == matchInfo.challengerId)
+            Challenge(challenger = localPlayer, challenged = opponent)
+        else
+            Challenge(challenger = opponent, challenged = localPlayer)
+    }
+
+    private val localPlayer: PlayerInfo by lazy {
+        PlayerInfo(
+            username = matchInfo.localPlayerNick,
+            id = UUID.fromString(matchInfo.localPlayerId)
+        )
+    }
+
 }
+
+
 
 
 @Parcelize

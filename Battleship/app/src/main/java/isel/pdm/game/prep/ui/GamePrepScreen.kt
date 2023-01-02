@@ -72,7 +72,7 @@ fun GamePrepScreen(
         Scaffold(
             backgroundColor = MaterialTheme.colors.background,
             topBar = { GameTopBar(players) }
-        ) { _ ->
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -92,7 +92,7 @@ fun GamePrepScreen(
                     onClick = boardCellHandler.onCellClick,
                     selectedBoat = shipSelectionHandler.selectedShip,
                     boardCellList = boardCellHandler.boardCellList,
-                    //enabled = true
+                    enabled = true
                 )
                 FleetSelectorView(
                     modifier = Modifier.testTag(FleetSelectorTestTag),

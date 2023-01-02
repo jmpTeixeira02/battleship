@@ -78,7 +78,6 @@ class LobbyActivity : ComponentActivity() {
                                 challenge = it.challenge,
                                 //opponent = fakeOpponent.opponent
                             )
-                            Log.v("CHALLENGE", it.challenge.toString())
                         }
                     }
                 }

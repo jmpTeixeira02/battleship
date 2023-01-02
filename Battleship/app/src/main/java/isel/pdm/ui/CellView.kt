@@ -31,7 +31,7 @@ fun drawCell(
             .background(cellFillColor)
             .clickable(
                 onClick = onClick,
-                //enabled = enabled
+                enabled = enabled
             ),
 
         contentAlignment = Alignment.Center,

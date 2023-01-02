@@ -76,7 +76,7 @@ fun ReplayGameScreen(
                         .height(OPPONENT_GAME_BOARD_SIZE),
                     onClick = {_, _, _, ->},
                     boardCellList = opponentReplayCells,
-                    //enabled = false
+                    enabled = false
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))

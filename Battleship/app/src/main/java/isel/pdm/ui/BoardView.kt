@@ -37,7 +37,7 @@ private fun BoardView(
     selectedBoat: TypeOfShip? = null,
     cellText: (line: Int, column: Int) -> String = { _, _ -> " " },
     cellFillColor: (line: Int, column: Int) -> Color,
-   // enabled: Boolean
+    enabled: Boolean = false
 ) {
 
     BoxWithConstraints(modifier = modifier/*.testTag(BoardTestTag)*/) {
@@ -64,7 +64,7 @@ private fun BoardView(
                                 if (selectedBoat != null) onClick(line, column, Ship(selectedBoat))
                                 else onClick(line, column, null)
                             },
-                           // enabled = enabled
+                            enabled = enabled
                         )
                     }
                 }
@@ -84,7 +84,7 @@ fun GamePrepBoard(
     onClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit,
     selectedBoat: TypeOfShip? = null,
     boardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell() } },
-   // enabled: Boolean
+    enabled: Boolean
 ) {
     BoardView(
         modifier = modifier.testTag(GamePrepBoardTag),
@@ -92,7 +92,7 @@ fun GamePrepBoard(
         onClick = onClick,
         selectedBoat = selectedBoat,
         cellFillColor = { line: Int, column: Int -> CellColor.valueOf(boardCellList[line][column].prepCellValue).color },
-       // enabled = enabled
+        enabled = enabled
     )
 }
 
@@ -102,7 +102,6 @@ fun MyGameBoard(
     boarderColor: Color = Color.Black,
     onClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit,
     boardCellList: List<List<Cell>>,
-    //enabled: Boolean
 ) {
     BoardView(
         modifier = modifier.testTag(MyGameBoard),
@@ -113,7 +112,6 @@ fun MyGameBoard(
             else " "
         },
         cellFillColor = { line: Int, column: Int -> CellColor.valueOf(boardCellList[line][column].prepCellValue).color },
-       // enabled = enabled
     )
 }
 
@@ -123,14 +121,14 @@ fun OpponentGameBoard(
     boarderColor: Color = Color.Black,
     onClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit,
     boardCellList: List<List<Cell>>,
-   // enabled: Boolean
+    enabled: Boolean
 ) {
     BoardView(
         modifier = modifier.testTag(OpponentGameBoard),
         boarderColor = boarderColor,
         onClick = onClick,
         cellFillColor = { line: Int, column: Int -> GameCellColor.valueOf(boardCellList[line][column].gameCellValue).color },
-       // enabled = enabled
+        enabled = enabled
     )
 }
 
@@ -138,5 +136,5 @@ fun OpponentGameBoard(
 @Preview
 @Composable
 fun GamePrepBoardPreview() {
-    GamePrepBoard(onClick = { _, _, _ -> })
+    GamePrepBoard(onClick = { _, _, _ -> }, enabled = true)
 }

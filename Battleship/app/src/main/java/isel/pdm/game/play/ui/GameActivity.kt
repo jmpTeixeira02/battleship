@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.activity.compose.setContent
@@ -61,10 +62,6 @@ class GameActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val localBoard: Board = intent.getParcelableExtra(MY_BOARD)!!
-        val opponentBoard: Board = intent.getParcelableExtra(OPPONENT_BOARD)!!
-
         setContent {
             val currentGame by viewModel.onGoingGame.collectAsState()
             val title = when (viewModel.state) {
@@ -72,7 +69,7 @@ class GameActivity : ComponentActivity() {
                 MatchState.IDLE -> "Joining match"
                 else -> null
             }
-
+            Log.v("MATCH_INFO", "local id -> " + matchInfo.localPlayerId + "\n opponent id -> " + matchInfo.opponentId)
             GameScreen(
                 players = listOf(
                     matchInfo.localPlayerNick,
@@ -81,21 +78,20 @@ class GameActivity : ComponentActivity() {
                 state = GameScreenState(title, currentGame),
                 boardCellHandler = BoardCellHandler(
                     onLocalPlayerShotTaken = { line: Int, column: Int, _ ->
-                        viewModel.opponentGameBoardClickHandler(line, column)
+                        viewModel.opponentGameBoardClickHandler(line, column, localPlayer, challenge)
                     },
-                    onOpponentPlayerShotTaken = { line: Int, column: Int, _ ->
-                        viewModel.localGameBoardClickHandler(line, column)
-                    },
+                    /*onOpponentPlayerShotTaken = { line: Int, column: Int, _ ->
+                        viewModel.localGameBoardClickHandler(line, column, challenge)
+                    },*/
                     localBoardCellList = viewModel.myCells,
                     opponentBoardCellList = viewModel.opponentCells,
                 ),
-                //turn = viewModel.isTurn,
                 winner = viewModel.winnerFound
             )
         }
 
         if (viewModel.state == MatchState.IDLE)
-            viewModel.startMatch(localPlayer, challenge, localBoard.toGameBoard())
+            viewModel.startMatch(localPlayer, challenge)
 
         onBackPressedDispatcher.addCallback(owner = this, enabled = true) {
             viewModel.forfeit()

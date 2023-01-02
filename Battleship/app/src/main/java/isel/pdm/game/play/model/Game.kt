@@ -17,7 +17,7 @@ data class Game(
     val localPlayerMarker: Marker = Marker.firstToMove,
     val forfeitedBy: Marker? = null,
     val localBoard: GameBoard = GameBoard(),
-    val opponentBoard: GameBoard = GameBoard()
+    val opponentBoard: GameBoard = GameBoard(turn = Marker.OPPONENT),
 )
 
 /**
@@ -27,23 +27,9 @@ data class Game(
  * @throws IllegalStateException if its an invalid move, either because its
  * not the local player's turn or the move cannot be made on that location
  */
-fun Game.takeLocalBoardShot(at: Coordinate): Game {
-    check(Marker.OPPONENT == opponentBoard.turn)
-    return copy(localBoard = localBoard.takeShot(at))
+fun Game.shootOpponentBoard(at: Coordinate, opponentGameBoard: GameBoard): Game {
+    return copy(opponentBoard = opponentGameBoard.takeShot(at))
 }
-
-/**
- * Makes a move on this [Game], returning a new instance.
- * @param at the coordinates where the move is to be made
- * @return the new [Game] instance
- * @throws IllegalStateException if its an invalid move, either because its
- * not the local player's turn or the move cannot be made on that location
- */
-fun Game.takeOpponentBoardShot(at: Coordinate): Game {
-    check(Marker.LOCAL == localBoard.turn)
-    return copy(opponentBoard = opponentBoard.takeShot(at))
-}
-
 
 /**
  * Gets which marker is to be assigned to the local player for the given challenge.
@@ -58,5 +44,4 @@ fun getLocalPlayerMarker(localPlayer: PlayerInfo, challenge: Challenge) =
 fun Game.getResult() =
     if (forfeitedBy != null) HasWinner(forfeitedBy.other)
     else localBoard.getResult()
-    /* LOCAL BOARD AQUI É SUS*/
 

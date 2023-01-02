@@ -31,22 +31,22 @@ interface Match {
      * @return the flow of game state change events, expressed as [GameEvent] instances
      * @throws IllegalStateException if a game is in progress
      */
-    fun start(localPlayer: PlayerInfo, challenge: Challenge, gameBoard: GameBoard): Flow<GameEvent>
+    fun start(localPlayer: PlayerInfo, challenge: Challenge, localGameBoard: GameBoard/*, opponentGameBoard: GameBoard*/): Flow<GameEvent>
 
-
+/*
     /**
      * Takes a shot at the given coordinates.
      * @throws IllegalStateException if a game is not in progress or the shot is illegal,
      * either because it's not the opponent player turn or the cell has already been shot.
      */
-    suspend fun takeLocalBoardShot(at: Coordinate)
+    suspend fun takeLocalBoardShot(at: Coordinate, challenge: Challenge)*/
 
     /**
      * Takes a shot at the given coordinates.
      * @throws IllegalStateException if a game is not in progress or the move is illegal,
      * either because it's not the local player turn or or the cell has already been shot
      */
-    suspend fun takeOpponentBoardShot(at: Coordinate)
+    suspend fun opponentBoardShot(at: Coordinate, localPlayer: PlayerInfo, challenge: Challenge)
 
 
     /**

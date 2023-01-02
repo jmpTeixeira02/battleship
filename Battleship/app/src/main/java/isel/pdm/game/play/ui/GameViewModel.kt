@@ -1,5 +1,6 @@
 package isel.pdm.game.play.ui
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,13 +11,11 @@ import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.play.model.*
 import isel.pdm.game.prep.model.BOARD_SIDE
 import isel.pdm.game.prep.model.BiStateGameCellShot
-import isel.pdm.game.prep.model.Cell
 import isel.pdm.game.prep.model.Coordinate
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 /**
  * Represents the current match state
@@ -36,11 +35,11 @@ class GameViewModel(private val match: Match, myBoard: GameBoard, opponentBoard:
     val state: MatchState
         get() = _state
 
-    fun startMatch(localPlayer: PlayerInfo, challenge: Challenge, gameBoard: GameBoard): Job? =
+    fun startMatch(localPlayer: PlayerInfo, challenge: Challenge): Job? =
         if (state == MatchState.IDLE) {
             _state = MatchState.STARTING
             viewModelScope.launch {
-                match.start(localPlayer, challenge, gameBoard).collect {
+                match.start(localPlayer, challenge, _myBoard).collect {
                     _onGoingGame.value = it.game
                     _state = when (it) {
                         is GameStarted -> MatchState.STARTED
@@ -72,27 +71,20 @@ class GameViewModel(private val match: Match, myBoard: GameBoard, opponentBoard:
     private val _opponentCells = _opponentBoard.cells
     val opponentCells = _opponentCells
 
+
     private var _winnerFound by mutableStateOf(false)
     val winnerFound: Boolean
         get() = _winnerFound
 
 
-    fun opponentGameBoardClickHandler(line: Int, column: Int): Job? =
+    fun opponentGameBoardClickHandler(line: Int, column: Int, localPlayer: PlayerInfo, challenge: Challenge): Job? =
         if (state == MatchState.STARTED) {
             viewModelScope.launch {
-                match.takeOpponentBoardShot(Coordinate(line,column))
+                match.opponentBoardShot(Coordinate(line,column), localPlayer, challenge)
             }
         }
         else null
 
-
-    fun localGameBoardClickHandler(line: Int, column: Int): Job? =
-        if (state == MatchState.STARTED) {
-            viewModelScope.launch {
-                match.takeLocalBoardShot(Coordinate(line,column))
-            }
-        }
-        else null
 
     private fun checkIfWinnerExists(board: GameBoard): Boolean {
         repeat(BOARD_SIDE) { line ->

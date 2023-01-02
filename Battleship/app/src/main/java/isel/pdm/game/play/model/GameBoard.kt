@@ -4,6 +4,8 @@ import android.os.Parcelable
 import android.util.Log
 import androidx.compose.runtime.toMutableStateList
 import isel.pdm.game.prep.model.*
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 
@@ -23,25 +25,6 @@ data class GameBoard(
 ) : Parcelable {
 
 
-    fun shoot(coordinate: Coordinate): Boolean {
-        try {
-            val shotCoordinates = cells[coordinate.line][coordinate.column]
-
-            return if (shotCoordinates.ship != null) {
-                cells[coordinate.line][coordinate.column] =
-                    Cell(state = BiStateGameCellShot.HasBeenShot, ship = shotCoordinates.ship)
-                true
-            } else {
-                cells[coordinate.line][coordinate.column] =
-                    Cell(state = BiStateGameCellShot.HasBeenShot, ship = null)
-                false
-            }
-        } catch (e: Exception) {
-            throw e
-        }
-    }
-
-
     /**
      * Makes a move at the given coordinates and returns the new board instance.
      * @param at    the board's coordinate
@@ -49,7 +32,7 @@ data class GameBoard(
      * @return the new board instance
      */
     fun takeShot(at: Coordinate): GameBoard {
-        check(this.cells[at.line][at.column].state != BiStateGameCellShot.HasBeenShot)
+        if(this.cells[at.line][at.column].state == BiStateGameCellShot.HasBeenShot) return this
         val newGameBoardCells = this.cells
         val shotCoordinate = newGameBoardCells[at.line][at.column]
 
@@ -76,6 +59,7 @@ data class GameBoard(
             })
         )
     }
+
 
     /**
      * Converts this instance to a list of moves.

@@ -102,7 +102,8 @@ private fun BuildBoatSelect(
             modifier = modifier.width(maxBoatCellSize*size),
             onClick = {
                 onClick(boatSelected)
-            }
+            },
+            enabled = true
         )
     }
 
