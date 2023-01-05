@@ -1,6 +1,5 @@
 package isel.pdm.game.play.ui
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,8 +8,6 @@ import androidx.lifecycle.viewModelScope
 import isel.pdm.game.lobby.model.Challenge
 import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.play.model.*
-import isel.pdm.game.prep.model.BOARD_SIDE
-import isel.pdm.game.prep.model.BiStateGameCellShot
 import isel.pdm.game.prep.model.Coordinate
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +22,7 @@ enum class MatchState { IDLE, STARTING, STARTED, FINISHED }
 /**
  * View model for the Game Screen hosted by [GameActivity].
  */
-class GameViewModel(private val match: Match, myBoard: GameBoard, opponentBoard: GameBoard) : ViewModel() {
+class GameViewModel(private val match: Match, myBoard: GameBoard) : ViewModel() {
 
 
     private val _onGoingGame = MutableStateFlow(Game())
@@ -63,19 +60,6 @@ class GameViewModel(private val match: Match, myBoard: GameBoard, opponentBoard:
 
 
     private val _myBoard = myBoard
-    private val _myCells = _myBoard.cells
-    val myCells = _myCells
-
-
-    private val _opponentBoard = opponentBoard
-    private val _opponentCells = _opponentBoard.cells
-    val opponentCells = _opponentCells
-
-
-    private var _winnerFound by mutableStateOf(false)
-    val winnerFound: Boolean
-        get() = _winnerFound
-
 
     fun opponentGameBoardClickHandler(line: Int, column: Int, localPlayer: PlayerInfo, challenge: Challenge): Job? =
         if (state == MatchState.STARTED) {
@@ -85,14 +69,5 @@ class GameViewModel(private val match: Match, myBoard: GameBoard, opponentBoard:
         }
         else null
 
-
-    private fun checkIfWinnerExists(board: GameBoard): Boolean {
-        repeat(BOARD_SIDE) { line ->
-            repeat(BOARD_SIDE) { column ->
-                if (board.cells[line][column].state == BiStateGameCellShot.HasNotBeenShot && board.cells[line][column].ship != null) return false
-            }
-        }
-        return true
-    }
 
 }

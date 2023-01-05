@@ -1,7 +1,6 @@
 package isel.pdm.game.lobby.ui
 
 import android.util.Log
-import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import isel.pdm.game.lobby.model.*

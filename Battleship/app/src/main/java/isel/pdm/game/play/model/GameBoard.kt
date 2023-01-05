@@ -1,11 +1,11 @@
 package isel.pdm.game.play.model
 
 import android.os.Parcelable
-import android.util.Log
 import androidx.compose.runtime.toMutableStateList
-import isel.pdm.game.prep.model.*
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import isel.pdm.game.prep.model.BOARD_SIDE
+import isel.pdm.game.prep.model.BiStateGameCellShot
+import isel.pdm.game.prep.model.Cell
+import isel.pdm.game.prep.model.Coordinate
 import kotlinx.parcelize.Parcelize
 
 
@@ -50,14 +50,21 @@ data class GameBoard(
 
 
     companion object {
-        fun fromMovesList(turn: Marker, moves: List<Cell>) = GameBoard(
-            turn = turn,
-            cells = MutableList(size = BOARD_SIDE, init = { row ->
-                MutableList(size = BOARD_SIDE, init = { col ->
-                    moves[row * BOARD_SIDE + col]
+        fun fromMovesList(turn: Marker, moves: List<Cell>) = if(moves.isNotEmpty()){
+            GameBoard(
+                turn = turn,
+                cells = MutableList(size = BOARD_SIDE, init = { row ->
+                    MutableList(size = BOARD_SIDE, init = { col ->
+                        moves[row * BOARD_SIDE + col]
+                    })
                 })
-            })
-        )
+            )
+        }
+        else {
+            GameBoard(
+                turn = turn
+            )
+        }
     }
 
 

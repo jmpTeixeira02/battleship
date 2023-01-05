@@ -5,20 +5,17 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
-import isel.pdm.preferences.ui.CreatePlayerActivity
 import isel.pdm.preferences.PlayerRepository
+import isel.pdm.preferences.ui.CreatePlayerActivity
+import isel.pdm.preferences.ui.UsernameInputTag
 import isel.pdm.testutils.PreserveDefaultDependencies
 import isel.pdm.testutils.assertIsNotReadOnly
 import isel.pdm.testutils.createPreserveDefaultDependenciesComposeRule
+import isel.pdm.ui.buttons.SaveButtonTag
 import isel.pdm.ui.topbar.NavigateBackTestTag
 import isel.pdm.ui.topbar.NavigateToAboutTestTag
 import isel.pdm.ui.topbar.NavigateToEditUserTestTag
 import isel.pdm.ui.topbar.NavigateToReplayTestTag
-import isel.pdm.ui.buttons.SaveButtonTag
-import isel.pdm.preferences.ui.CreatePlayerScreenTag
-import isel.pdm.game.lobby.ui.LobbyScreenTag
-import isel.pdm.preferences.ui.UsernameInputTag
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -113,22 +110,5 @@ class CreatePlayerActivityEditModeTests {
             testRule.onNodeWithTag(UsernameInputTag).assertIsNotReadOnly()
         }
     }
-
-    /*@Test
-    fun pressing_save_button_stores_info_and_navigates_to_home_screen() {
-
-        application.playerRepo = mockRepo
-
-        ActivityScenario.launch(CreatePlayerActivity::class.java).use {
-            testRule.onNodeWithTag(UsernameInputTag).performTextInput("newUser")
-            testRule.onNodeWithTag(SaveButtonTag).performClick()
-            testRule.waitForIdle()
-
-            // Assert
-            verify { mockRepo.playerInfo }
-            testRule.onNodeWithTag(CreatePlayerScreenTag).assertDoesNotExist()
-            testRule.onNodeWithTag(LobbyScreenTag).assertExists()
-        }
-    }*/
 
 }

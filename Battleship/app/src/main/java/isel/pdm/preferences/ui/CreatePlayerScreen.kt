@@ -26,10 +26,6 @@ import isel.pdm.ui.theme.BattleshipTheme
 import isel.pdm.ui.topbar.NavigationHandlers
 import isel.pdm.ui.topbar.NavigationTopBar
 
-/*data class PlayerHandler(
-    val onCreatePlayer: (PlayerMatchmaking) -> Unit = { },
-)*/
-
 const val CreatePlayerScreenTag = "CreatePlayerScreen"
 const val UsernameInputTag = "UsernameInput"
 
@@ -79,13 +75,12 @@ fun CreatePlayerScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
 
             ) {
-                //var textState by rememberSaveable { mutableStateOf("") }
                 TextField(
                     singleLine = true,
                     value = displayedUsername,
                     onValueChange = { if (it.length <= 15) displayedUsername = it.trim() },
                     label = {
-                        Text("Your username")
+                        Text(stringResource(id = R.string.player_creating_username_label))
                     },
                     readOnly = !editing,
                     modifier = Modifier

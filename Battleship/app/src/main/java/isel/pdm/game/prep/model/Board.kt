@@ -1,11 +1,8 @@
 package isel.pdm.game.prep.model
 
 import android.os.Parcelable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
-import isel.pdm.game.play.model.Game
 import isel.pdm.game.play.model.GameBoard
-import isel.pdm.game.play.model.Marker
 import isel.pdm.utils.CellIsAlreadyOccupiedException
 import isel.pdm.utils.InvalidOrientationException
 import kotlinx.parcelize.Parcelize

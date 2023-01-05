@@ -12,13 +12,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import isel.pdm.game.play.model.GameBoard
 import isel.pdm.game.play.ui.OPPONENT_GAME_BOARD_SIZE
 import isel.pdm.game.play.ui.PREVIEW_MY_GAME_BOARD_SIZE
 import isel.pdm.game.prep.model.BOARD_SIDE
 import isel.pdm.game.prep.model.Cell
 import isel.pdm.replay.selector.model.Replay
-import isel.pdm.replay.selector.model.GameInfo
 import isel.pdm.ui.MyGameBoard
 import isel.pdm.ui.OpponentGameBoard
 import isel.pdm.ui.topbar.NavigationHandlers
@@ -27,7 +25,7 @@ import isel.pdm.ui.theme.BattleshipTheme
 
 const val ForwardMoveButton = "ForwardMoveButtonTag"
 const val BackwardMoveButton = "BackwardMoveButtonTag"
-const val MoveCouter = "MoveCouterTag"
+const val MoveCounter = "MoveCounterTag"
 
 
 @Composable
@@ -36,7 +34,7 @@ fun ReplayGameScreen(
     replay: Replay,
     myReplayCells: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell() } },
     opponentReplayCells: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell() } },
-    onFowardMove: () -> Unit = {},
+    onForwardMove: () -> Unit = {},
     onBackwardMove: () -> Unit = {},
     moveNumber: Int = 0
 ) {
@@ -65,7 +63,6 @@ fun ReplayGameScreen(
                         .height(PREVIEW_MY_GAME_BOARD_SIZE),
                     onClick = {_, _, _, ->},
                     boardCellList = myReplayCells,
-                    //enabled = false
                 )
 
                 Spacer(modifier = Modifier.height(80.dp))
@@ -82,7 +79,7 @@ fun ReplayGameScreen(
                 Spacer(modifier = Modifier.height(20.dp))
                 
                 Text(
-                    modifier = Modifier.testTag(MoveCouter),
+                    modifier = Modifier.testTag(MoveCounter),
                     text = "Move $moveNumber",
                     fontSize = 24.sp
                 )
@@ -102,7 +99,7 @@ fun ReplayGameScreen(
                     }
                     Button(
                         modifier = Modifier.testTag(ForwardMoveButton),
-                        onClick = onFowardMove
+                        onClick = onForwardMove
                     ) {
                         Text(text = ">")
                     }

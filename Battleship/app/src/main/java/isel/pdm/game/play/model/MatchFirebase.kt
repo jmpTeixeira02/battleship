@@ -1,9 +1,9 @@
 package isel.pdm.game.play.model
 
-import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.SetOptions
 import isel.pdm.game.lobby.model.Challenge
 import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.prep.model.*
@@ -32,13 +32,14 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
                         snapshot.toMatchStateOrNull()?.let {
                             val game = Game(
                                 localPlayerMarker = localPlayerMarker,
-                                forfeitedBy = it.second,
-                                /* SUS ? */localBoard = it.first
+                                forfeitedBy = it.third,
+                                challengerBoard = it.first,
+                                challengedBoard = it.second
                             )
                             val gameEvent = when {
                                 onGoingGame == null -> GameStarted(game)
-                                game.forfeitedBy != null -> GameEnded(game, game.forfeitedBy.other)
-                                else -> MoveMade(game)
+                                game.forfeitedBy != null -> GameEnded(game)
+                                else -> ShotTaken(game)
                             }
                             onGoingGame = Pair(game, gameId)
                             flow.trySend(gameEvent)
@@ -48,49 +49,31 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
             }
 
 
-    private suspend fun publishLocalGame(game: Game, gameId: String) {
+    private suspend fun publishLocalGame(player: String, gameId: String, board: GameBoard) {
         db.collection(ONGOING)
             .document(gameId)
-            .set(game.localBoard.toDocumentContent())
+            .set(board.toDocumentContent(player), SetOptions.merge())
             .await()
     }
 
 
-    private suspend fun getFireStoreBoard(gameId: String): String {
+    private suspend fun getFireStoreBoard(gameId: String, boardField: String): List<Cell> {
         val docRef = db.collection(ONGOING).document(gameId)
-        var ret = ""
 
-         docRef.get().addOnSuccessListener { document ->
-           ret = document.getBoardAsString()!!
-        }.await()
+        val getDocRef = docRef.get().await()
 
-        return ret
-    }
+        val str = getDocRef.get(boardField) as String
+        return str.toMovesList()
 
-    private fun DocumentSnapshot.getBoardAsString() : String? {
-        val docData = data
-        if(docData != null) {
-            return docData["board"] as String
-        }
-        return null
     }
 
 
-
-    private suspend fun updateOpponentGame(game: Game, gameId: String) {
+    private suspend fun updateOpponentGame(game: Game, gameId: String, boardField: String) {
         db.collection(ONGOING)
             .document(gameId)
-            .update(game.opponentBoard.toDocumentContent())
+            .update(game.challengedBoard.toDocumentContent(boardField))
             .await()
     }
-
-    private suspend fun updateLocalGame(game: Game, gameId: String) {
-        db.collection(ONGOING)
-            .document(gameId)
-            .update(game.localBoard.toDocumentContent())
-            .await()
-    }
-
 
     override fun start(
         localPlayer: PlayerInfo,
@@ -102,22 +85,29 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
         return callbackFlow {
             val newGame = Game(
                 localPlayerMarker = getLocalPlayerMarker(localPlayer, challenge),
-                localBoard = GameBoard(cells = localGameBoard.cells),
+                challengerBoard = GameBoard(cells = localGameBoard.cells),
             )
-            
-            val challengerGameId = challenge.challenger.id.toString()
-            val challengedGameId = challenge.challenged.id.toString()
+            val gameId = challenge.challenger.id.toString()
+
             var gameSubscription: ListenerRegistration? = null
             try {
                 if (localPlayer == challenge.challenger) {
-                    publishLocalGame(newGame, challengerGameId)
-                } else publishLocalGame(newGame, challengedGameId)
+                    publishLocalGame(CHALLENGER_BOARD_FIELD, gameId, localGameBoard)
+                    gameSubscription = subscribeGameStateUpdated(
+                        localPlayerMarker = newGame.localPlayerMarker,
+                        gameId = gameId,
+                        flow = this
+                    )
 
-                gameSubscription = subscribeGameStateUpdated(
-                    localPlayerMarker = newGame.localPlayerMarker,
-                    gameId = challengerGameId,
-                    flow = this
-                )
+                } else {
+                    publishLocalGame(CHALLENGED_BOARD_FIELD, gameId, localGameBoard)
+                    gameSubscription = subscribeGameStateUpdated(
+                        localPlayerMarker = newGame.localPlayerMarker,
+                        gameId = gameId,
+                        flow = this
+                    )
+                }
+
             } catch (e: Throwable) {
                 close(e)
             }
@@ -138,23 +128,17 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
 
             if (it.first.localPlayerMarker == Marker.LOCAL) {
 
-                val stringBoard = getFireStoreBoard(challenge.challenged.id.toString())
+                val stringBoardMoves = getFireStoreBoard(challenge.challenger.id.toString(), CHALLENGED_BOARD_FIELD)
+                val challengedGameBoard = GameBoard.fromMovesList(it.first.challengerBoard.turn, stringBoardMoves)
 
-                val moves = stringBoard.toMovesList()
-
-                val challengedGameBoard = GameBoard.fromMovesList(it.first.localBoard.turn, moves)
                 val game = it.copy(first = it.first.shootOpponentBoard(at, challengedGameBoard))
-                updateOpponentGame(game.first,  challenge.challenged.id.toString())
-                game.first.localBoard.turn = Marker.OPPONENT
-                updateLocalGame(game.first, challenge.challenger.id.toString())
+                updateOpponentGame(game.first,  challenge.challenger.id.toString(), CHALLENGED_BOARD_FIELD)
             } else {
-                val stringBoard = getFireStoreBoard(challenge.challenger.id.toString())
+                val stringBoardMoves = getFireStoreBoard(challenge.challenger.id.toString(), CHALLENGER_BOARD_FIELD)
+                val challengerGameBoard = GameBoard.fromMovesList(it.first.challengerBoard.turn, stringBoardMoves)
 
-                val moves = stringBoard.toMovesList()
-
-                val challengerGameBoard = GameBoard.fromMovesList(it.first.localBoard.turn, moves)
                 val game = it.copy(first = it.first.shootOpponentBoard(at, challengerGameBoard))
-                updateOpponentGame(game.first, challenge.challenger.id.toString())
+                updateOpponentGame(game.first, challenge.challenger.id.toString(), CHALLENGER_BOARD_FIELD)
             }
         }
     }
@@ -184,7 +168,8 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
  */
 const val ONGOING = "ongoing"
 const val TURN_FIELD = "turn"
-const val BOARD_FIELD = "board"
+const val CHALLENGER_BOARD_FIELD = "challenger_board"
+const val CHALLENGED_BOARD_FIELD = "challenged_board"
 const val FORFEIT_FIELD = "forfeit"
 
 
@@ -192,9 +177,9 @@ const val FORFEIT_FIELD = "forfeit"
  * [GameBoard] extension function used to convert an instance to a map of key-value
  * pairs containing the object's properties
  */
-fun GameBoard.toDocumentContent() = mapOf(
+fun GameBoard.toDocumentContent(boardField: String) = mapOf(
     TURN_FIELD to turn.name,
-    BOARD_FIELD to toMovesList().joinToString(separator = "") {
+    boardField to toMovesList().joinToString(separator = "") {
         when (it) {
             Cell(BiStateGameCellShot.HasNotBeenShot, Ship(TypeOfShip.BattleShip)) -> "B"
             Cell(BiStateGameCellShot.HasNotBeenShot, Ship(TypeOfShip.Carrier)) -> "CA"
@@ -217,14 +202,25 @@ fun GameBoard.toDocumentContent() = mapOf(
  * Extension function to convert documents stored in the Firestore DB
  * into the corresponding match state.
  */
-fun DocumentSnapshot.toMatchStateOrNull(): Pair<GameBoard, Marker?>? =
+fun DocumentSnapshot.toMatchStateOrNull(): Triple<GameBoard, GameBoard, Marker?>? =
     data?.let {
-        val moves = it[BOARD_FIELD] as String
+        var movesChallenger = ""
+
+        if( it[CHALLENGER_BOARD_FIELD] != null) {
+            movesChallenger =  it[CHALLENGER_BOARD_FIELD] as String
+        }
+
+        var movesChallenged = ""
+        if( it[CHALLENGED_BOARD_FIELD] != null) {
+            movesChallenged =  it[CHALLENGED_BOARD_FIELD] as String
+        }
+
         val turn = Marker.valueOf(it[TURN_FIELD] as String)
         val forfeit = it[FORFEIT_FIELD] as String?
-        Pair(
-            first = GameBoard.fromMovesList(turn, moves.toMovesList()),
-            second = if (forfeit != null) Marker.valueOf(forfeit) else null
+        Triple(
+            first = GameBoard.fromMovesList(turn, movesChallenger.toMovesList()),
+            second = GameBoard.fromMovesList(turn, movesChallenged.toMovesList()),
+            third = if (forfeit != null) Marker.valueOf(forfeit) else null,
         )
     }
 

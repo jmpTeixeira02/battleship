@@ -5,23 +5,20 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import isel.pdm.game.lobby.model.Challenge
 import isel.pdm.game.lobby.model.PlayerInfo
-import isel.pdm.game.play.model.FakeOpponent
 import isel.pdm.game.play.ui.GameActivity
-import isel.pdm.game.prep.model.Board
 import isel.pdm.game.prep.model.Ship
 import isel.pdm.game.prep.model.TypeOfShip
 import isel.pdm.main.MainActivity
 import isel.pdm.ui.buttons.BiState
 import isel.pdm.utils.viewModelInit
 import kotlinx.parcelize.Parcelize
-import java.util.UUID
+import java.util.*
 
 class GamePrepActivity : ComponentActivity() {
 
@@ -91,7 +88,7 @@ class GamePrepActivity : ComponentActivity() {
 
 
     private fun checkBoardPrepState() {
-        if (viewModel.allShipsPlaced()) { /* time's up e barcos postos totalmente*/
+        if (viewModel.allShipsPlaced()) { // time's up e barcos postos totalmente
 
             val prepBoard = viewModel.getBoard()
 
@@ -100,9 +97,8 @@ class GamePrepActivity : ComponentActivity() {
                 localPlayer = localPlayer,
                 challenge = challenge ,
                 prepBoard,
-                prepBoard
             )
-        } else { /* time's up e barcos não postos totalmente */
+        } else { // time's up e barcos não postos totalmente
             MainActivity.navigate(this)
         }
     }

@@ -18,6 +18,9 @@ import androidx.compose.ui.unit.dp
 import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.ui.theme.BattleshipTheme
 
+const val PlayerViewTag = "PlayerView"
+
+
 @Composable
 fun PlayerView(
     player: PlayerInfo,
@@ -25,7 +28,7 @@ fun PlayerView(
 ) {
     Card(
         modifier = Modifier
-            .testTag("PlayerView")
+            .testTag(PlayerViewTag)
             .fillMaxWidth()
             .clickable{onPlayerSelected(player)}
             .padding(4.dp),

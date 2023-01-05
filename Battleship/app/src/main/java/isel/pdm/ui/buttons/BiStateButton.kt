@@ -89,7 +89,7 @@ fun RemoveBoatButton(
         modifier = modifier.testTag("RemoveButtonTag"),
         toggle = true,
         biStateButtonStrings = BiStateButtonStrings(
-            hasNotBeenPressedStr= stringResource(id = R.string.boatDeleteButtonReady),
+            hasNotBeenPressedStr = stringResource(id = R.string.boatDeleteButtonReady),
             hasBeenPressedStrResStr = stringResource(id = R.string.boatDeleteButtonPending),
         )
     )
@@ -158,3 +158,4 @@ fun RemoveBoatButtonHasBeenPressed() {
         modifier = Modifier.padding(all = 16.dp)
     )
 }
+

@@ -9,13 +9,13 @@ import kotlinx.coroutines.flow.Flow
  * Sum type used to describe events occurring while the match is ongoing.
  *
  * [GameStarted] to signal that the game has started.
- * [MoveMade] to signal that the a move was made.
+ * [ShotTaken] to signal that the shot was taken.
  * [GameEnded] to signal the game termination.
  */
 sealed class GameEvent(val game: Game)
 class GameStarted(game: Game) : GameEvent(game)
-class MoveMade(game: Game) : GameEvent(game)
-class GameEnded(game: Game, val winner: Marker? = null) : GameEvent(game)
+class ShotTaken(game: Game) : GameEvent(game)
+class GameEnded(game: Game) : GameEvent(game)
 
 /**
  * Abstraction that characterizes a match between two players, that is, the
@@ -24,22 +24,14 @@ class GameEnded(game: Game, val winner: Marker? = null) : GameEvent(game)
 interface Match {
 
     /**
-     * Starts the match. The first to make a move is the challenger. The game
+     * Starts the match. The first to take the shot is the challenger. The game
      * is only actually in progress after its initial state is published on the flow.
      * @param [localPlayer] the local player information
      * @param [challenge] the challenge bearing the players' information
      * @return the flow of game state change events, expressed as [GameEvent] instances
      * @throws IllegalStateException if a game is in progress
      */
-    fun start(localPlayer: PlayerInfo, challenge: Challenge, localGameBoard: GameBoard/*, opponentGameBoard: GameBoard*/): Flow<GameEvent>
-
-/*
-    /**
-     * Takes a shot at the given coordinates.
-     * @throws IllegalStateException if a game is not in progress or the shot is illegal,
-     * either because it's not the opponent player turn or the cell has already been shot.
-     */
-    suspend fun takeLocalBoardShot(at: Coordinate, challenge: Challenge)*/
+    fun start(localPlayer: PlayerInfo, challenge: Challenge, localGameBoard: GameBoard): Flow<GameEvent>
 
     /**
      * Takes a shot at the given coordinates.

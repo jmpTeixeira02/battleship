@@ -13,7 +13,6 @@ data class Cell(
     var ship: Ship? = null
 ) : Parcelable {
 
-    /* VERIFICAR CONDIÇÕES */
     @IgnoredOnParcel
     var gameCellValue =
         if (state == BiStateGameCellShot.HasNotBeenShot && ship == null || state == BiStateGameCellShot.HasNotBeenShot && ship != null) "Water"

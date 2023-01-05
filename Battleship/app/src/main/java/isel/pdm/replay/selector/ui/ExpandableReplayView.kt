@@ -1,6 +1,5 @@
 package isel.pdm.replay.selector.ui
 
-import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
@@ -28,9 +27,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import isel.pdm.R
 import isel.pdm.replay.selector.model.Replay
-import isel.pdm.ui.buttons.ReplayButton
 
 
 data class ReplayHandler(

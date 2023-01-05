@@ -10,14 +10,15 @@ import isel.pdm.game.prep.model.Coordinate
  * Represents a Battleship game. Instances are immutable.
  * @property localPlayerMarker  The local player marker
  * @property forfeitedBy        The marker of the player who forfeited the game, if that was the case
- * @property localBoard         The local player game board
- * @property opponentBoard      The opponent player game board
+ * @property challengerBoard         The local player game board
+ * @property challengedBoard      The opponent player game board
  */
 data class Game(
     val localPlayerMarker: Marker = Marker.firstToMove,
     val forfeitedBy: Marker? = null,
-    val localBoard: GameBoard = GameBoard(),
-    val opponentBoard: GameBoard = GameBoard(turn = Marker.OPPONENT),
+    var wonBy: Marker? = null,
+    val challengerBoard: GameBoard = GameBoard(),
+    val challengedBoard: GameBoard = GameBoard(turn = Marker.OPPONENT),
 )
 
 /**
@@ -28,7 +29,7 @@ data class Game(
  * not the local player's turn or the move cannot be made on that location
  */
 fun Game.shootOpponentBoard(at: Coordinate, opponentGameBoard: GameBoard): Game {
-    return copy(opponentBoard = opponentGameBoard.takeShot(at))
+    return copy(challengedBoard = opponentGameBoard.takeShot(at))
 }
 
 /**
@@ -41,7 +42,23 @@ fun getLocalPlayerMarker(localPlayer: PlayerInfo, challenge: Challenge) =
 /**
  * Gets the game current result
  */
-fun Game.getResult() =
-    if (forfeitedBy != null) HasWinner(forfeitedBy.other)
-    else localBoard.getResult()
+fun Game.getResult(): BoardResult {
+    if (forfeitedBy != null) return HasWinner(forfeitedBy.other)
+    else {
+        if (localPlayerMarker == Marker.LOCAL) {
+            if(challengerBoard.getResult() is HasWinner) return HasWinner(Marker.OPPONENT)
+            else if(challengedBoard.getResult() is HasWinner) return HasWinner(localPlayerMarker)
+        } else {
+            if(challengedBoard.getResult() is HasWinner) return HasWinner(Marker.LOCAL)
+            else if(challengerBoard.getResult() is HasWinner) return HasWinner(localPlayerMarker)
+        }
+    }
+    return OnGoing()
+}
+
+
+
+
+
+
 

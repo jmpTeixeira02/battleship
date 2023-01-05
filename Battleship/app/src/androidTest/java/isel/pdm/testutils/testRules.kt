@@ -8,7 +8,6 @@ import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import isel.pdm.BattleshipTestApplication
-import isel.pdm.game.prep.ui.GamePrepViewModel
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement

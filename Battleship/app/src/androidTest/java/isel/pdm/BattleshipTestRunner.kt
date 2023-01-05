@@ -3,7 +3,6 @@ package isel.pdm
 import android.app.Application
 import android.content.Context
 import androidx.test.runner.AndroidJUnitRunner
-import androidx.test.runner.screenshot.Screenshot.capture
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore

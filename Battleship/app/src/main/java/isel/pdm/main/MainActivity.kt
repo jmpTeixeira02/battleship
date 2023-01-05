@@ -6,9 +6,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import isel.pdm.DependenciesContainer
-import isel.pdm.preferences.ui.CreatePlayerActivity
 import isel.pdm.game.lobby.ui.LobbyActivity
-import isel.pdm.info.AboutUsActivity
+import isel.pdm.preferences.ui.CreatePlayerActivity
 
 class MainActivity : ComponentActivity() {
     private val repo by lazy {

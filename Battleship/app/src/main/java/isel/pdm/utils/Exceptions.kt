@@ -1,5 +1,5 @@
 package isel.pdm.utils
 
-class InvalidOrientationException(val msg: String = ""): Exception(msg)
+class InvalidOrientationException(msg: String = ""): Exception(msg)
 
-class CellIsAlreadyOccupiedException(val msg: String = ""): Exception(msg)
+class CellIsAlreadyOccupiedException(msg: String = ""): Exception(msg)

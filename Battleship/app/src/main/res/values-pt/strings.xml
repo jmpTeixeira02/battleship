@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enabled_invite_button_text">"Convidar "</string>
+    <string name="disabled_invite_button_text">Convidado</string>
+    <string name="aboutUs_screenName">Sobre nós</string>
+    <string name="refreshButtonReady">Atualizar</string>
+    <string name="refreshButtonRefreshing">Atualizando…</string>
+    <string name="boatDeleteButtonReady">Apagar barco</string>
+    <string name="boatDeleteButtonPending">Selecionar barco a apagar…</string>
+    <string name="match_ended_dialog_text_won">Ganhaste!</string>
+    <string name="match_ended_dialog_text_lose">Perdeste.</string>
+    <string name="game_screen_your_turn">É a tua vez</string>
+    <string name="game_screen_opponent_turn">É a vez do oponente</string>
+    <string name="game_screen_waiting">Entrando no jogo</string>
+    <string name="game_screen_forfeit">Abandonar</string>
+    <string name="random_button">Aleatório</string>
+    <string name="main_screen_play_button">Jogar</string>
+    <string name="player_creating_username_label">O teu usuário</string>
+</resources>

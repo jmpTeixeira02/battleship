@@ -3,15 +3,12 @@ package isel.pdm.preferences.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import isel.pdm.DependenciesContainer
 import isel.pdm.game.lobby.ui.LobbyActivity
 import isel.pdm.info.AboutUsActivity
 import isel.pdm.ui.topbar.NavigationHandlers
-
-const val FINISH_ON_SAVE_EXTRA = "FinishOnSaveExtra"
 
 class CreatePlayerActivity : ComponentActivity() {
 
@@ -42,7 +39,7 @@ class CreatePlayerActivity : ComponentActivity() {
                 ),
                 onSaveRequested = {
                     repo.playerInfo = it
-                    LobbyActivity.navigate(this, player = it) //mudar nome da activity (player lobby)
+                    LobbyActivity.navigate(this, player = it)
                 },
             )
         }

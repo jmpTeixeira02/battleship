@@ -61,7 +61,7 @@ class ViewReplayActivityTests {
     @Test
     fun screen_has_all_navigation_options() {
         // Assert
-        testRule.onNodeWithTag(MoveCouter).assertExists()
+        testRule.onNodeWithTag(MoveCounter).assertExists()
         testRule.onNodeWithTag(ForwardMoveButton).assertExists()
         testRule.onNodeWithTag(BackwardMoveButton).assertExists()
         testRule.onNodeWithTag(MyGameBoard).assertExists()

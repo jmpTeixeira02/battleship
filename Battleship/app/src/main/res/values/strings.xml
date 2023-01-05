@@ -1,12 +1,32 @@
 <resources>
-    <string name="app_name">Battleship</string>
+    <string name="app_name" translatable="false">Battleship</string>
+
+    <string name="main_screen_play_button">Play</string>
+
+    <string name="player_creating_username_label">Your username</string>
+
+
     <string name="enabled_invite_button_text">Invite player</string>
     <string name="disabled_invite_button_text">Player invited</string>
-    <string name="activity_info_no_suitable_app">There is no suitable app for this operation!</string>
-    <string name="replay_screenName">Replays</string>
+
+    <string name="activity_info_no_suitable_app" translatable="false">There is no suitable app for this operation!</string>
+
+    <string name="replay_screenName" translatable="false">Replays</string>
+
     <string name="aboutUs_screenName">About US</string>
+
     <string name="refreshButtonReady">Refresh</string>
     <string name="refreshButtonRefreshing">Refreshing…</string>
+
+    <string name="random_button">Random</string>
     <string name="boatDeleteButtonReady">Delete Boat</string>
     <string name="boatDeleteButtonPending">Selecting a boat to delete…</string>
+
+    <string name="match_ended_dialog_text_won">You won!</string>
+    <string name="match_ended_dialog_text_lose">You lose.</string>
+    <string name="game_screen_your_turn">It\'s your turn</string>
+    <string name="game_screen_opponent_turn">Opponent\'s turn</string>
+    <string name="game_screen_waiting">Joining match</string>
+    <string name="game_screen_forfeit">Forfeit</string>
+
 </resources>

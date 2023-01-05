@@ -7,9 +7,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import isel.pdm.game.play.model.GameBoard
-import isel.pdm.game.play.ui.GameActivity
-import isel.pdm.game.play.ui.GameViewModel
 import isel.pdm.game.prep.model.*
 import isel.pdm.replay.selector.model.Replay
 import isel.pdm.ui.topbar.NavigationHandlers
@@ -44,7 +41,7 @@ class ReplayGameActivity : ComponentActivity() {
                 ),
                 replay = replayExtra!!,
                 moveNumber = viewModel.moveCounter,
-                onFowardMove = { viewModel.moveForward() },
+                onForwardMove = { viewModel.moveForward() },
                 onBackwardMove = { viewModel.moveBackward() },
                 myReplayCells = viewModel.myReplayCells,
                 opponentReplayCells = viewModel.opponentReplayCells

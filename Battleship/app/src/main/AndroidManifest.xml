@@ -56,7 +56,8 @@
 
         <activity
             android:name=".game.prep.ui.GamePrepActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:noHistory="true"/>
     </application>
 
 </manifest>

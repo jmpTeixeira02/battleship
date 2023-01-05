@@ -9,7 +9,6 @@ import isel.pdm.game.play.model.GameBoard
 import isel.pdm.game.prep.model.BiStateGameCellShot
 import isel.pdm.game.prep.model.Cell
 import isel.pdm.game.prep.model.Coordinate
-import isel.pdm.replay.selector.model.GameInfo
 import isel.pdm.replay.selector.model.Replay
 
 class ReplayGameViewModel(

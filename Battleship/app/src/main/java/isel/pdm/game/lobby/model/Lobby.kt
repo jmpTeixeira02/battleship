@@ -2,8 +2,6 @@ package isel.pdm.game.lobby.model
 
 import kotlinx.coroutines.flow.Flow
 
-private val TAG = "Matchmaking"
-
 
 /**
  * Sum type used to describe events occurring while the player is in the lobby.

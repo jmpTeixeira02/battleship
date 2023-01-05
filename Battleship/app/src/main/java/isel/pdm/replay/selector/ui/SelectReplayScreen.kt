@@ -13,11 +13,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.R
 import isel.pdm.replay.selector.model.Replay
-import isel.pdm.replay.selector.ui.ExpandableReplayView
-import isel.pdm.replay.selector.ui.ReplayHandler
+import isel.pdm.ui.theme.BattleshipTheme
 import isel.pdm.ui.topbar.NavigationHandlers
 import isel.pdm.ui.topbar.NavigationTopBar
-import isel.pdm.ui.theme.BattleshipTheme
+
+const val SelectReplayScreenTag = "SelectReplayScreen"
 
 @Composable
 fun SelectReplayScreen(
@@ -29,7 +29,7 @@ fun SelectReplayScreen(
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
-                .testTag("SelectReplayScreen"),
+                .testTag(SelectReplayScreenTag),
             backgroundColor = MaterialTheme.colors.background,
             topBar = {
                 NavigationTopBar(

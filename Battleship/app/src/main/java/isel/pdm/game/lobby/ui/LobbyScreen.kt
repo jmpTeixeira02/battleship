@@ -17,9 +17,6 @@ import isel.pdm.ui.theme.BattleshipTheme
 import isel.pdm.ui.topbar.NavigationHandlers
 import isel.pdm.ui.topbar.NavigationTopBar
 
-/*data class PlayersListScreen(
-    val players: List<PlayerView> = emptyList()
-)*/
 
 const val LobbyScreenTag = "HomeScreen"
 

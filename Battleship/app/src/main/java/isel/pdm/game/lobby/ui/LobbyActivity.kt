@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -14,10 +13,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import isel.pdm.DependenciesContainer
-import isel.pdm.info.AboutUsActivity
 import isel.pdm.game.lobby.model.PlayerInfo
-import isel.pdm.game.play.model.FakeOpponentService
 import isel.pdm.game.prep.ui.GamePrepActivity
+import isel.pdm.info.AboutUsActivity
 import isel.pdm.preferences.ui.CreatePlayerActivity
 import isel.pdm.replay.selector.ui.SelectReplayActivity
 import isel.pdm.ui.topbar.NavigationHandlers
@@ -28,7 +26,6 @@ class LobbyActivity : ComponentActivity() {
 
 
     companion object {
-        const val PLAYER_EXTRA = "PLAYER_EXTRA"
         const val LOCAL_PLAYER = "LOCAL_PLAYER"
         fun navigate(origin: Activity, player: PlayerInfo? = null) {
             with(origin) {
@@ -50,8 +47,6 @@ class LobbyActivity : ComponentActivity() {
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       /* val localPlayer: String = intent.getStringExtra(LOCAL_PLAYER)!!
-        val fakeOpponent = FakeOpponentService()*/
         setContent {
             val players by viewModel.players.collectAsState()
             LobbyScreen(
@@ -76,7 +71,6 @@ class LobbyActivity : ComponentActivity() {
                                 origin = this@LobbyActivity,
                                 localPlayer = it.localPlayer,
                                 challenge = it.challenge,
-                                //opponent = fakeOpponent.opponent
                             )
                         }
                     }
