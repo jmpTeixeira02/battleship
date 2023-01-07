@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import isel.pdm.game.play.model.BoardResult
@@ -22,12 +23,13 @@ import isel.pdm.ui.OpponentGameBoard
 import isel.pdm.ui.theme.BattleshipTheme
 import isel.pdm.ui.topbar.GameTopBar
 import isel.pdm.R
+import isel.pdm.game.play.model.Marker
 
 val PREVIEW_MY_GAME_BOARD_SIZE: Dp = 192.dp
 val OPPONENT_GAME_BOARD_SIZE: Dp = 312.dp
 
 internal const val ForfeitButtonTag = "ForfeitButton"
-
+internal const val FavoritesButtonTag = "FavoritesButton"
 
 data class GameScreenState(
     val game: Game,
@@ -43,6 +45,7 @@ fun GameScreen(
     state: GameScreenState,
     boardCellHandler: BoardCellHandler = BoardCellHandler(),
     onForfeitRequested: () -> Unit = { },
+    onAddToFavoritesRequested: () -> Unit = { },
     result: BoardResult
 ) {
 
@@ -79,6 +82,8 @@ fun GameScreen(
                         else
                             R.string.match_ended_dialog_text_lose
 
+
+
                     MatchState.STARTED -> if (state.game.localPlayerMarker ==
                         state.game.challengerBoard.turn
                     )
@@ -89,6 +94,29 @@ fun GameScreen(
 
                 }
 
+
+                if (state.matchState == MatchState.FINISHED) {
+                    Row(
+                        //modifier = Modifier.padding(bottom = 8.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.game_screen_add_to_favourites),
+                            style = MaterialTheme.typography.subtitle1,
+                            color = MaterialTheme.colors.primaryVariant,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                        Button(
+                            onClick = onAddToFavoritesRequested,
+                            modifier = Modifier.testTag(FavoritesButtonTag).size(width = 64.dp, height = 32.dp)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.game_screen_accept_additon_to_favourites),
+                            )
+                        }
+                    }
+
+                }
 
                 Text(
                     text = stringResource(id = titleTextId),
@@ -114,4 +142,14 @@ fun GameScreen(
         }
 
     }
+}
+
+@Preview
+@Composable
+fun GameFinishedLocalWinsScreenPreview() {
+    GameScreen(
+        players = listOf("AB", "CD"),
+        state = GameScreenState(Game(), MatchState.FINISHED),
+        result = HasWinner(Marker.LOCAL)
+    )
 }

@@ -82,6 +82,7 @@ class GameActivity : ComponentActivity() {
                     },
                 ),
                 onForfeitRequested = { viewModel.forfeit() },
+                onAddToFavoritesRequested = { viewModel.saveGame() },
                 result = currentGame.getResult()
             )
 

@@ -28,5 +28,6 @@
     <string name="game_screen_opponent_turn">Opponent\'s turn</string>
     <string name="game_screen_waiting">Joining match</string>
     <string name="game_screen_forfeit">Forfeit</string>
-
+    <string name="game_screen_add_to_favourites">Add to favorites?</string>
+    <string name="game_screen_accept_additon_to_favourites" translatable="false">OK</string>
 </resources>

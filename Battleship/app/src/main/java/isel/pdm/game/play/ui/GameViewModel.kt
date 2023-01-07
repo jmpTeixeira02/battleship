@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import isel.pdm.game.lobby.model.Challenge
 import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.play.model.*
+import isel.pdm.game.prep.model.Cell
 import isel.pdm.game.prep.model.Coordinate
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,5 +70,7 @@ class GameViewModel(private val match: Match, myBoard: GameBoard) : ViewModel() 
         }
         else null
 
+    fun saveGame() {
 
+    }
 }
