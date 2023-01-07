@@ -1,5 +1,7 @@
 package isel.pdm.replay.viewer.model
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import isel.pdm.replay.selector.model.Replay
 
 interface ReplayService {
@@ -10,10 +12,11 @@ class FakeReplayService : ReplayService {
 
     private val fakeReplays = mutableListOf<Replay>()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun fetchReplays(): List<Replay> {
         var i = 1
         while (i <= 5) {
-            fakeReplays.add(Replay("#0$i", "2$i/0$i/2022", "hehexd", 10))
+            fakeReplays.add(Replay(opponentName = "$i", shotsFired = 1))
             ++i
         }
         return fakeReplays

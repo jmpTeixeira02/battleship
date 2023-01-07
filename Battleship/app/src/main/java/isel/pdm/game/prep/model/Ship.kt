@@ -12,6 +12,7 @@ enum class TypeOfShip(val size: Int) {
 }
 
 @Parcelize
+@kotlinx.serialization.Serializable
 data class Ship(val type: TypeOfShip) : Parcelable {
     val size = type.size
     val name = type.name

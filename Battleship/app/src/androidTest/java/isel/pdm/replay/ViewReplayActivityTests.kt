@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import isel.pdm.game.play.model.GameBoard
 import isel.pdm.game.prep.model.*
-import isel.pdm.replay.selector.model.GameInfo
+import isel.pdm.replay.viewer.model.GameInfo
 import isel.pdm.replay.selector.model.Replay
 import isel.pdm.replay.viewer.ui.*
 import isel.pdm.replay.viewer.ui.ReplayGameActivity.Companion.REPLAY_EXTRA

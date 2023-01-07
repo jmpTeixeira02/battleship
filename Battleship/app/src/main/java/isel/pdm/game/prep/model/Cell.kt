@@ -8,6 +8,7 @@ import kotlinx.parcelize.Parcelize
 enum class BiStateGameCellShot { HasBeenShot, HasNotBeenShot }
 
 @Parcelize
+@kotlinx.serialization.Serializable
 data class Cell(
     var state: BiStateGameCellShot = BiStateGameCellShot.HasNotBeenShot,
     var ship: Ship? = null

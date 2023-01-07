@@ -4,6 +4,9 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.lifecycle.Lifecycle
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import isel.pdm.replay.selector.model.Replay
+import isel.pdm.replay.selector.model.ReplayManager
 import isel.pdm.replay.selector.ui.SelectReplayActivity
 import isel.pdm.testutils.assertNotEmpty
 import isel.pdm.testutils.isExpanded
@@ -92,5 +95,19 @@ class SelectReplayActivityTests {
         assert(testRule.activityRule.scenario.state == Lifecycle.State.DESTROYED)
     }
 
+    // THIS ONE SHOULD BE A UNIT TEST
+    @Test
+    fun selecting_replay_saves_and_reads_the_file() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
 
+        val rep = Replay(opponentName = "opponent", shotsFired = 1)
+
+        // Save Replay
+        ReplayManager.saveReplay(context, rep)
+
+        // Load Replay
+        val loadedReplay = ReplayManager.readReplay(context, rep.replayId)
+
+        assert(rep.replayId == loadedReplay.replayId)
+    }
 }

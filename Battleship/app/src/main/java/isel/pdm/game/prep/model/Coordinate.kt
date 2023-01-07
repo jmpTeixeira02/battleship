@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
  * Represents coordinates
  */
 @Parcelize
+@kotlinx.serialization.Serializable
 data class Coordinate(val line: Int, val column: Int) : Parcelable {
     init {
         require(isValidRow(line) && isValidColumn(column))

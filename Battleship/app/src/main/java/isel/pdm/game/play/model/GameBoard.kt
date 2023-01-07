@@ -15,6 +15,7 @@ import kotlinx.parcelize.Parcelize
  * @property cells  The board tiles
  */
 @Parcelize
+@kotlinx.serialization.Serializable
 data class GameBoard(
     var turn: Marker = Marker.firstToMove,
     var cells: MutableList<MutableList<Cell>> = MutableList(BOARD_SIDE) { _ ->

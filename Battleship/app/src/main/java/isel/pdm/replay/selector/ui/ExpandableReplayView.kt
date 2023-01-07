@@ -88,7 +88,8 @@ private fun StatelessExpandableReplayView(
                     )
                 )
                 Text(
-                    text = "Game ID: " + replay.replayId +
+                    text = "Game Name: " + replay.replayName +
+                            "\n\nGame Id: " + replay.replayId +
                             "\n\nOpponent name: " + replay.opponentName +
                             "\n\nShots fired: " + replay.shotsFired.toString(),
                     style = MaterialTheme.typography.subtitle2,
@@ -143,9 +144,7 @@ private fun ExpandableReplayViewPreview() {
     ExpandableReplayView(replay = randomReplay)
 }
 
+
 private val randomReplay = Replay(
-    replayId = "#XPTO123",
-    date = "14/10/2022",
-    opponentName = "ADV_3",
-    shotsFired = 29
+    opponentName = "opponent", shotsFired = 1
 )
