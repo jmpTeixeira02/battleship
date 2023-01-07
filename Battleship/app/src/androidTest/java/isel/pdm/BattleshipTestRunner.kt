@@ -62,7 +62,7 @@ class BattleshipTestApplication : DependenciesContainer, Application() {
         }
 
 
-    override var match: Match = TODO()
+    override var match: Match = mockk(relaxed = true) {}
 
     val emulatedFirestoreDb: FirebaseFirestore by lazy {
         Firebase.firestore.also {

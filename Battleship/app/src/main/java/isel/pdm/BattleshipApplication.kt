@@ -41,5 +41,5 @@ class BattleshipApplication : DependenciesContainer, Application() {
         get() = LobbyFirebase(realFireStoreDb)
 
     override val match: Match
-       get() = MatchFirebase(realFireStoreDb)
+        get() = MatchFirebase(realFireStoreDb)
 }
