@@ -13,8 +13,11 @@ import androidx.compose.runtime.getValue
 import isel.pdm.DependenciesContainer
 import isel.pdm.game.lobby.model.Challenge
 import isel.pdm.game.lobby.model.PlayerInfo
+import isel.pdm.game.play.model.GameBoard
 import isel.pdm.game.play.model.getResult
 import isel.pdm.game.prep.model.Board
+import isel.pdm.game.prep.model.Cell
+import isel.pdm.game.prep.model.Ship
 import isel.pdm.game.prep.ui.BoardCellHandler
 import isel.pdm.game.prep.ui.MatchInfo
 import isel.pdm.utils.viewModelInit
@@ -56,10 +59,22 @@ class GameActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var myBoard: List<List<Cell>>
+        var opponentBoard: List<List<Cell>>
+
+
         setContent {
             val currentGame by viewModel.onGoingGame.collectAsState()
             val currentState = viewModel.state
 
+            if(challenge.challenger.id.toString() == localPlayer.id.toString()){
+                myBoard = currentGame.challengerBoard.cells
+                opponentBoard = currentGame.challengedBoard.cells
+            }
+            else{
+                opponentBoard = currentGame.challengerBoard.cells
+                myBoard = currentGame.challengedBoard.cells
+            }
             GameScreen(
                 players = listOf(
                     matchInfo.localPlayerNick,
@@ -67,20 +82,14 @@ class GameActivity : ComponentActivity() {
                 ),
                 state = GameScreenState(currentGame, currentState),
                 boardCellHandler = BoardCellHandler(
-                    onLocalPlayerShotTaken = { line: Int, column: Int, _ ->
+                    onLocalPlayerShotSent = { line: Int, column: Int, _ ->
+                        viewModel.fleetUpdater(opponentBoard[line][column].ship)
                         viewModel.opponentGameBoardClickHandler(line, column, localPlayer, challenge)
                     },
-                    localBoardCellList = if (challenge.challenger.id.toString() == localPlayer.id.toString()) {
-                        currentGame.challengerBoard.cells
-                    } else {
-                        currentGame.challengedBoard.cells
-                    },
-                    opponentBoardCellList = if (challenge.challenger.id.toString() != localPlayer.id.toString()) {
-                        currentGame.challengerBoard.cells
-                    } else {
-                        currentGame.challengedBoard.cells
-                    },
+                    localBoardCellList = myBoard,
+                    opponentBoardCellList = opponentBoard
                 ),
+                destroyedShips = viewModel.opponentFleet,
                 onForfeitRequested = { viewModel.forfeit() },
                 onAddToFavoritesRequested = { viewModel.saveGame() },
                 result = currentGame.getResult()

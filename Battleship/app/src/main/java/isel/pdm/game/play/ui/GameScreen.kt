@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,9 +25,12 @@ import isel.pdm.ui.theme.BattleshipTheme
 import isel.pdm.ui.topbar.GameTopBar
 import isel.pdm.R
 import isel.pdm.game.play.model.Marker
+import isel.pdm.game.prep.model.TypeOfShip
+import isel.pdm.game.prep.ui.FleetSelectorView
+import isel.pdm.game.prep.ui.ShipState
 
-val PREVIEW_MY_GAME_BOARD_SIZE: Dp = 192.dp
-val OPPONENT_GAME_BOARD_SIZE: Dp = 312.dp
+val PREVIEW_MY_GAME_BOARD_SIZE: Dp = 160.dp
+val OPPONENT_GAME_BOARD_SIZE: Dp = 260.dp
 
 internal const val ForfeitButtonTag = "ForfeitButton"
 internal const val FavoritesButtonTag = "FavoritesButton"
@@ -46,7 +50,9 @@ fun GameScreen(
     boardCellHandler: BoardCellHandler = BoardCellHandler(),
     onForfeitRequested: () -> Unit = { },
     onAddToFavoritesRequested: () -> Unit = { },
-    result: BoardResult
+    result: BoardResult,
+    destroyedShips: Map<TypeOfShip, ShipState> = TypeOfShip.values()
+        .associateWith { _ -> ShipState.isNotSelected },
 ) {
 
     BattleshipTheme {
@@ -71,7 +77,7 @@ fun GameScreen(
                     boardCellList = boardCellHandler.localBoardCellList,
                 )
 
-                Spacer(modifier = Modifier.height(80.dp))
+                Spacer(modifier = Modifier.height(5.dp))
 
                 val titleTextId = when (state.matchState) {
                     MatchState.FINISHED ->
@@ -81,8 +87,6 @@ fun GameScreen(
                             R.string.match_ended_dialog_text_won
                         else
                             R.string.match_ended_dialog_text_lose
-
-
 
                     MatchState.STARTED -> if (state.game.localPlayerMarker ==
                         state.game.challengerBoard.turn
@@ -98,7 +102,8 @@ fun GameScreen(
                 if (state.matchState == MatchState.FINISHED) {
                     Row(
                         //modifier = Modifier.padding(bottom = 8.dp),
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = stringResource(id = R.string.game_screen_add_to_favourites),
@@ -108,7 +113,9 @@ fun GameScreen(
                         )
                         Button(
                             onClick = onAddToFavoritesRequested,
-                            modifier = Modifier.testTag(FavoritesButtonTag).size(width = 64.dp, height = 32.dp)
+                            modifier = Modifier
+                                .testTag(FavoritesButtonTag)
+                                .size(width = 64.dp, height = 32.dp)
                         ) {
                             Text(
                                 text = stringResource(id = R.string.game_screen_accept_additon_to_favourites),
@@ -120,7 +127,7 @@ fun GameScreen(
 
                 Text(
                     text = stringResource(id = titleTextId),
-                    style = MaterialTheme.typography.h4,
+                    style = MaterialTheme.typography.h5,
                     color = MaterialTheme.colors.primaryVariant
                 )
 
@@ -128,9 +135,14 @@ fun GameScreen(
                     modifier = Modifier
                         .width(OPPONENT_GAME_BOARD_SIZE)
                         .height(OPPONENT_GAME_BOARD_SIZE),
-                    onClick = boardCellHandler.onLocalPlayerShotTaken,
+                    onClick = boardCellHandler.onLocalPlayerShotSent,
                     boardCellList = boardCellHandler.opponentBoardCellList,
                     enabled = state.game.localPlayerMarker == state.game.challengerBoard.turn
+                )
+                FleetSelectorView(
+                    modifier = Modifier
+                        .scale(0.75F, 0.75F),
+                    shipSelector = destroyedShips
                 )
                Button(
                    onClick = onForfeitRequested,

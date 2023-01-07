@@ -41,8 +41,7 @@ data class ShipRemoverHandler(
 data class BoardCellHandler(
     val onCellClick: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ -> },
     val boardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell() } },
-    val onLocalPlayerShotTaken: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ -> },
-    val onOpponentPlayerShotTaken: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ -> },
+    val onLocalPlayerShotSent: (line: Int, column: Int, selectedShip: Ship?) -> Unit = { _, _, _ -> },
     val localBoardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell() } },
     val opponentBoardCellList: List<List<Cell>> = List(BOARD_SIDE) { _ -> List(BOARD_SIDE) { _ -> Cell() } },
 )

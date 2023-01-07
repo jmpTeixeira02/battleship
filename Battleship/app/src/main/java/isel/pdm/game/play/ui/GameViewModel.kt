@@ -1,8 +1,11 @@
-package isel.pdm.game.play.ui
+package isel.pdm .game.play.ui
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.runtime.toMutableStateMap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import isel.pdm.game.lobby.model.Challenge
@@ -10,10 +13,14 @@ import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.play.model.*
 import isel.pdm.game.prep.model.Cell
 import isel.pdm.game.prep.model.Coordinate
+import isel.pdm.game.prep.model.Ship
+import isel.pdm.game.prep.model.TypeOfShip
+import isel.pdm.game.prep.ui.ShipState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.*
 
 /**
  * Represents the current match state
@@ -28,6 +35,12 @@ class GameViewModel(private val match: Match, myBoard: GameBoard) : ViewModel() 
 
     private val _onGoingGame = MutableStateFlow(Game())
     val onGoingGame = _onGoingGame.asStateFlow()
+
+    private val _opponentFleet: SnapshotStateMap<TypeOfShip, ShipState> =
+        TypeOfShip.values().map { ship -> ship to ShipState.isNotSelected }.toMutableStateMap()
+
+    val opponentFleet: Map<TypeOfShip, ShipState>
+        get() = _opponentFleet
 
     private var _state by mutableStateOf(MatchState.IDLE)
     val state: MatchState
@@ -59,6 +72,21 @@ class GameViewModel(private val match: Match, myBoard: GameBoard) : ViewModel() 
         if (state == MatchState.STARTED) viewModelScope.launch { match.forfeit() }
         else null
 
+
+    private val fleetSelectorHits = TypeOfShip.values().map { ship -> Pair(ship, 0)}.toMutableStateMap()
+
+
+    fun fleetUpdater(ship: Ship?){
+        if (ship != null) {
+            var count = fleetSelectorHits[ship.type]
+            if (count != null) {
+                fleetSelectorHits[ship.type] = count + 1
+            }
+
+        if (fleetSelectorHits[ship?.type] == TypeOfShip.values().first { e -> e == ship?.type }.size)
+            _opponentFleet[ship?.type!!] = ShipState.hasBeenPlaced
+        }
+    }
 
     private val _myBoard = myBoard
 
