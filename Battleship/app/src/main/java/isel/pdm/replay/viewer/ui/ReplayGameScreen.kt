@@ -1,5 +1,7 @@
 package isel.pdm.replay.viewer.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -45,7 +47,7 @@ fun ReplayGameScreen(
             topBar = {
                 NavigationTopBar(
                     navigation = navigationRequest,
-                    title = "${replay.replayId} Vs. ${replay.opponentName}"
+                    title = "${replay.replayName} Vs. ${replay.opponentName}"
                 )
             },
         ) { innerPadding ->
@@ -109,6 +111,7 @@ fun ReplayGameScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 private fun ReplayGameScreenPreview() {
@@ -118,6 +121,7 @@ private fun ReplayGameScreenPreview() {
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 val replay: Replay = Replay(
     replayId = "#123",
     date = "01/01/01",

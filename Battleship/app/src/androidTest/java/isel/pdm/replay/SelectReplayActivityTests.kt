@@ -106,7 +106,7 @@ class SelectReplayActivityTests {
         ReplayManager.saveReplay(context, rep)
 
         // Load Replay
-        val loadedReplay = ReplayManager.readReplay(context, rep.replayId)
+        val loadedReplay = ReplayManager.loadReplay(context, rep.replayId)
 
         assert(rep.replayId == loadedReplay.replayId)
     }
