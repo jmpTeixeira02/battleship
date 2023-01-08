@@ -17,4 +17,5 @@
     <string name="main_screen_play_button">Jogar</string>
     <string name="player_creating_username_label">O teu usuário</string>
     <string name="game_screen_add_to_favourites">Adicionar aos favoritos?</string>
+    <string name="game_screen_accept_additon_to_favourites" translatable="false">Guardar</string>
 </resources>

@@ -6,21 +6,21 @@
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="SERIAL_NUMBER" />
-            <value value="FUNDU20519010788" />
+            <type value="VIRTUAL_DEVICE_PATH" />
+            <value value="C:\Users\cravo\.android\avd\Pixel_4a_API_33_opponent.avd" />
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2023-01-08T22:12:20.125508400Z" />
+    <timeTargetWasSelectedWithDropDown value="2023-01-08T22:32:45.898512900Z" />
     <multipleDevicesSelectedInDropDown value="true" />
     <runningDeviceTargetsSelectedWithDialog>
       <Target>
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="SERIAL_NUMBER" />
-            <value value="FUNDU20519010788" />
+            <type value="VIRTUAL_DEVICE_PATH" />
+            <value value="C:\Users\cravo\.android\avd\Pixel_4a_API_33_1.avd" />
           </Key>
         </deviceKey>
       </Target>
@@ -29,21 +29,10 @@
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\Joao\.android\avd\Pixel_6_API_33.avd" />
+            <value value="C:\Users\cravo\.android\avd\Pixel_4a_API_33_opponent.avd" />
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetsSelectedWithDialog>
-    <targetsSelectedWithDialog>
-      <Target>
-        <type value="QUICK_BOOT_TARGET" />
-        <deviceKey>
-          <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\Joao\.android\avd\Pixel_6_API_33.avd" />
-          </Key>
-        </deviceKey>
-      </Target>
-    </targetsSelectedWithDialog>
   </component>
 </project>

@@ -89,9 +89,9 @@ private fun StatelessExpandableReplayView(
                 )
                 Text(
                     text = "Game Name: " + replay.replayName +
-                            "\n\nGame Id: " + replay.replayId +
                             "\n\nOpponent name: " + replay.opponentName +
-                            "\n\nShots fired: " + replay.shotsFired.toString(),
+                            "\n\nShots fired: " + replay.shotsFired.toString() +
+                            "\n\nWinner: " + replay.winner,
                     style = MaterialTheme.typography.subtitle2,
                     textAlign = TextAlign.Start,
                     maxLines = maxLines,
@@ -146,5 +146,5 @@ private fun ExpandableReplayViewPreview() {
 
 
 private val randomReplay = Replay(
-    opponentName = "opponent", shotsFired = 1
+    opponentName = "opponent", shotsFired = 1, winner = "local"
 )

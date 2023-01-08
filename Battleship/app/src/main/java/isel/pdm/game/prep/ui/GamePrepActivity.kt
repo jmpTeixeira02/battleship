@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import isel.pdm.game.lobby.model.Challenge
 import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.play.ui.GameActivity
+import isel.pdm.game.prep.model.Board
 import isel.pdm.game.prep.model.Ship
 import isel.pdm.game.prep.model.TypeOfShip
 import isel.pdm.main.MainActivity
@@ -78,29 +79,28 @@ class GamePrepActivity : ComponentActivity() {
                 onCheckBoardPrepRequest = ::checkBoardPrepState
             )
         }
-
-        onBackPressedDispatcher.addCallback(owner = this, enabled = true) {
-            MainActivity.navigate(this@GamePrepActivity)
-            finish()
-        }
-
     }
 
 
+    override fun onBackPressed() {}
+
     private fun checkBoardPrepState() {
+        var prepBoard = Board()
         if (viewModel.allShipsPlaced()) { // time's up e barcos postos totalmente
 
-            val prepBoard = viewModel.getBoard()
+            prepBoard = viewModel.getBoard()
 
-            GameActivity.navigate(
-                this,
-                localPlayer = localPlayer,
-                challenge = challenge ,
-                prepBoard,
-            )
+
         } else { // time's up e barcos não postos totalmente
-            MainActivity.navigate(this)
+          prepBoard.randomFleet()
         }
+
+        GameActivity.navigate(
+            this,
+            localPlayer = localPlayer,
+            challenge = challenge ,
+            prepBoard,
+        )
     }
 
     @Suppress("deprecation")

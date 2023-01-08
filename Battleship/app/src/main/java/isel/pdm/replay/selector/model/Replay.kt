@@ -23,7 +23,8 @@ data class Replay @RequiresApi(Build.VERSION_CODES.O) constructor(
     val date: String = LocalDate.now().toString(),
     val opponentName: String,
     val shotsFired: Int,
-    val gameInfo: GameInfo = GameInfo(GameBoard(), GameBoard(), listOf(), listOf(), true)
+    val gameInfo: GameInfo = GameInfo(GameBoard(), GameBoard(), listOf(), listOf(), true),
+    val winner: String = ""
 ) : Parcelable
 
 

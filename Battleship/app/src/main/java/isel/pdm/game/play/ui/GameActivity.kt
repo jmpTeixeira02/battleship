@@ -92,14 +92,19 @@ class GameActivity : ComponentActivity() {
                 ),
                 destroyedShips = viewModel.opponentFleet,
                 onForfeitRequested = { viewModel.forfeit() },
-                onAddToFavoritesRequested = { replay: Replay -> viewModel.saveGame(this, replay) },
+                onAddToFavoritesRequested = { replay: Replay ->
+                    viewModel.saveGame(this, replay)
+                    finish()
+                },
                 result = currentGame.getResult()
             )
 
         }
 
-        if (viewModel.state == MatchState.IDLE)
+        if (viewModel.state == MatchState.IDLE) {
             viewModel.startMatch(localPlayer, challenge)
+        }
+
 
         onBackPressedDispatcher.addCallback(owner = this, enabled = true) {
             viewModel.forfeit()

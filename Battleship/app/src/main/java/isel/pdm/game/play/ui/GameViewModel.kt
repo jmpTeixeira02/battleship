@@ -101,4 +101,5 @@ class GameViewModel(private val match: Match, myBoard: GameBoard) : ViewModel() 
     fun saveGame(context: Context, replay: Replay) {
         ReplayManager.saveReplay(context = context, replay)
     }
+
 }

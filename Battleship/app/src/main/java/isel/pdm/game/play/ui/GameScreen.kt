@@ -4,11 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -61,6 +58,8 @@ fun GameScreen(
 
     BattleshipTheme {
 
+        var displayedReplayName by remember { mutableStateOf("") }
+
         Scaffold(
             backgroundColor = MaterialTheme.colors.background,
             topBar = { GameTopBar(players) }
@@ -102,44 +101,7 @@ fun GameScreen(
 
                 }
 
-
-                if (state.matchState == MatchState.FINISHED) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.game_screen_add_to_favourites),
-                            style = MaterialTheme.typography.subtitle1,
-                            color = MaterialTheme.colors.primaryVariant,
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
-                        Button(
-                            onClick = { onAddToFavoritesRequested(
-                                Replay(
-                                    replayName = "REPLAY_NAME_HERE",
-                                    opponentName = players[1],
-                                    shotsFired = 0,
-                                    gameInfo = GameInfo(
-                                        myBoard = if (state.game.localPlayerMarker == Marker.LOCAL) state.game.challengerBoard else state.game.challengedBoard,
-                                        opponentBoard = if (state.game.localPlayerMarker != Marker.LOCAL) state.game.challengerBoard else state.game.challengedBoard,
-                                        iMadeFirstMove = state.game.localPlayerMarker == Marker.LOCAL,
-                                        myMoves = if (state.game.localPlayerMarker == Marker.LOCAL) state.game.challengerMoves else state.game.challengedMoves,
-                                        opponentMoves = if (state.game.localPlayerMarker != Marker.LOCAL) state.game.challengerMoves else state.game.challengedMoves
-                                    )
-                                )
-                            ) },
-                            modifier = Modifier
-                                .testTag(FavoritesButtonTag)
-                                .size(width = 64.dp, height = 32.dp)
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.game_screen_accept_additon_to_favourites),
-                            )
-                        }
-                    }
-
-                }
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
                     text = stringResource(id = titleTextId),
@@ -161,12 +123,63 @@ fun GameScreen(
                         .scale(0.75F, 0.75F),
                     shipSelector = destroyedShips
                 )
-               Button(
-                   onClick = onForfeitRequested,
-                   modifier = Modifier.testTag(ForfeitButtonTag)
-               ) {
-                   Text(text = stringResource(id = R.string.game_screen_forfeit))
-               }
+
+                if (state.matchState == MatchState.FINISHED) {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        TextField(
+                            singleLine = true,
+                            value = displayedReplayName,
+                            onValueChange = {
+                                if (it.length <= 15) displayedReplayName = it.trim()
+                            },
+                            label = {
+                                Text(
+                                    text = stringResource(id = R.string.game_screen_add_to_favourites),
+
+                                    )
+                            },
+                            modifier = Modifier
+                                .size(width = 200.dp, height = 50.dp)
+                                .padding(horizontal = 4.dp)
+                        )
+                        Button(
+                            onClick = { onAddToFavoritesRequested(
+                                Replay(
+                                    replayName = displayedReplayName,
+                                    opponentName = players[1],
+                                    shotsFired = state.game.challengerMoves.size + state.game.challengedMoves.size,
+                                    gameInfo = GameInfo(
+                                        myBoard = if (state.game.localPlayerMarker == Marker.LOCAL) state.game.challengerBoard else state.game.challengedBoard,
+                                        opponentBoard = if (state.game.localPlayerMarker != Marker.LOCAL) state.game.challengerBoard else state.game.challengedBoard,
+                                        iMadeFirstMove = state.game.localPlayerMarker == Marker.LOCAL,
+                                        myMoves = if (state.game.localPlayerMarker == Marker.LOCAL) state.game.challengerMoves else state.game.challengedMoves,
+                                        opponentMoves = if (state.game.localPlayerMarker != Marker.LOCAL) state.game.challengerMoves else state.game.challengedMoves
+                                    ),
+                                    winner = if (result is HasWinner &&
+                                        result.winner == state.game.localPlayerMarker
+                                    ) players[0] else players[1]
+                                )
+                            ) },
+                            modifier = Modifier
+                                .testTag(FavoritesButtonTag)
+                                .size(width = 80.dp, height = 40.dp)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.game_screen_accept_additon_to_favourites),
+                            )
+                        }
+                    }
+                } else {
+                    Button(
+                        onClick = onForfeitRequested,
+                        modifier = Modifier.testTag(ForfeitButtonTag)
+                    ) {
+                        Text(text = stringResource(id = R.string.game_screen_forfeit))
+                    }
+                }
             }
         }
 
@@ -180,6 +193,17 @@ fun GameFinishedLocalWinsScreenPreview() {
     GameScreen(
         players = listOf("AB", "CD"),
         state = GameScreenState(Game(), MatchState.FINISHED),
+        result = HasWinner(Marker.LOCAL)
+    )
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview
+@Composable
+fun GameFinishedLocalStartedScreenPreview() {
+    GameScreen(
+        players = listOf("AB", "CD"),
+        state = GameScreenState(Game(), MatchState.STARTED),
         result = HasWinner(Marker.LOCAL)
     )
 }
