@@ -1,6 +1,5 @@
-package isel.pdm .game.play.ui
+package isel.pdm.game.play.ui
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import isel.pdm.game.lobby.model.Challenge
 import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.play.model.*
-import isel.pdm.game.prep.model.Cell
 import isel.pdm.game.prep.model.Coordinate
 import isel.pdm.game.prep.model.Ship
 import isel.pdm.game.prep.model.TypeOfShip
@@ -20,7 +18,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.util.*
 
 /**
  * Represents the current match state
@@ -83,8 +80,8 @@ class GameViewModel(private val match: Match, myBoard: GameBoard) : ViewModel() 
                 fleetSelectorHits[ship.type] = count + 1
             }
 
-        if (fleetSelectorHits[ship?.type] == TypeOfShip.values().first { e -> e == ship?.type }.size)
-            _opponentFleet[ship?.type!!] = ShipState.hasBeenPlaced
+            if (fleetSelectorHits[ship?.type] == TypeOfShip.values().first { e -> e == ship?.type }.size)
+                _opponentFleet[ship?.type!!] = ShipState.hasBeenPlaced
         }
     }
 

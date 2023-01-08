@@ -20,6 +20,9 @@ import isel.pdm.R
 import isel.pdm.ui.topbar.NavigationHandlers
 import isel.pdm.ui.theme.BattleshipTheme
 
+const val AboutUsScreenTag = "AboutScreen"
+
+
 @Composable
 fun AboutUsScreen(
     navigationRequest: NavigationHandlers = NavigationHandlers(),
@@ -28,7 +31,7 @@ fun AboutUsScreen(
 ){
     BattleshipTheme {
         Scaffold(
-            modifier = Modifier.fillMaxSize().testTag("AboutScreen"),
+            modifier = Modifier.fillMaxSize().testTag(AboutUsScreenTag),
             backgroundColor = MaterialTheme.colors.background,
             topBar = { NavigationTopBar(
                 navigation = navigationRequest,

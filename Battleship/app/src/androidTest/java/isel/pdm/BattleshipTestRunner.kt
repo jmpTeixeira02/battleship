@@ -12,7 +12,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import isel.pdm.game.lobby.model.*
-import isel.pdm.game.play.model.Match
+import isel.pdm.game.play.model.*
+import isel.pdm.game.prep.model.Board
 import isel.pdm.preferences.PlayerRepository
 import kotlinx.coroutines.flow.flow
 
@@ -62,7 +63,17 @@ class BattleshipTestApplication : DependenciesContainer, Application() {
         }
 
 
-    override var match: Match = mockk(relaxed = true) {}
+    override var match: Match = mockk(relaxed = true) {
+        val localPlayer = slot<PlayerInfo>()
+        val challenge = slot<Challenge>()
+        val localGameBoard = slot<GameBoard>()
+        coEvery { start(capture(localPlayer), capture(challenge), capture(localGameBoard)) } answers {
+            flow {
+                val localMarker = getLocalPlayerMarker(localPlayer.captured, challenge.captured)
+                emit(GameStarted(Game(localPlayerMarker = localMarker, challengerBoard = GameBoard())))
+            }
+        }
+    }
 
     val emulatedFirestoreDb: FirebaseFirestore by lazy {
         Firebase.firestore.also {

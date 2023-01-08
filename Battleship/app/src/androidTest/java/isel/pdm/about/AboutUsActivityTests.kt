@@ -5,6 +5,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.lifecycle.Lifecycle
 import isel.pdm.info.AboutUsActivity
+import isel.pdm.info.AboutUsScreenTag
 import isel.pdm.ui.topbar.NavigateBackTestTag
 import isel.pdm.ui.topbar.NavigateToAboutTestTag
 import isel.pdm.ui.topbar.NavigateToReplayTestTag
@@ -29,14 +30,14 @@ class AboutUsActivityTests {
     fun pressing_navigate_back_finishes_activity() {
 
         // Arrange
-        testRule.onNodeWithTag("AboutScreen").assertExists()
+        testRule.onNodeWithTag(AboutUsScreenTag).assertExists()
 
         // Act
         testRule.onNodeWithTag(NavigateBackTestTag).performClick()
         testRule.waitForIdle()
 
         // Assert
-        testRule.onNodeWithTag("AboutScreen").assertDoesNotExist()
+        testRule.onNodeWithTag(AboutUsScreenTag).assertDoesNotExist()
         assert(testRule.activityRule.scenario.state == Lifecycle.State.DESTROYED)
     }
 }

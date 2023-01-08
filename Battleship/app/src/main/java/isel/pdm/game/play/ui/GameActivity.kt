@@ -13,11 +13,9 @@ import androidx.compose.runtime.getValue
 import isel.pdm.DependenciesContainer
 import isel.pdm.game.lobby.model.Challenge
 import isel.pdm.game.lobby.model.PlayerInfo
-import isel.pdm.game.play.model.GameBoard
 import isel.pdm.game.play.model.getResult
 import isel.pdm.game.prep.model.Board
 import isel.pdm.game.prep.model.Cell
-import isel.pdm.game.prep.model.Ship
 import isel.pdm.game.prep.ui.BoardCellHandler
 import isel.pdm.game.prep.ui.MatchInfo
 import isel.pdm.utils.viewModelInit

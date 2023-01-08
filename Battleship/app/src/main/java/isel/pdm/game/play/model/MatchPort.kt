@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
 sealed class GameEvent(val game: Game)
 class GameStarted(game: Game) : GameEvent(game)
 class ShotTaken(game: Game) : GameEvent(game)
-class GameEnded(game: Game) : GameEvent(game)
+class GameEnded(game: Game, val winner: Marker? = null) : GameEvent(game)
 
 /**
  * Abstraction that characterizes a match between two players, that is, the

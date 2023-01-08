@@ -1,14 +1,9 @@
 package isel.pdm.game.play.model
 
-import androidx.compose.runtime.snapshots.SnapshotStateMap
-import androidx.compose.runtime.toMutableStateMap
 import isel.pdm.game.lobby.model.Challenge
 import isel.pdm.game.lobby.model.PlayerInfo
 import isel.pdm.game.lobby.model.firstToMove
-import isel.pdm.game.prep.model.Cell
 import isel.pdm.game.prep.model.Coordinate
-import isel.pdm.game.prep.model.TypeOfShip
-import isel.pdm.game.prep.ui.ShipState
 
 
 /**

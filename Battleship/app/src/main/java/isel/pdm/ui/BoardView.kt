@@ -77,6 +77,10 @@ fun BoardCellTestTag(line: Int, column: Int): String {
     return "BoardCell${line}${column}Tag"
 }
 
+fun OpponentBoardCellTestTag(line: Int = 0, column: Int = 0): String {
+    return "OpponentBoardCell${line}${column}Tag"
+}
+
 @Composable
 fun GamePrepBoard(
     modifier: Modifier = Modifier,
@@ -124,7 +128,7 @@ fun OpponentGameBoard(
     enabled: Boolean
 ) {
     BoardView(
-        modifier = modifier.testTag(OpponentGameBoard),
+        modifier = modifier.testTag(OpponentBoardCellTestTag()),
         boarderColor = boarderColor,
         onClick = onClick,
         cellFillColor = { line: Int, column: Int -> GameCellColor.valueOf(boardCellList[line][column].gameCellValue).color },

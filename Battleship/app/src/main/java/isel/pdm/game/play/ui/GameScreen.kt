@@ -32,15 +32,16 @@ import isel.pdm.game.prep.ui.ShipState
 val PREVIEW_MY_GAME_BOARD_SIZE: Dp = 160.dp
 val OPPONENT_GAME_BOARD_SIZE: Dp = 260.dp
 
-internal const val ForfeitButtonTag = "ForfeitButton"
-internal const val FavoritesButtonTag = "FavoritesButton"
+const val ForfeitButtonTag = "ForfeitButton"
+const val FavoritesButtonTag = "FavoritesButton"
+const val GameScreenTitleTag = "GameScreenTitle"
+const val GameScreenTestTag = "GameScreen"
 
 data class GameScreenState(
     val game: Game,
     val matchState: MatchState
 )
 
-const val GameScreenTestTag = "GameScreen"
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -101,7 +102,6 @@ fun GameScreen(
 
                 if (state.matchState == MatchState.FINISHED) {
                     Row(
-                        //modifier = Modifier.padding(bottom = 8.dp),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -128,7 +128,8 @@ fun GameScreen(
                 Text(
                     text = stringResource(id = titleTextId),
                     style = MaterialTheme.typography.h5,
-                    color = MaterialTheme.colors.primaryVariant
+                    color = MaterialTheme.colors.primaryVariant,
+                    modifier = Modifier.testTag(GameScreenTitleTag)
                 )
 
                 OpponentGameBoard(

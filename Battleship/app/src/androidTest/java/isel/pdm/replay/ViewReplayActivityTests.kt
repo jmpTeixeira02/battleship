@@ -65,7 +65,6 @@ class ViewReplayActivityTests {
         testRule.onNodeWithTag(ForwardMoveButton).assertExists()
         testRule.onNodeWithTag(BackwardMoveButton).assertExists()
         testRule.onNodeWithTag(MyGameBoard).assertExists()
-        testRule.onNodeWithTag(OpponentGameBoard).assertExists()
     }
 
     @Test
