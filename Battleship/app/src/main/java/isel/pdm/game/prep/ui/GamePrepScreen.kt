@@ -28,6 +28,7 @@ import isel.pdm.ui.buttons.BiState
 import isel.pdm.ui.buttons.RemoveBoatButton
 import isel.pdm.ui.theme.BattleshipTheme
 import isel.pdm.ui.topbar.GameTopBar
+import isel.pdm.ui.theme.CustomColor
 
 
 val BOARD_SIZE: Dp = 248.dp
@@ -161,7 +162,7 @@ fun CountdownPrepTimer(
         Text(
             text = if (secondsTimer.value < 10) "0${minutesTimer.value}:0${secondsTimer.value}"
             else "0${minutesTimer.value}:${secondsTimer.value}",
-            color = Color.Red,
+            color = Color(CustomColor.DarkRed.color),
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
         )

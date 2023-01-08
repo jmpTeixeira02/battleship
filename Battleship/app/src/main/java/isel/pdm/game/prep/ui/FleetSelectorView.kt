@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import isel.pdm.game.prep.model.TypeOfShip
 import isel.pdm.ui.drawCell
+import isel.pdm.ui.theme.CustomColor
 
 
 enum class ShipState {hasBeenPlaced, isSelected, isNotSelected}
@@ -94,9 +95,9 @@ private fun BuildBoatSelect(
         drawCell(
             boarderColor = Color.Transparent,
             cellFillColor = when(state){
-                ShipState.isNotSelected -> Color.Green
-                ShipState.hasBeenPlaced -> Color.Red
-                ShipState.isSelected -> Color.Magenta
+                ShipState.isNotSelected -> Color(CustomColor.LightGreen.color)
+                ShipState.hasBeenPlaced -> Color(CustomColor.DarkRed.color)
+                ShipState.isSelected -> Color(CustomColor.Orange.color)
             },
             cellText = name,
             modifier = modifier.width(maxBoatCellSize*size),

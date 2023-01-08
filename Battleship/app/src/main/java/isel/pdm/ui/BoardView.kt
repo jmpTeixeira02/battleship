@@ -1,12 +1,14 @@
 package isel.pdm.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import isel.pdm.game.prep.model.*
+import isel.pdm.ui.theme.CustomColor
 
 
 const val GamePrepBoardTag = "GamePrepBoardTag"
@@ -15,17 +17,17 @@ const val OpponentGameBoard = "OpponentGameBoardTag"
 
 enum class CellColor(val color: Color) {
     Water(Color.LightGray),
-    Destroyer(Color.Blue),
-    Submarine(Color.Cyan),
-    Cruiser(Color.Magenta),
-    BattleShip(Color.Yellow),
-    Carrier(Color.Green),
+    Destroyer(Color(CustomColor.DarkBlue.color)),
+    Submarine(Color(CustomColor.DarkPink.color)),
+    Cruiser(Color(CustomColor.LightBlue.color)),
+    BattleShip(Color(CustomColor.YellowPastel.color)),
+    Carrier(Color(CustomColor.Orange.color)),
 }
 
 enum class GameCellColor(val color: Color) {
     Water(Color.LightGray),
     ShotTaken(Color.DarkGray),
-    Ship(Color.Red)
+    Ship(Color(CustomColor.DarkRed.color))
 }
 
 
