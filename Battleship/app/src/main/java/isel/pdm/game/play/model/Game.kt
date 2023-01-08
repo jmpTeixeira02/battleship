@@ -18,6 +18,8 @@ data class Game(
     val forfeitedBy: Marker? = null,
     val challengerBoard: GameBoard = GameBoard(),
     val challengedBoard: GameBoard = GameBoard(turn = Marker.OPPONENT),
+    val challengerMoves: List<Coordinate> = listOf(),
+    val challengedMoves: List<Coordinate> = listOf()
 )
 
 /**

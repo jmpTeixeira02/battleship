@@ -1,5 +1,6 @@
 package isel.pdm.game.play.ui
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,6 +15,8 @@ import isel.pdm.game.prep.model.Coordinate
 import isel.pdm.game.prep.model.Ship
 import isel.pdm.game.prep.model.TypeOfShip
 import isel.pdm.game.prep.ui.ShipState
+import isel.pdm.replay.selector.model.Replay
+import isel.pdm.replay.selector.model.ReplayManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -95,7 +98,7 @@ class GameViewModel(private val match: Match, myBoard: GameBoard) : ViewModel() 
         }
         else null
 
-    fun saveGame() {
-
+    fun saveGame(context: Context, replay: Replay) {
+        ReplayManager.saveReplay(context = context, replay)
     }
 }

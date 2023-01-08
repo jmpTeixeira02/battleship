@@ -19,7 +19,7 @@ class ReplayGameViewModel(
     private val _myCells = gameInfo.myBoard.cells
     private val _opponentCells = gameInfo.opponentBoard.cells
 
-    private val _myReplayCells = replay.gameInfo.myBoard.cells
+    private val _myReplayCells = hitReset(replay.gameInfo.myBoard.cells)
     val myReplayCells = _myReplayCells
 
     private val _opponentReplayCells = GameBoard().cells
@@ -28,6 +28,15 @@ class ReplayGameViewModel(
     private var _moveCounter by mutableStateOf(0)
     val moveCounter: Int
         get() = _moveCounter
+
+    private fun hitReset(cells: MutableList<MutableList<Cell>>): MutableList<MutableList<Cell>>{
+        cells.forEach{
+            it.forEach {
+                it.state = BiStateGameCellShot.HasNotBeenShot
+            }
+        }
+        return cells
+    }
 
     fun moveForward(){
         if (_moveCounter >= gameInfo.myMoves.size + gameInfo.opponentMoves.size){

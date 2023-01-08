@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import isel.pdm.DependenciesContainer
@@ -18,6 +19,7 @@ import isel.pdm.game.prep.model.Board
 import isel.pdm.game.prep.model.Cell
 import isel.pdm.game.prep.ui.BoardCellHandler
 import isel.pdm.game.prep.ui.MatchInfo
+import isel.pdm.replay.selector.model.Replay
 import isel.pdm.utils.viewModelInit
 import java.util.*
 
@@ -55,6 +57,7 @@ class GameActivity : ComponentActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var myBoard: List<List<Cell>>
@@ -89,7 +92,7 @@ class GameActivity : ComponentActivity() {
                 ),
                 destroyedShips = viewModel.opponentFleet,
                 onForfeitRequested = { viewModel.forfeit() },
-                onAddToFavoritesRequested = { viewModel.saveGame() },
+                onAddToFavoritesRequested = { replay: Replay -> viewModel.saveGame(this, replay) },
                 result = currentGame.getResult()
             )
 

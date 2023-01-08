@@ -1,6 +1,8 @@
 package isel.pdm.game.play.ui
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -15,19 +17,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import isel.pdm.game.play.model.BoardResult
-import isel.pdm.game.play.model.Game
-import isel.pdm.game.play.model.HasWinner
 import isel.pdm.game.prep.ui.BoardCellHandler
 import isel.pdm.ui.MyGameBoard
 import isel.pdm.ui.OpponentGameBoard
 import isel.pdm.ui.theme.BattleshipTheme
 import isel.pdm.ui.topbar.GameTopBar
 import isel.pdm.R
-import isel.pdm.game.play.model.Marker
+import isel.pdm.game.play.model.*
+import isel.pdm.game.prep.model.Cell
 import isel.pdm.game.prep.model.TypeOfShip
 import isel.pdm.game.prep.ui.FleetSelectorView
 import isel.pdm.game.prep.ui.ShipState
+import isel.pdm.replay.selector.model.Replay
+import isel.pdm.replay.viewer.model.GameInfo
 
 val PREVIEW_MY_GAME_BOARD_SIZE: Dp = 160.dp
 val OPPONENT_GAME_BOARD_SIZE: Dp = 260.dp
@@ -43,6 +45,7 @@ data class GameScreenState(
 )
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GameScreen(
@@ -50,7 +53,7 @@ fun GameScreen(
     state: GameScreenState,
     boardCellHandler: BoardCellHandler = BoardCellHandler(),
     onForfeitRequested: () -> Unit = { },
-    onAddToFavoritesRequested: () -> Unit = { },
+    onAddToFavoritesRequested: (replayName: Replay) -> Unit = {},
     result: BoardResult,
     destroyedShips: Map<TypeOfShip, ShipState> = TypeOfShip.values()
         .associateWith { _ -> ShipState.isNotSelected },
@@ -112,7 +115,20 @@ fun GameScreen(
                             modifier = Modifier.padding(horizontal = 8.dp)
                         )
                         Button(
-                            onClick = onAddToFavoritesRequested,
+                            onClick = { onAddToFavoritesRequested(
+                                Replay(
+                                    replayName = "REPLAY_NAME_HERE",
+                                    opponentName = players[1],
+                                    shotsFired = 0,
+                                    gameInfo = GameInfo(
+                                        myBoard = if (state.game.localPlayerMarker == Marker.LOCAL) state.game.challengerBoard else state.game.challengedBoard,
+                                        opponentBoard = if (state.game.localPlayerMarker != Marker.LOCAL) state.game.challengerBoard else state.game.challengedBoard,
+                                        iMadeFirstMove = state.game.localPlayerMarker == Marker.LOCAL,
+                                        myMoves = if (state.game.localPlayerMarker == Marker.LOCAL) state.game.challengerMoves else state.game.challengedMoves,
+                                        opponentMoves = if (state.game.localPlayerMarker != Marker.LOCAL) state.game.challengerMoves else state.game.challengedMoves
+                                    )
+                                )
+                            ) },
                             modifier = Modifier
                                 .testTag(FavoritesButtonTag)
                                 .size(width = 64.dp, height = 32.dp)
@@ -157,6 +173,7 @@ fun GameScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun GameFinishedLocalWinsScreenPreview() {

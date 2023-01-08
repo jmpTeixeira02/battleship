@@ -1,6 +1,8 @@
 package isel.pdm.game.play.model
 
+import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
@@ -12,6 +14,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import java.lang.reflect.Field
 
 class MatchFirebase(private val db: FirebaseFirestore) : Match {
 
@@ -32,9 +35,11 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
                         snapshot.toMatchStateOrNull()?.let {
                             val game = Game(
                                 localPlayerMarker = localPlayerMarker,
-                                forfeitedBy = it.third,
-                                challengerBoard = it.first,
-                                challengedBoard = it.second
+                                forfeitedBy = it.marker,
+                                challengerBoard = it.gameBoardChallenger,
+                                challengedBoard = it.gameBoardChallenged,
+                                challengerMoves = it.movesChallenger,
+                                challengedMoves = it.movesChallenged
                             )
                             val gameEvent = when {
                                 onGoingGame == null -> GameStarted(game)
@@ -67,6 +72,12 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
 
     }
 
+    private suspend fun updateMoveMatrix(at: Coordinate, gameId: String, movesField: String){
+        db.collection(ONGOING)
+            .document(gameId)
+            .update(movesField, FieldValue.arrayUnion(at))
+            .await()
+    }
 
     private suspend fun updateOpponentGame(game: Game, gameId: String, boardField: String) {
         db.collection(ONGOING)
@@ -133,12 +144,14 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
 
                 val game = it.copy(first = it.first.shootOpponentBoard(at, challengedGameBoard))
                 updateOpponentGame(game.first,  challenge.challenger.id.toString(), CHALLENGED_BOARD_FIELD)
+                updateMoveMatrix(at, challenge.challenger.id.toString(), CHALLENGER_MOVES)
             } else {
                 val stringBoardMoves = getFireStoreBoard(challenge.challenger.id.toString(), CHALLENGER_BOARD_FIELD)
                 val challengerGameBoard = GameBoard.fromMovesList(it.first.challengerBoard.turn, stringBoardMoves)
 
                 val game = it.copy(first = it.first.shootOpponentBoard(at, challengerGameBoard))
                 updateOpponentGame(game.first, challenge.challenger.id.toString(), CHALLENGER_BOARD_FIELD)
+                updateMoveMatrix(at, challenge.challenger.id.toString(), CHALLENGED_MOVES)
             }
         }
     }
@@ -171,6 +184,8 @@ const val TURN_FIELD = "turn"
 const val CHALLENGER_BOARD_FIELD = "challenger_board"
 const val CHALLENGED_BOARD_FIELD = "challenged_board"
 const val FORFEIT_FIELD = "forfeit"
+const val CHALLENGER_MOVES = "challenger_moves"
+const val CHALLENGED_MOVES = "challenged_moves"
 
 
 /**
@@ -197,32 +212,60 @@ fun GameBoard.toDocumentContent(boardField: String) = mapOf(
     }
 )
 
+fun Coordinate.toDocumentContent(movesField: String) = mapOf(
+    movesField to this
+)
+
+data class FirebaseReader(
+    val gameBoardChallenger: GameBoard,
+    val gameBoardChallenged: GameBoard,
+    val marker: Marker?,
+    val movesChallenger: List<Coordinate>,
+    val movesChallenged: List<Coordinate>
+)
 
 /**
  * Extension function to convert documents stored in the Firestore DB
  * into the corresponding match state.
  */
-fun DocumentSnapshot.toMatchStateOrNull(): Triple<GameBoard, GameBoard, Marker?>? =
+fun DocumentSnapshot.toMatchStateOrNull(): FirebaseReader? =
     data?.let {
-        var movesChallenger = ""
+        var boardChallenger = ""
 
         if( it[CHALLENGER_BOARD_FIELD] != null) {
-            movesChallenger =  it[CHALLENGER_BOARD_FIELD] as String
+            boardChallenger =  it[CHALLENGER_BOARD_FIELD] as String
         }
 
-        var movesChallenged = ""
+        var boardChallenged = ""
         if( it[CHALLENGED_BOARD_FIELD] != null) {
-            movesChallenged =  it[CHALLENGED_BOARD_FIELD] as String
+            boardChallenged =  it[CHALLENGED_BOARD_FIELD] as String
         }
 
+        var movesChallenged = listOf<Map<Int,Int>>()
+        if( it[CHALLENGED_MOVES] != null) {
+            movesChallenged =  it[CHALLENGED_MOVES] as List<Map<Int, Int>>
+        }
+
+        var movesChallenger = listOf<Map<Int,Int>>()
+        if( it[CHALLENGER_MOVES] != null) {
+            movesChallenger =  it[CHALLENGER_MOVES] as List<Map<Int, Int>>
+        }
         val turn = Marker.valueOf(it[TURN_FIELD] as String)
         val forfeit = it[FORFEIT_FIELD] as String?
-        Triple(
-            first = GameBoard.fromMovesList(turn, movesChallenger.toMovesList()),
-            second = GameBoard.fromMovesList(turn, movesChallenged.toMovesList()),
-            third = if (forfeit != null) Marker.valueOf(forfeit) else null,
+
+        FirebaseReader(
+            gameBoardChallenger = GameBoard.fromMovesList(turn, boardChallenger.toMovesList()),
+            gameBoardChallenged = GameBoard.fromMovesList(turn, boardChallenged.toMovesList()),
+            marker = if (forfeit != null) Marker.valueOf(forfeit) else null,
+            movesChallenger = movesChallenger.map { map -> coordinateExtractor(map)},
+            movesChallenged = movesChallenged.map { map -> coordinateExtractor(map)},
         )
     }
+
+fun coordinateExtractor(map: Map<Int,Int>): Coordinate{
+    val values = map.values.toList()
+    return Coordinate(line = values[0], column = values[1])
+}
 
 /**
  * Converts this string to a list of moves in the board
