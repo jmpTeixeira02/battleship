@@ -10,10 +10,13 @@ This project is an Online Battleship Clone for Android devices
   - João Martins 50055
 
 
-### WIP Features:
-- Battleship Base Game
-- UI
-- Replay Functions
-- Online Matchmaking
+### Implemented Features:
+- Multiplayer BattleShip Game
+- Replay Saver and Viewer
 
-[Demonstration - #TODO](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+
+### WIP Features:
+- Bug Fixing
+- Matchmaking system
+
+[Demonstration](https://www.youtube.com/watch?v=fpOVHLBnKKs)
