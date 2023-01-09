@@ -1,6 +1,5 @@
 package isel.pdm.game.play.model
 
-import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,7 +13,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
-import java.lang.reflect.Field
 
 class MatchFirebase(private val db: FirebaseFirestore) : Match {
 
@@ -54,10 +52,10 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
             }
 
 
-    private suspend fun publishLocalGame(player: String, gameId: String, board: GameBoard) {
+    private suspend fun publishLocalGame(player: String, movesField: String, gameId: String, board: GameBoard) {
         db.collection(ONGOING)
             .document(gameId)
-            .set(board.toDocumentContent(player), SetOptions.merge())
+            .set(board.toDocumentContent(player, movesField = movesField), SetOptions.merge())
             .await()
     }
 
@@ -72,17 +70,10 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
 
     }
 
-    private suspend fun updateMoveMatrix(at: Coordinate, gameId: String, movesField: String){
+    private suspend fun updateOpponentGame(game: Game, gameId: String, boardField: String, at: Coordinate, movesField: String) {
         db.collection(ONGOING)
             .document(gameId)
-            .update(movesField, FieldValue.arrayUnion(at))
-            .await()
-    }
-
-    private suspend fun updateOpponentGame(game: Game, gameId: String, boardField: String) {
-        db.collection(ONGOING)
-            .document(gameId)
-            .update(game.challengedBoard.toDocumentContent(boardField))
+            .update(game.challengedBoard.toDocumentContent(boardField, movesField, FieldValue.arrayUnion(at)))
             .await()
     }
 
@@ -103,7 +94,7 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
             var gameSubscription: ListenerRegistration? = null
             try {
                 if (localPlayer == challenge.challenger) {
-                    publishLocalGame(CHALLENGER_BOARD_FIELD, gameId, localGameBoard)
+                    publishLocalGame(CHALLENGER_BOARD_FIELD, CHALLENGER_MOVES, gameId, localGameBoard)
                     gameSubscription = subscribeGameStateUpdated(
                         localPlayerMarker = newGame.localPlayerMarker,
                         gameId = gameId,
@@ -111,7 +102,7 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
                     )
 
                 } else {
-                    publishLocalGame(CHALLENGED_BOARD_FIELD, gameId, localGameBoard)
+                    publishLocalGame(CHALLENGED_BOARD_FIELD, CHALLENGED_MOVES, gameId, localGameBoard)
                     gameSubscription = subscribeGameStateUpdated(
                         localPlayerMarker = newGame.localPlayerMarker,
                         gameId = gameId,
@@ -143,15 +134,13 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
                 val challengedGameBoard = GameBoard.fromMovesList(it.first.challengerBoard.turn, stringBoardMoves)
 
                 val game = it.copy(first = it.first.shootOpponentBoard(at, challengedGameBoard))
-                updateOpponentGame(game.first,  challenge.challenger.id.toString(), CHALLENGED_BOARD_FIELD)
-                updateMoveMatrix(at, challenge.challenger.id.toString(), CHALLENGER_MOVES)
+                updateOpponentGame(game.first,  challenge.challenger.id.toString(), CHALLENGED_BOARD_FIELD, at, CHALLENGER_MOVES)
             } else {
                 val stringBoardMoves = getFireStoreBoard(challenge.challenger.id.toString(), CHALLENGER_BOARD_FIELD)
                 val challengerGameBoard = GameBoard.fromMovesList(it.first.challengerBoard.turn, stringBoardMoves)
 
                 val game = it.copy(first = it.first.shootOpponentBoard(at, challengerGameBoard))
-                updateOpponentGame(game.first, challenge.challenger.id.toString(), CHALLENGER_BOARD_FIELD)
-                updateMoveMatrix(at, challenge.challenger.id.toString(), CHALLENGED_MOVES)
+                updateOpponentGame(game.first, challenge.challenger.id.toString(), CHALLENGER_BOARD_FIELD, at, CHALLENGED_MOVES)
             }
         }
     }
@@ -192,7 +181,7 @@ const val CHALLENGED_MOVES = "challenged_moves"
  * [GameBoard] extension function used to convert an instance to a map of key-value
  * pairs containing the object's properties
  */
-fun GameBoard.toDocumentContent(boardField: String) = mapOf(
+fun GameBoard.toDocumentContent(boardField: String, movesField: String? = "", arrayUnion: FieldValue? = null) = mapOf(
     TURN_FIELD to turn.name,
     boardField to toMovesList().joinToString(separator = "") {
         when (it) {
@@ -209,7 +198,8 @@ fun GameBoard.toDocumentContent(boardField: String) = mapOf(
             Cell(BiStateGameCellShot.HasBeenShot, Ship(TypeOfShip.Submarine)) -> "s"
             else -> "-"
         }
-    }
+    },
+    movesField to arrayUnion
 )
 
 fun Coordinate.toDocumentContent(movesField: String) = mapOf(

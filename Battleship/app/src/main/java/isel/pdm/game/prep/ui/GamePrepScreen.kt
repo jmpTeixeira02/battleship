@@ -83,7 +83,7 @@ fun GamePrepScreen(
             ) {
                 CountdownPrepTimer(
                     modifier = Modifier.testTag(CountdownPrepTimerTestTag),
-                    gamePrepDuration = 30000,
+                    gamePrepDuration = 10000,
                     onCheckBoardPrepRequest
                 )
                 GamePrepBoard(
