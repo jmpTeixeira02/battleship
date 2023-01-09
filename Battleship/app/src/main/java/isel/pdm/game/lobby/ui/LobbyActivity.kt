@@ -56,7 +56,9 @@ class LobbyActivity : ComponentActivity() {
                     replayListRequest = { SelectReplayActivity.navigate(origin = this) },
                     editUserRequest = { CreatePlayerActivity.navigate(context = this) }
                 ),
-                onPlayerSelected = { player -> viewModel.sendChallenge(player) },
+                onPlayerSelected = { player ->
+                    viewModel.sendChallenge(player)
+               },
                 state = LobbyScreenState(players.map { playerInfo -> playerInfo }),
             )
 

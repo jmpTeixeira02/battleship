@@ -29,7 +29,7 @@ import isel.pdm.replay.selector.model.Replay
 import isel.pdm.replay.viewer.model.GameInfo
 
 val PREVIEW_MY_GAME_BOARD_SIZE: Dp = 160.dp
-val OPPONENT_GAME_BOARD_SIZE: Dp = 260.dp
+val OPPONENT_GAME_BOARD_SIZE: Dp = 220.dp
 
 const val ForfeitButtonTag = "ForfeitButton"
 const val FavoritesButtonTag = "FavoritesButton"

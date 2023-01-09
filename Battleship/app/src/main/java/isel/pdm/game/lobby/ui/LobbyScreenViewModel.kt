@@ -46,6 +46,7 @@ class LobbyScreenViewModel(
         } else null
 
     fun leaveLobby(): Job? =
+
         if (lobbyMonitor != null) {
             viewModelScope.launch {
                 lobbyMonitor?.first?.cancel()
@@ -65,6 +66,7 @@ class LobbyScreenViewModel(
                     challenge = challenge
                 )
                 lobbyMonitor = null
+                _pendingMatch.value = null
             }
         } else null
     }
